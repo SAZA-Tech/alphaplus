@@ -2,7 +2,6 @@ import React from 'react'
 import {
   TheContent,
   TheSidebar,
-  TheFooter,
   TheHeader
 } from './index'
 
@@ -16,7 +15,6 @@ const TheLayout = () => {
         <div className="c-body">
           <TheContent/>
         </div>
-        <TheFooter/>
       </div>
     </div>
   )
