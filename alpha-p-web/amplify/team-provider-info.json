@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-alphapweb-dev-151850-authRole",
+      "UnauthRoleArn": "arn:aws:iam::335653406243:role/amplify-alphapweb-dev-151850-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::335653406243:role/amplify-alphapweb-dev-151850-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-alphapweb-dev-151850-deployment",
+      "UnauthRoleName": "amplify-alphapweb-dev-151850-unauthRole",
+      "StackName": "amplify-alphapweb-dev-151850",
+      "StackId": "arn:aws:cloudformation:eu-central-1:335653406243:stack/amplify-alphapweb-dev-151850/d3eaedb0-6550-11eb-ac18-0661b67b4f2e",
+      "AmplifyAppId": "d33zosk5tgou26"
+    }
+  }
+}
