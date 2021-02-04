@@ -2,7 +2,7 @@ import React from "react";
 
 const FormInput = ({ register, errors, label, id, ...inputProps }) => {
   return (
-    <div >
+    <div  >
       <label htmlFor={id}>{label}</label>
       <input className="FormInput" ref={register} id={id} {...inputProps} />
       {errors && <div>{errors.message}</div>}

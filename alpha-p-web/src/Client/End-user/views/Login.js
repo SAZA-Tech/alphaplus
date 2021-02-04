@@ -77,7 +77,7 @@ export const LoginForm = () => {
           <input type="checkbox" />
           <span>remember me?</span>
         </span>
-        <p>Forget Password</p>
+        <a href='#'>Forget Password</a>
       </span>
       <Button
         type="submit"
