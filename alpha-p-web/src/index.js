@@ -4,19 +4,20 @@ import 'core-js';
 import './polyfill'
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './Client/Admin/App';
+// import App from './Client/Admin/App';
 import * as serviceWorker from './serviceWorker';
 
 import { icons } from './Client/Admin/assets/icons'
 
 import { Provider } from 'react-redux'
 import store from './store'
+import EApp from './Client/End-user/E_App';
 
 React.icons = icons
 
 ReactDOM.render(
   <Provider store={store}>
-    <App/>
+    <EApp/>
   </Provider>,
   document.getElementById('root')
 );
