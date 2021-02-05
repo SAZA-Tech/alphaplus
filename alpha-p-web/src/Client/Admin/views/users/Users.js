@@ -8,10 +8,18 @@ import {
   CCol,
   CDataTable,
   CRow,
-  CPagination
+  CPagination,
+  CContainer,
+  CButton,
+  CInput,
+  CInputGroup,
+  CInputGroupPrepend,
+  CInputGroupAppend,
+  CInputGroupText,
 } from '@coreui/react'
-
+import CIcon from '@coreui/icons-react'
 import usersData from './UsersData'
+
 
 const getBadge = status => {
   switch (status) {
@@ -38,6 +46,7 @@ const Users = () => {
   }, [currentPage, page])
 
   return (
+    <CContainer>
     <CRow>
       <CCol xl={6}>
         <CCard>
@@ -79,7 +88,26 @@ const Users = () => {
           </CCardBody>
         </CCard>
       </CCol>
-    </CRow>
+    </CRow>,
+
+    <CRow className="justify-content-center">
+  <CCol md="6">
+
+    <CInputGroup className="input-prepend">
+      <CInputGroupPrepend>
+        <CInputGroupText>
+          <CIcon name="cil-magnifying-glass" />
+        </CInputGroupText>
+      </CInputGroupPrepend>
+      <CInput size="16" type="text" placeholder="What are you looking for?" />
+      <CInputGroupAppend>
+        <CButton color="info">Search</CButton>
+      </CInputGroupAppend>
+    </CInputGroup>
+  </CCol>
+</CRow>
+
+    </CContainer>
   )
 }
 
