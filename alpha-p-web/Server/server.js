@@ -3,7 +3,7 @@ const express = require("express"); // web application framework package
 const cors = require("cors"); // allows to access something from outside our server to our server
 const mongoose = require("mongoose"); // DB
 
-const { ApolloServer,PubSub  } = require("apollo-server"); // GraphQl Server
+const { ApolloServer,PubSub  } = require("apollo-server-express"); // GraphQl Server
 
 const typeDefs = require("./GraphQl/schema");
 const resolvers = require("./GraphQl/resolvers/user_resovlers");
@@ -16,7 +16,7 @@ const server = new ApolloServer({
   resolvers,
   context: ({ req }) => ({ req, pubsub })
 });
-// server.applyMiddleware({ app });
+server.applyMiddleware({ app });
 
 require("dotenv").config(); // saves env variables in files rather than own pc
 
@@ -41,17 +41,17 @@ app.use((req, res) => {
   res.end();
 });
 
-server
-  .listen()
-  .then(({ url }) =>
-    console.log(`Server is running on ${url}`)
-  );
-// app.listen({ port: 4000 }, () =>
-//   console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
-// );
-// app.get("/", function (req, res) {
-//   res.send("Hello world!"); //test post
-// });
+// server
+//   .listen()
+//   .then(({ url }) =>
+//     console.log(`Server is running on ${url}`)
+//   );
+app.listen({ port: 4000 }, () =>
+  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+);
+app.get("/", function (req, res) {
+  res.send("Hello world!"); //test post
+});
 
 // app.listen(port, () => {
 //   console.log(`server listening on port ${port}`); // start the server
