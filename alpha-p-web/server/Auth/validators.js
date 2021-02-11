@@ -3,13 +3,13 @@ const emailRegEx = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-z
 
 
 module.exports.validateRegisterInput = (
-  name,
+  username,
   email,
   password,
   confirmPassword
 ) => {
   const errors = {};
-  if (name.trim() === "") {
+  if (username.trim() === "") {
     errors.name = "Name must not be empty";
   }
   if (email.trim() === "") {
@@ -30,7 +30,7 @@ module.exports.validateRegisterInput = (
     valid: Object.keys(errors).length < 1,
   };
 };
-
+// TODO: Login With Username
 module.exports.validateLoginInput = (email, password) => {
   const errors = {};
   if (email.trim() === "") {

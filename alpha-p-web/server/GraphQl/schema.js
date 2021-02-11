@@ -8,14 +8,17 @@ module.exports = gql`
 
   type User {
     id: ID!
-    type: UserType!
+    type: String!
+    username: String!
     name: String
-    password: String,
-    email:String!,
+    password: String
+    email: String!
     createdAt: String
-    token:String!
+    token: String!
   }
+  # TODO: add defualt value for type
   input RegisterInput {
+    name: String
     username: String!
     password: String!
     confirmPassword: String!
@@ -24,6 +27,12 @@ module.exports = gql`
   type Mutation {
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
+    updateUserInfo(
+      id:ID!
+      name:String!
+      type: String!
+    ): User!
+    deleteUser(id: ID!): String!
     # createPost(body: String!): Post!
     # deletePost(postId: ID!): String!
     # createComment(postId: String!, body: String!): Post!
@@ -31,6 +40,7 @@ module.exports = gql`
     # likePost(postId: ID!): Post!
   }
   enum UserType {
+    Admin
     endUser
     analyst
   }
