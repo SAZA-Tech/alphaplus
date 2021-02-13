@@ -1,6 +1,6 @@
 @import "variables";
 @import "Buttons";
-@import 'mixins';
+@import "mixins";
 * {
   padding: 0;
   margin: 0;
@@ -11,34 +11,33 @@
   background-color: $background-color;
   width: 100%;
   height: 1100px;
-  @include responsive($xs){
-    height: $xs*3;
+  @include responsive($xs) {
+    height: $xs * 3;
     width: 100%;
-
   }
 }
 .navBar {
   padding: 0rem;
-    background-color: $base-color;
-    width: auto;
-    height: $xs/8;
-    .logo {
-      position: relative;
-      left: 36px;
-      width: min-content;
-    }
-    p {
-      padding-bottom: 20px;
-      color: $base-color-white;
-      font-style: normal;
-      font-weight: normal;
-      font-size: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      vertical-align: top;
-    }
-  @include responsive($xl){
+  background-color: $base-color;
+  width: auto;
+  height: $xs/8;
+  .logo {
+    position: relative;
+    left: 36px;
+    width: min-content;
+  }
+  p {
+    padding-bottom: 20px;
+    color: $base-color-white;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    vertical-align: top;
+  }
+  @include responsive($xl) {
     padding: 0rem;
     background-color: $base-color;
     width: auto;
@@ -90,7 +89,7 @@
     line-height: 42px;
     text-align: center;
   }
-  .createAccount{
+  .createAccount {
     display: flexbox;
     flex-direction: row;
     justify-content: center;
@@ -105,7 +104,7 @@
     font-size: 14px;
     .rememberMe {
       display: inline-block;
-      
+
       padding: 10px 0 00;
       justify-content: space-evenly;
       box-sizing: border-box;
@@ -118,12 +117,69 @@
       // padding: 1rem;
     }
   }
-  @include responsive($xl){
+  @include responsive($xl) {
+    position: absolute;
+    width: 450px;
+    height: 650px;
+    left: 500px;
+    top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    background: $base-color-white;
+    border: 1px solid $base-color-grey;
+    padding: 0 3rem 0 3rem;
+    box-sizing: border-box;
+    border-radius: $border-raduis;
+    h2 {
+      padding-top: 1.5rem;
+      margin-bottom: 4rem;
+      color: $base-color;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 36px;
+      line-height: 42px;
+      text-align: center;
+    }
+    .createAccount {
+      display: flexbox;
+      flex-direction: row;
+      justify-content: center;
+    }
+    .remember-forgetpass {
+      display: flex;
+      padding: 1rem;
+      align-items: center;
+      justify-content: space-between;
+      vertical-align: center;
+      font-size: 14px;
+      .rememberMe {
+        display: flex;
+        align-items: center;
+        justify-items: center;
+        padding: 10px 0 00;
+        justify-content: space-evenly;
+        box-sizing: border-box;
+        border-radius: 7px;
+        // display: inline-block;
+
+        span {
+          padding-left: 10px;
+        }
+        // padding: 1rem;
+      }
+    }
+  }
+}
+.signUpBlock {
   position: absolute;
-  width: 450px;
-  height: 650px;
-  left: 500px;
-  top: 50px;
+  width: 40%;
+  height: 100%;
+  left: 8%;
+  top: 10%;
+  padding: 20%;
+  // padding: cen;
   display: flex;
   flex-direction: column;
   justify-items: center;
@@ -135,7 +191,7 @@
   border-radius: $border-raduis;
   h2 {
     padding-top: 1.5rem;
-    margin-bottom: 4rem;
+    margin-bottom: 1rem;
     color: $base-color;
     font-style: normal;
     font-weight: bold;
@@ -143,39 +199,49 @@
     line-height: 42px;
     text-align: center;
   }
-  .createAccount{
+  .haveAccount {
     display: flexbox;
     flex-direction: row;
     justify-content: center;
-  }
-  .remember-forgetpass {
-    display: flex;
-    padding: 1rem;
-    align-items: center;
-    justify-content: space-between;
-    vertical-align: center;
     font-size: 14px;
-    .rememberMe {
-      display: flex;
-      align-items: center;
-      justify-items: center;
-      padding: 10px 0 00;
-      justify-content: space-evenly;
-      box-sizing: border-box;
-      border-radius: 7px;
-      // display: inline-block;
-
-      span {
-        padding-left: 10px;
-      }
-      // padding: 1rem;
-    }
   }
+
+  @include responsive($xl) {
+    position: absolute;
+    width: 450px;
+    height: 650px;
+    left: 500px;
+    top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    background: $base-color-white;
+    border: 1px solid $base-color-grey;
+    padding: 0 3rem 0 3rem;
+    box-sizing: border-box;
+    border-radius: $border-raduis;
+    h2 {
+      padding-top: 1.5rem;
+      margin-bottom: 4rem;
+      color: $base-color;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 36px;
+      line-height: 42px;
+      text-align: center;
+    }
+    .createAccount {
+      display: flexbox;
+      flex-direction: row;
+      justify-content: center;
+    }
   }
 }
 .FormInput {
   border-radius: $border-raduis + 5;
   border: 1px solid $base-color-grey;
+  border-color: black;
   width: 360px;
   height: 10px;
   padding: 1rem;
@@ -189,28 +255,29 @@
   &::placeholder {
     font-size: 24;
   }
-  @include responsive($xs){
+  @include responsive($xs) {
     width: 219px;
-  height: 10px;
-  // padding: 1rem;
-  margin-top: 1rem;
-  font-size: 14px;
+    height: 10px;
+    // padding: 1rem;
+    margin-top: 1rem;
+    font-size: 14px;
   }
 }
 .formDevider {
-  margin: 1rem;
+  margin: rem;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  padding-top: 0px;
   div {
     margin: 0;
     height: 2px;
     width: 150px;
     background-color: rgba(0, 0, 0, 0.33);
   }
-  p{
-    padding: .5rem;
+  p {
+    padding: 0.5rem;
     font-style: normal;
     font-weight: normal;
     font-size: 24px;
@@ -218,14 +285,14 @@
     letter-spacing: 0.1em;
     color: rgba(0, 0, 0, 0.33);
   }
-  @include responsive($xs){
+  @include responsive($xs) {
     div {
       margin: 0;
       height: 2px;
       width: 90px;
       background-color: rgba(0, 0, 0, 0.33);
     }
-    p{
+    p {
       font-size: 14px;
     }
   }
