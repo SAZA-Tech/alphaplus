@@ -22,8 +22,8 @@ require("dotenv").config(); // saves env variables in files rather than own pc
 
 const port = process.env.PORT || 5000;
 
-// app.use(cors());
-// app.use(express.json());
+app.use(cors());
+app.use(express.json());
 
 const uri = process.env.ATLAS_URI; //global env variable which defined in .env file
 
@@ -56,3 +56,16 @@ app.get("/", function (req, res) {
 // app.listen(port, () => {
 //   console.log(`server listening on port ${port}`); // start the server
 // });
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+app.get('/', function(req, res, next) {
+  // Handle the get for this route
+});
+
+app.post('/', function(req, res, next) {
+ // Handle the post for this route
+});
