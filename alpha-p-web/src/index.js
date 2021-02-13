@@ -17,7 +17,7 @@ React.icons = icons
 
 ReactDOM.render(
   <Provider store={store}>
-    <App/>
+    <EApp/>
   </Provider>,
   document.getElementById('root')
 );
