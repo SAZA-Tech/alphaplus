@@ -17,7 +17,7 @@ export class EApp extends Component {
                 <Router>
                     <Navbar/>
                     <Route exact path='/' component={Home} />
-                    <AuthRoute exact path='/' component={Login} />
+                    <AuthRoute exact path='/Login' component={Login} />
                 </Router>
             </AuthProvider>
         )
