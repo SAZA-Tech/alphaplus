@@ -47,6 +47,8 @@ const Users = () => {
     { key: 'UserTwitterAcc', _style: { width: '20%'} },
     { key: 'UserGoogleAcc', _style: { width: '20%'} },
     { key: 'Role', _style: { width: '20%'} },
+    { key: 'RegisterDate', _style: { width: '20%'} },
+
 
     {
       key: 'show_details',

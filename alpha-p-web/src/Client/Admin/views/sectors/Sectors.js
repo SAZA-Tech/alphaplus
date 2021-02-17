@@ -18,15 +18,15 @@ import {
   CInputGroupText,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import articlesData from './ArticlesData'
+import sectorsData from './SectorsData'
 
 
 
 
-const Articles = () => {
+const Sectors = () => {
   
   const [details, setDetails] = useState([])
-   const [items, setItems] = useState(articlesData)
+   const [items, setItems] = useState(sectorsData)
 
   const toggleDetails = (index) => {
     const position = details.indexOf(index)
@@ -41,10 +41,8 @@ const Articles = () => {
 
 
   const fields = [
-    { key: 'ArticleId', _style: { width: '20%'} },
-    { key: 'ArticleTopic', _style: { width: '20%'} },
-    {key: 'AnalystName', _style: { width: '20%'}},
-    { key: 'ArticleDate', _style: { width: '20%'} },
+    { key: 'SectorId', _style: { width: '20%'} },
+    { key: 'SectorTopic', _style: { width: '20%'} },
 
     {
       key: 'show_details',
@@ -59,7 +57,7 @@ const Articles = () => {
 
   return (
     <CDataTable
-      items={articlesData}
+      items={sectorsData}
       fields={fields}
       columnFilter
       tableFilter
@@ -96,9 +94,7 @@ const Articles = () => {
                     {item.username}
                   </h4>
                   <p className="text-muted">User since: {item.registered}</p>
-                  <CButton size="sm" color="info">
-                   Edit
-                  </CButton>
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Open modal for @getbootstrap</button>
                   <CButton size="sm" color="danger" className="ml-1">
                     Delete
                   </CButton>
@@ -113,4 +109,4 @@ const Articles = () => {
 
 }
 
-export default Articles
+export default Sectors
