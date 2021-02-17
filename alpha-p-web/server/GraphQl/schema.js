@@ -5,7 +5,7 @@ module.exports = gql`
     findUser(id: ID!): User!
     getUsers: [User!]!
     getCompanies: [Company!]!
-    findCompany(symbol: symbol!):Company!
+    findCompany(symbol: String!):Company!
   }
 
   type User {
