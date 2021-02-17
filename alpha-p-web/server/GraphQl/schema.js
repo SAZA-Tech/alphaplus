@@ -4,6 +4,8 @@ module.exports = gql`
   type Query {
     findUser(id: ID!): User!
     getUsers: [User!]!
+    getCompanies: [Company!]!
+    findCompany(symbol: symbol!):Company!
   }
 
   type User {
@@ -15,6 +17,23 @@ module.exports = gql`
     email: String!
     createdAt: String
     token: String!
+  }
+
+  type Post {
+    id: ID!
+    post: String!
+  }
+  #list of posts ?
+  type Company {
+    id: ID!
+    symbol: String!
+    exchange: String!
+    open: Float!
+    high: Float!
+    low: Float!
+    close: Float!
+    volume: Float!
+    posts: [Post]
   }
   # TODO: add defualt value for type
   input RegisterInput {
@@ -33,6 +52,8 @@ module.exports = gql`
       type: String!
     ): User!
     deleteUser(id: ID!): String!
+    #addCompany 
+    #deleteCompany
     # createPost(body: String!): Post!
     # deletePost(postId: ID!): String!
     # createComment(postId: String!, body: String!): Post!
