@@ -1,20 +1,40 @@
-import React, { Component } from "react";
-// import PropTypes from "prop-types";
+import React, { Component, useContext, useState } from "react";
 import Navbar from "../components/Navbar";
 import * as Yup from "yup";
 import { FormInput, FormDevider } from "../components/FormInput";
-import { useForm } from "react-hook-form";
+// import { useForm } from "react-hook-form";
 import { Button, OutlineButton } from "../components/Buttons";
 //imagers
 import GoogleIcon from "../assets/icons/1004px-Google__G__Logo.svg.png";
 import TwitterIcon from "../assets/icons/580b57fcd9996e24bc43c53e.png";
+//graphql
+import { useMutation } from "@apollo/client";
+import gql from "graphql-tag";
+
+//auth
+import { AuthContext } from "../context/auth";
+import { useForm } from "../util/hooks";
+
+
+
+const LOGIN_USER = gql`
+  mutation login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      id
+      email
+      username
+      createdAt
+      token
+    }
+  }
+`;
 export class Login extends Component {
   static propTypes = {};
 
   render() {
     return (
       <div className="background">
-        <Navbar />
+        {/* <Navbar /> */}
         <SignInBlock />
       </div>
     );
@@ -29,75 +49,96 @@ function SignInBlock() {
       <h2>Member Sign In</h2>
       <LoginForm />
       <div className="createAccount">
-          <p>Don't have account?</p>
-        <a href="#"><p>create account</p></a>
+        <p>Don't have account?</p>
+        <a href="#">
+          <p>create account</p>
+        </a>
       </div>
     </div>
   );
 }
 
-export const LoginForm = () => {
-  //form validation
-  const { register, handleSubmit, errors } = useForm({
-    mode: "onSubmit",
-    validationSchema: Yup.object({
-      email: Yup.string()
-        .email("Please Enter A Valid Email")
-        .required("Required"),
-      password: Yup.string()
-        .min(6, "Password should be longer than 6 characters")
-        .required("Required"),
-    }),
+export const LoginForm = (props) => {
+  const context = useContext(AuthContext);
+  const [errors, setErrors] = useState({});
+
+  const { onChange, onSubmit, values } = useForm(loginUserCallback, {
+    username: "",
+    password: "",
   });
 
-  //here we do the request once the validation is success 👍🏾
-  const onSubmit = ({ email, password }) => {
-    alert(`Login: ${email}, password: ${password}`);
-  };
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <FormInput
-        id="email"
-        name="email"
-        type="email"
-        placeHolder="email"
-        register={register}
-        errors={errors.email}
-      />
-      <FormInput
-        id="password"
-        name="password"
-        type="password"
-        placeHolder="password"
-        register={register}
-        errors={errors.password}
-      />
-      <span className="remember-forgetpass">
-        <span className="rememberMe">
-          <input type="checkbox" />
-          <span>remember me?</span>
-        </span>
-        <a href='#'>Forget Password</a>
-      </span>
-      <Button
-        type="submit"
-        title="Login"
-        onClick={() => console.log("Pressed")}
-      />
-      <FormDevider />
+  const [loginUser, { loading }] = useMutation(LOGIN_USER, {
+    update(_, { data: { login: userData } }) {
+      context.login(userData);
+      props.history.push("/");
+    },
+    onError(err) {
+      setErrors(err.graphQLErrors[0].extensions.exception.errors);
+    },
+    variables: values,
+  });
 
-      <OutlineButton
-        color={"#4285f4"}
-        image={GoogleIcon}
-        onClick={() => console.log("Google SignIn")}
-        title="Continue With Google"
-      />
-      <OutlineButton
-        color={"#00A2F5"}
-        image={TwitterIcon}
-        onClick={() => console.log("Twitter SignIn")}
-        title="Continue With Twitter"
-      />
-    </form>
+  function loginUserCallback() {
+    loginUser();
+  }
+  return (
+    <div>
+      <form onSubmit={onSubmit}>
+        <FormInput
+          id="email"
+          name="email"
+          type="email"
+          placeHolder="email"
+          value={values.email}
+          errors={errors.email}
+          onChange = {onChange}
+        />
+        <FormInput
+          id="password"
+          name="password"
+          type="password"
+          placeHolder="password"
+          value={values.password}
+          errors={errors.password}
+          onChange = {onChange}
+        />
+        <span className="remember-forgetpass">
+          <span className="rememberMe">
+            <input type="checkbox" />
+            <span>remember me?</span>
+          </span>
+          <a href="#">Forget Password</a>
+        </span>
+        <Button
+          type="submit"
+          title="Login"
+          onClick={() => console.log("Pressed")}
+        />
+        <FormDevider />
+
+        <OutlineButton
+          color={"#4285f4"}
+          image={GoogleIcon}
+          onClick={() => console.log("Google SignIn")}
+          title="Continue With Google"
+        />
+        <OutlineButton
+          color={"#00A2F5"}
+          image={TwitterIcon}
+          onClick={() => console.log("Twitter SignIn")}
+          title="Continue With Twitter"
+        />
+      </form>
+      {Object.keys(errors).length > 0 && (
+        <div className="ui error message">
+          <ul className="list">
+            {Object.values(errors).map((value) => (
+              <li key={value}>{value}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
   );
 };
+
