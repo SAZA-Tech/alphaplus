@@ -32,6 +32,13 @@ const _nav =  [
 
   {
     _tag: 'CSidebarNavItem',
+    name: 'Sectors',
+    to: '/sectors',
+  },
+
+
+  {
+    _tag: 'CSidebarNavItem',
     name: 'Comments',
     to: '/comments',
   },
