@@ -5,7 +5,9 @@ const mongoose = require("mongoose"); // DB
 
 const { ApolloServer,PubSub  } = require("apollo-server-express"); // GraphQl Server
 
-const typeDefs = require("./GraphQl/schema");
+const contentShcema = require('./GraphQl/ContentSchema');
+const authSchema = require("./GraphQl/schema");
+const typeDefs = [authSchema,contentShcema];
 const resolvers = require("./GraphQl/resolvers/user_resovlers");
 
 const app = express();
