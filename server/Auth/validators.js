@@ -1,6 +1,4 @@
-
 const emailRegEx = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/;
-
 
 module.exports.validateRegisterInput = (
   username,
@@ -35,14 +33,33 @@ module.exports.validateLoginInput = (email, password) => {
   const errors = {};
   if (email.trim() === "") {
     errors.email = "email must not be empty";
-  }
-  else if (!email.match(emailRegEx)){
-      errors.email='Email must be vaild'
+  } else if (!email.match(emailRegEx)) {
+    errors.email = "Email must be vaild";
   }
   if (password.trim() === "") {
     errors.password = "Password must not be empty";
   }
 
+  return {
+    errors,
+    valid: Object.keys(errors).length < 1,
+  };
+};
+
+module.exports.validateContentInput = (title, body
+  // , structerdBody
+  ) => {
+  const errors = {};
+
+  if (title.trim() == "") {
+    errors.title = "Title must not be empty";
+  }
+  if (body.trim() == "") {
+    errors.body = "Body must not be empty";
+  }
+  // if (structerdBody == null || structerdBody.length == 0) {
+  //   errors.structerdBody = "Body Must not be empty or length less than 5";
+  // }
   return {
     errors,
     valid: Object.keys(errors).length < 1,
