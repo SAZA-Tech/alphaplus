@@ -1,20 +1,60 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Container, Grid, Paper, Typography } from "@material-ui/core";
-import { ArticleAutherInfo } from "../components/AnalystInfo";
-import { makeStyles } from "@material-ui/core/styles";
+import {
+  Container,
+  Grid,
+  Paper,
+  Typography,
+  Divider,
+  ButtonBase,
+  Button,
+} from "@material-ui/core";
+import ThumbUpAltOutlinedIcon from "@material-ui/icons/ThumbUpAltOutlined";
+import ShareIcon from "@material-ui/icons/Share";
+import AddCommentIcon from "@material-ui/icons/AddComment";
+import { ArticleAutherInfo,ArticleAutherInfoExpanded } from "../components/AnalystInfo";
+import { fade, makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginLeft: 0,
   },
+  articleLayout: {
+    paddingTop:theme.spacing(5),
+    marginRight: theme.spacing(0),
+    marginLeft: theme.spacing(0),
+    padding: theme.spacing(1),
+    paddingBottom:theme.spacing(4),
+    [theme.breakpoints.up("lg")]: {
+      marginLeft: theme.spacing(40),
+      marginRight: theme.spacing(40),
+    },
+  },
+  analystInfoSection:{
+    marginTop:theme.spacing(4)
+  },
   title: {
-    paddingTop: "5%",
-    paddingBottom: "5%",
+    paddingTop:theme.spacing(1),
+    paddingBottom: theme.spacing(2),
   },
   body: {
-    padding: "2%",
+    padding: theme.spacing(2),
   },
+  likeBtn: {
+    "&:hover": {
+      backgroundColor: fade(theme.palette.common.white, 0.9),
+    },
+  },
+  commentsLayout:{
+    marginTop:theme.spacing(5)
+  },
+  commentsHeader:{
+    padding:theme.spacing(4),
+    color:theme.palette.grey[400]
+  },
+  addComment:{
+    
+  }
 }));
 
 const img = "avatars/7.jpg";
@@ -25,10 +65,14 @@ const analystInfo = {
 };
 
 const Article = (props) => {
+  const classes = useStyles();
+
   return (
     <div className="background">
-      <div className="ArticlePage">
+      <div className={classes.articleLayout}>
         <ArticleSection />
+        {/* Comments Section */}
+        <CommentsSection/>
       </div>
     </div>
   );
@@ -39,7 +83,7 @@ Article.propTypes = {};
 export default Article;
 
 const ArticleSection = (props) => {
-    const classes = useStyles();
+  const classes = useStyles();
   return (
     <Container>
       <Paper elevation={2}>
@@ -80,13 +124,69 @@ const ArticleSection = (props) => {
           <Container className={classes.body}>
             <Typography variant="body1">{body}</Typography>
           </Container>
+          <Divider variant="middle" />
+          {/* Article Buttons */}
+          <Container>
+            <Grid container justify="space-evenly" spacing={2} xs sm  >
+              <Grid item>
+                <Button
+                  variant="text"
+                  color="primary"
+                  startIcon={<ThumbUpAltOutlinedIcon />}
+                >
+                  Like the article?
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="text"
+                  color="primary"
+                  startIcon={<ShareIcon />}
+                >
+                  Share the article
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="text"
+                  color="primary"
+                  startIcon={<AddCommentIcon />}
+                >
+                  Add Comment
+                </Button>
+              </Grid>
+            </Grid>
+          </Container>
         </Container>
       </Paper>
+    <Paper elevation={2} className={classes.analystInfoSection}>
+    <ArticleAutherInfoExpanded  img={analystInfo.img}
+          name={analystInfo.name}
+          bio={analystInfo.bio} />
+    </Paper>
+    
     </Container>
   );
 };
 
 ArticleSection.propTypes = {};
+
+function CommentsSection (props){
+  const classes = useStyles();
+  return (
+    <Container className={classes.commentsLayout}>
+      <Paper elevation ={2}>
+        <Container>
+          <Container className={classes.commentsHeader}>
+            <Typography variant='h4'>
+              Comments(2)
+            </Typography>
+          </Container>
+        </Container>
+      </Paper>
+    </Container>
+  )
+}
 
 const body =
   "Summary\n\nBoth Tilray and Aphria have seen 200% stock surges in just days from Reddit-style buying.\n\nThe 'blue wave' will help cannabis companies as federal legalization will open up new markets internally in the United States.\n\nRevenues and earnings for both companies are muted compared to the growth of other companies in the same sector.\n\nStock prices do not reflect potential growth of revenue and earnings for either of these companies.\n\nA couple of weeks ago, I reviewed the Tilray (TLRY) and Aphria (APHA) merger. I was neutral on the deal simply because although there would be potential cost savings, the stock price had already achieved a rational valuation based upon what could be earned. Since then, the stock has caught fire and shot up sharply. I received many messages from readers asking what I thought and if I still maintained my neutral position.\n\n\n\nYes, I will always be a ‘neutral’ on a stock that is overvalued.\n\n\n\nI felt the valuations were too rich before and now both stocks are up significantly.\n\n\n\nBut, there have been fundamental changes since that last review I did so I wanted to take another look at what has transpired.";
