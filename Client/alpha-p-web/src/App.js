@@ -10,12 +10,14 @@ import Navbar from './components/Navbar';
 
 
 
+
 export class App extends Component {
     render() {
         return (
             <AuthProvider>
                 <Router>
                     <Navbar/>
+                    
                     <Route exact path='/' component={Home} />
                     <AuthRoute exact path='/Login' component={Login} />
                 </Router>
