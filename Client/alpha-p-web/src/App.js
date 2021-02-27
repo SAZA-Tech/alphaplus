@@ -7,7 +7,7 @@ import SignUp from './views/Sign-up';
 import AuthRoute from './components/AuthRoute';
 import Home from './views/Home';
 import Navbar from './components/Navbar';
-
+import Article from './views/Article';
 
 
 export class App extends Component {
@@ -17,6 +17,8 @@ export class App extends Component {
                 <Router>
                     <Navbar/>
                     <Route exact path='/' component={Home} />
+                    <Route exact path='/article' component={Article} />
+
                     <AuthRoute exact path='/Login' component={Login} />
                 </Router>
             </AuthProvider>
