@@ -8,11 +8,18 @@ import {
   Divider,
   ButtonBase,
   Button,
+  Avatar,
+  TextField,
+  FormHelperText,
 } from "@material-ui/core";
+import ReplyIcon from "@material-ui/icons/Reply";
 import ThumbUpAltOutlinedIcon from "@material-ui/icons/ThumbUpAltOutlined";
 import ShareIcon from "@material-ui/icons/Share";
 import AddCommentIcon from "@material-ui/icons/AddComment";
-import { ArticleAutherInfo,ArticleAutherInfoExpanded } from "../components/AnalystInfo";
+import {
+  ArticleAutherInfo,
+  ArticleAutherInfoExpanded,
+} from "../components/AnalystInfo";
 import { fade, makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -20,21 +27,21 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 0,
   },
   articleLayout: {
-    paddingTop:theme.spacing(5),
+    paddingTop: theme.spacing(5),
     marginRight: theme.spacing(0),
     marginLeft: theme.spacing(0),
     padding: theme.spacing(1),
-    paddingBottom:theme.spacing(4),
+    paddingBottom: theme.spacing(4),
     [theme.breakpoints.up("lg")]: {
       marginLeft: theme.spacing(40),
       marginRight: theme.spacing(40),
     },
   },
-  analystInfoSection:{
-    marginTop:theme.spacing(4)
+  analystInfoSection: {
+    marginTop: theme.spacing(4),
   },
   title: {
-    paddingTop:theme.spacing(1),
+    paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(2),
   },
   body: {
@@ -45,16 +52,44 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: fade(theme.palette.common.white, 0.9),
     },
   },
-  commentsLayout:{
-    marginTop:theme.spacing(5)
+  commentsLayout: {
+    marginTop: theme.spacing(5),
   },
-  commentsHeader:{
-    padding:theme.spacing(4),
-    color:theme.palette.grey[400]
+  commentsHeader: {
+    padding: theme.spacing(4),
+    color: theme.palette.grey[400],
   },
-  addComment:{
-    
+  addComment: {
+    paddingBottom: theme.spacing(2),
+    paddingRight: theme.spacing(4),
+    "& .MuiTextField-root": {
+      width: "60ch",
+      padding: theme.spacing(4),
+      paddingTop: theme.spacing(1),
+      borderTopLeftRadius: 0,
+    },
+  },
+  comment: {
+    padding:theme.spacing(2),
+    "& .MuiAvatar-root": {
+      marginRight: theme.spacing(2),
+    },
+    "& .MuiDivider-root": {
+      marginBottom: theme.spacing(2),
+    },
+    "& .MuiGrid-root":{
+      marginBottom: theme.spacing(2),
+
+    },
+    '& .commentBody':{
+      paddingBottom: theme.spacing(2),
+
+    }
+  },
+  commentBtn:{
+    paddingTop:theme.spacing(4),
   }
+
 }));
 
 const img = "avatars/7.jpg";
@@ -63,6 +98,26 @@ const analystInfo = {
   img: img,
   bio: "Analyst",
 };
+const commentsDocs = [
+  {
+    name: "Alex",
+    Avatar: "AL",
+    date: "2021-2-21",
+    body: "Great Article",
+  },
+  {
+    name: "Ziad",
+    Avatar: "ZI",
+    date: "2021-2-22",
+    body: "I dissagree , there should not be any downsides",
+  },
+  {
+    name: "Mohammed",
+    Avatar: "MO",
+    date: "2021-2-24",
+    body: "Please keep up the good work",
+  },
+];
 
 const Article = (props) => {
   const classes = useStyles();
@@ -72,7 +127,7 @@ const Article = (props) => {
       <div className={classes.articleLayout}>
         <ArticleSection />
         {/* Comments Section */}
-        <CommentsSection/>
+        <CommentsSection />
       </div>
     </div>
   );
@@ -127,7 +182,7 @@ const ArticleSection = (props) => {
           <Divider variant="middle" />
           {/* Article Buttons */}
           <Container>
-            <Grid container justify="space-evenly" spacing={2} xs sm  >
+            <Grid container justify="space-evenly" spacing={2} xs sm>
               <Grid item>
                 <Button
                   variant="text"
@@ -159,34 +214,84 @@ const ArticleSection = (props) => {
           </Container>
         </Container>
       </Paper>
-    <Paper elevation={2} className={classes.analystInfoSection}>
-    <ArticleAutherInfoExpanded  img={analystInfo.img}
+      <Paper elevation={2} className={classes.analystInfoSection}>
+        <ArticleAutherInfoExpanded
+          img={analystInfo.img}
           name={analystInfo.name}
-          bio={analystInfo.bio} />
-    </Paper>
-    
+          bio={analystInfo.bio}
+        />
+      </Paper>
     </Container>
   );
 };
 
 ArticleSection.propTypes = {};
 
-function CommentsSection (props){
+function CommentsSection(props) {
   const classes = useStyles();
+  const comments = (commentsDocs) =>
+    commentsDocs.map((v) => (
+      <CreateComment
+        name={v.name}
+        body={v.body}
+        date={v.date}
+        avatar={v.Avatar}
+      />
+    ));
+
   return (
     <Container className={classes.commentsLayout}>
-      <Paper elevation ={2}>
+      <Paper elevation={2}>
         <Container>
           <Container className={classes.commentsHeader}>
-            <Typography variant='h4'>
-              Comments(2)
-            </Typography>
+            <Typography variant="h4">Comments(2)</Typography>
           </Container>
+          <Container className={classes.addComment}>
+            <form>
+              <Avatar>OP</Avatar>
+              <TextField
+                id="outlined-multiline-static"
+                multiline
+                rows={4}
+                placeholder="add your comment.."
+                variant="outlined"
+              />
+              <Button variant="contained" color="primary">
+                Publish
+              </Button>
+            </form>
+          </Container>
+          <Container>{comments(commentsDocs)}</Container>
         </Container>
       </Paper>
     </Container>
-  )
+  );
 }
+
+const CreateComment = (props) => {
+  const classes = useStyles();
+  return (
+    <Container className={classes.comment}>
+      <Divider />
+      <Grid container direction="row" justify="space-between">
+        <Grid item container xs={4} sm>
+          <Avatar>{props.avatar}</Avatar>
+          <Typography variant="subtitle1">{props.name}</Typography>
+        </Grid>
+        <Typography variant="caption">{props.date}</Typography>
+      </Grid>
+      <Container className='commentBody'>
+        <Typography variant="body2">{props.body}</Typography>
+      </Container>
+      <Container className={classes.commentBtn}>
+        <Button startIcon={<ReplyIcon />}>Reply</Button>
+        <Button startIcon={<ThumbUpAltOutlinedIcon />}>Like</Button>
+      </Container>
+    </Container>
+  );
+};
+
+CreateComment.propTypes = {};
 
 const body =
   "Summary\n\nBoth Tilray and Aphria have seen 200% stock surges in just days from Reddit-style buying.\n\nThe 'blue wave' will help cannabis companies as federal legalization will open up new markets internally in the United States.\n\nRevenues and earnings for both companies are muted compared to the growth of other companies in the same sector.\n\nStock prices do not reflect potential growth of revenue and earnings for either of these companies.\n\nA couple of weeks ago, I reviewed the Tilray (TLRY) and Aphria (APHA) merger. I was neutral on the deal simply because although there would be potential cost savings, the stock price had already achieved a rational valuation based upon what could be earned. Since then, the stock has caught fire and shot up sharply. I received many messages from readers asking what I thought and if I still maintained my neutral position.\n\n\n\nYes, I will always be a ‘neutral’ on a stock that is overvalued.\n\n\n\nI felt the valuations were too rich before and now both stocks are up significantly.\n\n\n\nBut, there have been fundamental changes since that last review I did so I wanted to take another look at what has transpired.";

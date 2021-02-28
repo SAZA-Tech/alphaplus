@@ -25,7 +25,7 @@ export function ArticleAutherInfo(props) {
   const state = useState();
   const classes = useStyles();
   return (
-    <Container className={classes.root} maxWidth="sm">
+    <Container className={classes.root} maxWidth="xs">
       <Grid
         spacing={4}
         container
