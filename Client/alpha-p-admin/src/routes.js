@@ -7,7 +7,6 @@ const Articles = React.lazy(() => import('./views/articles/Articles'));
 const Companies = React.lazy(() => import('./views/companies/Companies'));
 const News = React.lazy(() => import('./views/news/News'));
 const Sectors = React.lazy(() => import('./views/sectors/Sectors'));
-
 const Users = React.lazy(() => import('./views/users/Users'));
 
 const routes = [

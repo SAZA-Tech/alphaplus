@@ -1,33 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import {
-  
-  CCard,
   CCardBody,
-  CCardHeader,
-  CCol,
   CDataTable,
-  CRow,
-  CPagination,
-  CContainer,
-  CButton,CBadge,CCollapse,
-  CInput,
-  CInputGroup,
-  CInputGroupPrepend,
-  CInputGroupAppend,
-  CInputGroupText,
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+  CButton,
+  CCollapse
+  } from '@coreui/react'
 import usersData from './UsersData'
-
-
+import InputFormUser from './InputFormUser'
 
 
 const Users = () => {
+
+  
   
   const [details, setDetails] = useState([])
    const [items, setItems] = useState(usersData)
-
+   const history = useHistory()
   const toggleDetails = (index) => {
     const position = details.indexOf(index)
     let newDetails = details.slice()
@@ -48,7 +37,8 @@ const Users = () => {
     { key: 'UserGoogleAcc', _style: { width: '20%'} },
     { key: 'Role', _style: { width: '20%'} },
     { key: 'RegisterDate', _style: { width: '20%'} },
-
+   
+  
 
     {
       key: 'show_details',
@@ -62,11 +52,20 @@ const Users = () => {
   
 
   return (
+
+
+    
     <CDataTable
+
+    
+      
       items={usersData}
       fields={fields}
       columnFilter
-      tableFilter
+      
+      theadTopSlot={ <CButton>
+        <InputFormUser name="Add User"/>
+    </CButton>}
       footer
       itemsPerPageSelect
       itemsPerPage={5}
@@ -78,6 +77,10 @@ const Users = () => {
         'show_details':
           (item, index)=>{
             return (
+              
+              <CButton size="sm" color="danger" className="ml-1">
+              Delete
+            </CButton>,
               <td className="py-2">
                 <CButton
                   color="primary"
@@ -99,9 +102,8 @@ const Users = () => {
                   <h4>
                     {item.username}
                   </h4>
-                  <p className="text-muted">User since: {item.registered}</p>
-                  <CButton size="sm" color="info">
-                   Edit
+                  <CButton>
+                    <InputFormUser name="Edit"/>
                   </CButton>
                   <CButton size="sm" color="danger" className="ml-1">
                     Delete
