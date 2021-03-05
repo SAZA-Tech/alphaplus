@@ -19,7 +19,7 @@ import AddCommentIcon from "@material-ui/icons/AddComment";
 import {
   ArticleAutherInfo,
   ArticleAutherInfoExpanded,
-} from "../components/AnalystInfo";
+} from "../../components/AnalystInfo";
 import { fade, makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({

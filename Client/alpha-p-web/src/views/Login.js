@@ -15,8 +15,6 @@ import gql from "graphql-tag";
 import { AuthContext } from "../context/auth";
 import { useForm } from "../util/hooks";
 
-
-
 const LOGIN_USER = gql`
   mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
@@ -73,7 +71,11 @@ export const LoginForm = (props) => {
       props.history.push("/");
     },
     onError(err) {
-      setErrors(err.graphQLErrors[0].extensions.exception.errors);
+      setErrors(
+        err && err.graphQLErrors[0]
+          ? err.graphQLErrors[0].extensions.exception.errors
+          : {}
+      );
     },
     variables: values,
   });
@@ -91,7 +93,7 @@ export const LoginForm = (props) => {
           placeHolder="email"
           value={values.email}
           errors={errors.email}
-          onChange = {onChange}
+          onChange={onChange}
         />
         <FormInput
           id="password"
@@ -100,7 +102,7 @@ export const LoginForm = (props) => {
           placeHolder="password"
           value={values.password}
           errors={errors.password}
-          onChange = {onChange}
+          onChange={onChange}
         />
         <span className="remember-forgetpass">
           <span className="rememberMe">
@@ -141,4 +143,3 @@ export const LoginForm = (props) => {
     </div>
   );
 };
-
