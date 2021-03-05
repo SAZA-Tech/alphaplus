@@ -15,9 +15,7 @@ import Navbar from "./components/Navbar";
 import Article from "./views/Content/Article";
 import Draft from "./views/Content/Draft";
 
-
 export class App extends Component {
-
   render() {
     return (
       <AuthProvider>
@@ -27,6 +25,7 @@ export class App extends Component {
             <Route exact path="/" component={Home} />
             <Route exact path="/article" component={Article} />
             <Route exact path="/draft" component={Draft} />
+            <AuthRoute exact path="/Signup" component={SignUp} />
 
             <AuthRoute exact path="/Login" component={Login} />
           </div>
@@ -34,7 +33,6 @@ export class App extends Component {
       </AuthProvider>
     );
   }
-
 }
 
 export default App;

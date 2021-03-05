@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -20,16 +20,17 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import TwitterIcon from "@material-ui/icons/Twitter";
 import EmailIcon from "@material-ui/icons/Email";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/auth";
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
   },
   menuButton: {
-    order:4,
+    order: 4,
     marginRight: theme.spacing(2),
   },
   title: {
-    fontFamily: 'sans-serif',
+    fontFamily: "sans-serif",
     fontStyle: "normal",
     fontWeight: "bold",
     fontSize: "36px",
@@ -121,6 +122,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function PrimarySearchAppBar(props) {
+  const context = useContext(AuthContext);
+
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -231,8 +234,7 @@ export default function PrimarySearchAppBar(props) {
     <div className={classes.grow}>
       <AppBar position="static">
         <Toolbar>
-        
-          <Typography className={classes.title} variant="h6" noWrap >
+          <Typography className={classes.title} variant="h6" noWrap>
             Alpha+
           </Typography>
           <div className={classes.search}>
@@ -251,19 +253,28 @@ export default function PrimarySearchAppBar(props) {
           {/* 👇👇👇👇👇👇👇 Here a Spacer */}
           <div className={classes.grow} />
           <div className={classes.loginBtn}>
-            <Button variant="outlined" color="inherit" component={Link} to="/Login">
+            <Button
+              variant="outlined"
+              color="inherit"
+              component={Link}
+              to="/Login"
+            >
               Login
             </Button>
           </div>
           <div className={classes.subscribeBtn}>
-            <Button variant="contained" color="secondary">
-              Subscribe
-            </Button>
+            {context.user ? (
+              <Button onClick={() => context.logout()}>Log out</Button>
+            ) : (
+              <Button variant="contained" color="secondary">
+                Subscribe
+              </Button>
+            )}
           </div>
 
           <div className={classes.sectionDesktop}></div>
           <div className={classes.sectionMobile}>
-              {/* <IconButton
+            {/* <IconButton
             edge="start"
             className={classes.menuButton}
             color="inherit"
