@@ -3,10 +3,12 @@ const express = require("express"); // web application framework package
 const cors = require("cors"); // allows to access something from outside our server to our server
 const mongoose = require("mongoose"); // DB
 
-const { ApolloServer,PubSub  } = require("apollo-server-express"); // GraphQl Server
+const { ApolloServer, PubSub } = require("apollo-server-express"); // GraphQl Server
 
-const typeDefs = require("./GraphQl/schema");
-const resolvers = require("./GraphQl/resolvers/user_resovlers");
+const contentShcema = require("./GraphQl/ContentSchema");
+const authSchema = require("./GraphQl/schema");
+const typeDefs = [authSchema, contentShcema];
+const resolvers = require("./GraphQl/resolvers");
 
 const app = express();
 const pubsub = new PubSub();
@@ -14,7 +16,7 @@ const pubsub = new PubSub();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req }) => ({ req, pubsub })
+  context: ({ req }) => ({ req, pubsub }),
 });
 server.applyMiddleware({ app });
 
@@ -24,12 +26,18 @@ const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+const options = {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useUnifiedTopology: true,
+};
 
 const uri = process.env.ATLAS_URI; //global env variable which defined in .env file
 
 mongoose.connect(
   uri,
-  { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true } // connection with mongo db
+  options
+  // connection with mongo db
 );
 const connection = mongoose.connection;
 connection.once("open", () => {
@@ -56,16 +64,19 @@ app.get("/", function (req, res) {
 // app.listen(port, () => {
 //   console.log(`server listening on port ${port}`); // start the server
 // });
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   next();
 });
 
-app.get('/', function(req, res, next) {
+app.get("/", function (req, res, next) {
   // Handle the get for this route
 });
 
-app.post('/', function(req, res, next) {
- // Handle the post for this route
+app.post("/", function (req, res, next) {
+  // Handle the post for this route
 });
