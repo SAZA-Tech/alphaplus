@@ -15,7 +15,9 @@ import Navbar from "./components/Navbar";
 import Article from "./views/Content/Article";
 import Draft from "./views/Content/Draft";
 
+
 export class App extends Component {
+
   render() {
     return (
       <AuthProvider>
@@ -32,6 +34,7 @@ export class App extends Component {
       </AuthProvider>
     );
   }
+
 }
 
 export default App;
