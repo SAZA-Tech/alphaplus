@@ -14,10 +14,12 @@ import Home from "./views/Home";
 import Navbar from "./components/Navbar";
 import Article from "./views/Content/Article";
 import Draft from "./views/Content/Draft";
-
+import {theme} from './Theme';
+import { ThemeProvider } from "@material-ui/styles";
 export class App extends Component {
   render() {
     return (
+      <ThemeProvider theme={theme}>
       <AuthProvider>
         <Router>
           <Navbar />
@@ -31,6 +33,7 @@ export class App extends Component {
           </div>
         </Router>
       </AuthProvider>
+      </ThemeProvider>
     );
   }
 }

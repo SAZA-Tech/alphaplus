@@ -10,3 +10,15 @@ export const LOGIN_USER = gql`
     }
   }
 `;
+
+export const SIGNUP_USER = gql`
+  mutation register($registerInput: RegisterInput) {
+    register(registerInput: $registerInput) {
+      id
+      email
+      username
+      createdAt
+      token
+    }
+  }
+`;
