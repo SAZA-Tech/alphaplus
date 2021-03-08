@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import Editor from "../../components/Editor";
-import { Button } from "@material-ui/core";
+import { Button, Container } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
 import { fade, makeStyles } from "@material-ui/core/styles";
@@ -24,6 +24,23 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
     width: "25ch",
   },
+  publishBtn:{
+    backgroundColor:theme.palette.success.light,
+    "&:hover":{
+      backgroundColor:theme.palette.success.main,
+
+    },
+    color:theme.palette.common.white,
+    marginLeft:theme.spacing(2)
+  },
+  saveBtn:{
+    backgroundColor:theme.palette.primary.light,
+    "&:hover":{
+      backgroundColor:theme.palette.primary.main,
+
+    },
+    color:theme.palette.common.white,
+  }
 }));
 
 function Draft(props) {
@@ -106,10 +123,15 @@ function Draft(props) {
       <div style={{ textAlign: "center", margin: "2rem" }}>
         {loading ? (
           <CircularProgress />
-        ) : (
-          <Button size="large" className="" onClick={onSubmit}>
-            Submit
+        ) : (<Container>
+          <Button size='large'   variant='contained'
+          className={classes.saveBtn}>Save</Button>
+          <Button size="large" 
+          variant='contained'
+          className={classes.publishBtn} onClick={onSubmit}>
+            Publish Draft
           </Button>
+          </Container>
         )}
       </div>
       {success && (

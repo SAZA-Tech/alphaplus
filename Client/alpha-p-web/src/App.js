@@ -14,25 +14,28 @@ import Home from "./views/Home";
 import Navbar from "./components/Navbar";
 import Article from "./views/Content/Article";
 import Draft from "./views/Content/Draft";
-import {theme} from './Theme';
+import { MyAuthors } from "./views/Content/MyAuthors";
+import { theme } from "./Theme";
 import { ThemeProvider } from "@material-ui/styles";
+import { Container } from "@material-ui/core";
 export class App extends Component {
   render() {
     return (
       <ThemeProvider theme={theme}>
-      <AuthProvider>
-        <Router>
-          <Navbar />
-          <div>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/article" component={Article} />
-            <Route exact path="/draft" component={Draft} />
-            <AuthRoute exact path="/Signup" component={SignUp} />
+        <AuthProvider>
+          <Router>
+            <Navbar />
+            <Container>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/article" component={Article} />
+              <Route exact path="/draft/:draftId" component={Draft} />
+              <Route exact path="/MyAuthers/:username/" component={MyAuthors} />
+              <AuthRoute exact path="/Signup" component={SignUp} />
 
-            <AuthRoute exact path="/Login" component={Login} />
-          </div>
-        </Router>
-      </AuthProvider>
+              <AuthRoute exact path="/Login" component={Login} />
+            </Container>
+          </Router>
+        </AuthProvider>
       </ThemeProvider>
     );
   }

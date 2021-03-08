@@ -13,3 +13,21 @@ export const CREATE_DRAFT = gql`
     }
   }
 `;
+
+export const GET_DRAFTS = gql`
+  query getDrafts($id: ID!) {
+    getDrafts(id: $id) {
+      draftBody
+      draftAuther {
+        username
+        name
+        id
+        email
+        type
+      }
+      createdAt
+      draftName
+      id
+    }
+  }
+`;

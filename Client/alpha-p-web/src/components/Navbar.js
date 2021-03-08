@@ -124,13 +124,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header() {
+export default function Header(props) {
   const context = useContext(AuthContext);
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const isMenuOpen = Boolean(anchorEl);
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
+  };
+  const loggingOut = () => {
+    handleMenuClose();
+    context.logout();
   };
   const handleMenuClose = () => {
     setAnchorEl(null);
@@ -157,13 +161,13 @@ export default function Header() {
         </IconButton>
         <p>Profile</p>
       </MenuItem>{" "}
-      <MenuItem onClick={() => context.logout()}>
+      <MenuItem onClick={loggingOut}>
         <IconButton
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
           aria-haspopup="true"
           color="inherit"
-          onClick={() => context.logout()}
+          onClick={loggingOut}
         >
           <ExitToApp />
         </IconButton>
@@ -171,17 +175,18 @@ export default function Header() {
       </MenuItem>
     </Menu>
   );
+
   const leftMenu = [
     {
       title: "My Authers",
-      link: "/@username/authors",
+      link: context.user ? `/MyAuthers/${context.user.id}/` : `/Login`,
     },
     {
       title: "My Portfolio",
       link: "/Portfolio",
     },
     {
-      title: "My Authers",
+      title: "Sectors",
       dropdown: true,
       menu: [
         {
