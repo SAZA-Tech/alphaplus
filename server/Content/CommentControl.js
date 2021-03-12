@@ -1,33 +1,37 @@
 const { isAuthrized } = require("../Auth/Autherization");
 const { validateContentInput } = require("../Auth/validators");
 const { ArticleControl } = require("./ArticlesControl");
+const { findUser } = require("../Auth/AuthControl");
+
 const Article = require("./Models/ArticleModel");
 const Comment = require("./Models/CommentModel");
 module.exports.CommentControl = {
-  addComment: async (
-    _,
-    { autherId, articleId, contentInput: { title, body } },
-    context
-  ) => {
-    const { valid, errors } = validateContentInput(title, body);
+  addComment: async (_, { autherId, articleId, commentBody }, context) => {
+    // const { valid, errors } = validateContentInput(title, body);
 
-    if (!valid) {
-      throw new UserInputError(`Invalid Input ${errors}`);
+    if (commentBody.trim() === '') {
+      throw new UserInputError('Empty comment', {
+        errors: {
+          body: 'Comment body must not empty'
+        }
+      });
     }
-    if (isAuthrized(_, { id }, context)) {
+    if (isAuthrized(_, { autherId }, context)) {
       const article = await Article.findById(articleId);
-      const commentAuther = await findUser(_, { id: autherId });
+      const commentAuthor = await findUser(_, { id: autherId });
       const comment = new Comment({
         articleId: article._id,
-        commentAutherId: commentAuther._id,
-        commentBody: body,
+        commentAutherId: commentAuthor._id,
+        commentBody: commentBody,
         createdAt: new Date().toISOString(),
       });
       const res = await comment.save();
+       article.articleComments.push(res._id);
+       await article.save();
       return {
         id: res._id,
         ...res._doc,
-        commentAuther,
+        commentAuthor,
       };
     } else {
       throw new Error("Not Authrized");
@@ -57,7 +61,10 @@ module.exports.CommentControl = {
       (companyId == null) &
       (tags == null)
     ) {
-      commentDocs = await Comment.find();
+      commentDocs = await Comment.find()
+        .populate("commentAuthorId")
+        .populate("articleId")
+        .exec();
     } else {
       // Other wise set up the filter
       const Filter = {};
@@ -67,16 +74,24 @@ module.exports.CommentControl = {
       // TODO: Get Company Tag from company Id
       //   if(companyId!=null) Filter.
       // Find the articles
-      commentDocs = await Comment.find(Filter);
+      commentDocs = await Comment.find(Filter)
+        .populate("commentAuthorId")
+        .populate("articleId")
+        .exec();
     }
     // get auther data
     const comments = [];
-    commentDocs.map(async (v) => {
-      const commentAuthor = await findUser(_, { id: v.commentAuthorId });
+    commentDocs.map(async (e) => {
       comments.push({
-        commentAuthor,
-        id: v._id,
-        ...v._doc,
+        commentAuthor: {
+          id: e.commentAuthorId._id,
+          name: e.commentAuthorId.name,
+          username: e.commentAuthorId.username,
+          email: e.commentAuthorId.email,
+          createdAt: e.commentAuthorId.createdAt,
+        },
+        id: e._id,
+        ...e._doc,
       });
       return comments;
     });

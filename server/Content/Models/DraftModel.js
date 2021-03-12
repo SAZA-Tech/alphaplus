@@ -1,12 +1,13 @@
-const { model, Schema } = require("mongoose");
+const { model, Schema, SchemaType } = require("mongoose");
 const User = require("../../Auth/UserModel");
-
-
 
 const DraftSchema = new Schema({
   draftName: String,
   draftBody: String,
-  draftAuthorId: String,
+  draftAuthorId: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
   createdAt: String,
   updatedAt: String,
 });

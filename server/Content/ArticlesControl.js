@@ -3,6 +3,7 @@ const { isAuthrized } = require("../Auth/Autherization");
 const { validateContentInput } = require("../Auth/validators");
 const Article = require("./Models/ArticleModel");
 const { findUser } = require("../Auth/AuthControl");
+const checkAuth = require("../Auth/check-auth");
 module.exports.ArticleControl = {
   // Create Article and refrence to to copmany db using tags
   createArticle: async (_, { draft, tags }, context) => {
@@ -43,7 +44,7 @@ module.exports.ArticleControl = {
     };
   },
   //Return List Of Articles Based On Filter
-  getArticls: async (
+  getArticles: async (
     _,
     { filter: { userId, articleId, companyId, tags } },
     context
@@ -71,21 +72,58 @@ module.exports.ArticleControl = {
       //   if(companyId!=null) Filter.
       if (tags != null) Filter.articleTags = tags;
       // Find the articles
-      articlesDocs = await Article.find(Filter);
+      articlesDocs = await Article.find(Filter)
+        .populate("articleAuthorId")
+        .populate("articleComments")
+        .exec();
       // get auther data
     }
     const articles = [];
-    for (let index = 0; index < articlesDocs.length; index++) {
-      const articleAuthor = await findUser(_, {
-        id: articlesDocs[index].articleAuthorId,
-      });
+    articlesDocs.map((e) => {
       articles.push({
-        articleAuthor,
-        id: articlesDocs[index].id,
-        ...articlesDocs[index]._doc,
+        id: e._id,
+        articleAuthor: {
+          id: e.articleAuthorId._id,
+          name: e.articleAuthorId.name,
+          username: e.articleAuthorId.username,
+          email: e.articleAuthorId.email,
+          createdAt: e.articleAuthorId.createdAt,
+        },
+        ...e._doc,
       });
-    }
+    });
+    // for (let index = 0; index < articlesDocs.length; index++) {
+    //   const articleAuthor = await findUser(_, {
+    //     id: articlesDocs[index].articleAuthorId,
+    //   });
+    //   articles.push({
+    //     articleAuthor,
+    //     id: articlesDocs[index].id,
+    //     ...articlesDocs[index]._doc,
+    //   });
+    // }
     return articles;
+  },
+  getArticle: async (_, { articleId }, context) => {
+    const article = await Article.findById(articleId)
+      .populate("articleAuthorId")
+      .populate("articleComments")
+      .exec();
+    if (article.$isValid) {
+      return {
+        id: article._id,
+        articleAuthor: {
+          id: article.articleAuthorId._id,
+          name: article.articleAuthorId.name,
+          username: article.articleAuthorId.username,
+          email: article.articleAuthorId.email,
+          createdAt: article.articleAuthorId.createdAt,
+        },
+        ...article._doc,
+      };
+    } else {
+      throw new Error(`Article is not found`);
+    }
   },
   editArticle: async (
     _,
@@ -100,16 +138,25 @@ module.exports.ArticleControl = {
     }
     //Auth
     if (isAuthrized(_, { id })) {
-      const article = await Article.findById(articleId);
+      const article = await Article.findById(articleId)
+        .populate("articleAuthorId")
+        .populate("articleComments")
+        .exec();
       if (article.$isValid) {
-        const articleAuthor = await findUser(_, { id });
+        // const articleAuthor = await findUser(_, { id });
         article.articleTitle = title;
         article.articleBody = body;
         article.updatedAt = new Date().toISOString();
         const res = await article.save();
         return {
           id: res._id,
-          articleAuthor,
+          articleAuthor: {
+            id: res.articleAuthorId._id,
+            name: res.articleAuthorId.name,
+            username: res.articleAuthorId.username,
+            email: res.articleAuthorId.email,
+            createdAt: res.articleAuthorId.createdAt,
+          },
           ...res._doc,
         };
       } else {
@@ -133,6 +180,31 @@ module.exports.ArticleControl = {
       }
     } else {
       throw new Error("No Autrhized");
+    }
+  },
+  likeArticle: async (_, { articleId }, context) => {
+    const auth = checkAuth(context);
+    const article = await Article.findById(articleId);
+    if (article) {
+      if (article.likes.find((like) => like.username == auth.username)) {
+        //Article is already liked
+        article.likes = article.likes.filter(
+          (like) => like.username !== auth.username
+        );
+      } else {
+        //Not liked
+        article.likes.push({
+          username: auth.username,
+          createdAt: new Date().toISOString(),
+        });
+      }
+      const res = await article.save();
+      return {
+        id: res._id,
+        ...res._doc,
+      };
+    } else {
+      throw new UserInputError("Article Not Found");
     }
   },
 };

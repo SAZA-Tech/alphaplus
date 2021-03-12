@@ -3,8 +3,11 @@ const Content = require("../../Content");
 module.exports = {
   Query: {
     getDrafts: Content.DraftControl.getDrafts,
-    getArticls: Content.ArticleControl.getArticls,
+    getDraft: Content.DraftControl.getDraft,
+    getArticles: Content.ArticleControl.getArticles,
+    getArticle: Content.ArticleControl.getArticle,
     getComments: Content.CommentControl.getComments,
+    uploads: Content.FileUploadControl.uploads,
   },
   Mutation: {
     createDraft: Content.DraftControl.createDraft,
@@ -15,5 +18,7 @@ module.exports = {
     deleteArticle: Content.ArticleControl.deleteArticle,
     addComment: Content.CommentControl.addComment,
     deleteComment: Content.CommentControl.deleteComment,
+    likeArticle: Content.ArticleControl.likeArticle,
+    singleUpload: Content.FileUploadControl.singleUpload,
   },
 };

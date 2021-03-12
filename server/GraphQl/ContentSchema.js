@@ -3,11 +3,16 @@ const { gql } = require("apollo-server-express");
 const contentShcema = gql`
   extend type Query {
     # Get Analyst Drafts
-    getDrafts(id: ID!): [Draft!]!
+    getDrafts(autherId: ID!): [Draft!]!
+    getDraft(draftId: ID!): Draft!
     # Get Articles , Input with filter
-    getArticls(filter: Filter): [Article!]!
+    getArticles(filter: Filter): [Article!]!
+    getArticle(articleId: ID!): Article!
     # Get Comments
     getComments(filter: Filter): [Comment!]!
+
+     # Get uploads
+     uploads: [UploadedFileResponse]
   }
   extend type Mutation {
     createDraft(id: ID!, contentInput: ContentInput): Draft!
@@ -19,9 +24,13 @@ const contentShcema = gql`
     addComment(
       autherId: ID!
       articleId: ID!
-      contentInput: ContentInput
+      commentBody:String!
     ): Comment!
     deleteComment(commentId: ID!): String!
+    likeArticle(articleId: ID!): Article!
+
+    # Upload File
+    singleUpload(file: Upload!): UploadedFileResponse!
   }
   type Draft {
     id: ID!
@@ -34,19 +43,27 @@ const contentShcema = gql`
   type Article {
     id: ID!
     articleTitle: String!
-    articleBody:String!
+    articleBody: String!
     articleAuthor: User!
     articleComments: [Comment!]
+    commentCount: Int!
     articleTags: [String!]!
+    likes: [Like!]
+    likeCount: Int!
     createdAt: String
     updatedAt: String
   }
   type Comment {
     id: ID!
-    articleId:ID!
+    articleId: ID!
     commentAuthor: User!
     commentBody: String!
     createdAt: String
+  }
+  type Like {
+    id: ID!
+    createdAt: String!
+    user: User!
   }
   #Use filter values in the queries
   input Filter {
@@ -58,8 +75,12 @@ const contentShcema = gql`
   input ContentInput {
     title: String!
     body: String!
-    #for article and drafts
-    # structerdBody: [String!]!
+  }
+  type UploadedFileResponse {
+    filename: String!
+    mimetype: String!
+    encoding: String!
+    url: String!
   }
 `;
 module.exports = contentShcema;

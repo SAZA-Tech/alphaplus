@@ -39,7 +39,7 @@ module.exports.DraftControl = {
       }
       const draftName = title;
       const draftBody = body;
-      const draftAuthorId = userDraft.id;
+      const draftAuthorId = userDraft._id;
       const newDraft = new Draft({
         draftName,
         draftBody,
@@ -59,18 +59,28 @@ module.exports.DraftControl = {
     }
   },
 
-  getDrafts: async (_, { id }, context) => {
+  getDrafts: async (_, { autherId }, context) => {
     const auth = checkAuth(context);
 
-    if (auth.id == id) {
+    if (auth.id == autherId) {
       try {
         const drafts = [];
-        const draftsDocs = await Draft.find({ draftAuthorId: id });
-        const draftAuther = await findUser(_, { id: id });
+        const draftsDocs = await Draft.find({ draftAuthorId: autherId })
+          .populate("draftAuthorId")
+          .exec();
+      
         draftsDocs.map((v) => {
           drafts.push({
             id: v._id,
-            draftAuther,
+            draftAuther:
+              // To match GraphQl Schema
+              {
+                id: v.draftAuthorId._id,
+                name: v.draftAuthorId.name,
+                username: v.draftAuthorId.username,
+                email: v.draftAuthorId.email,
+                createdAt: v.draftAuthorId.createdAt,
+              },
             ...v._doc,
           });
         });
@@ -82,7 +92,31 @@ module.exports.DraftControl = {
       throw new Error("Not Authrized");
     }
   },
+  getDraft: async (_, { draftId }, context) => {
+    const auth = checkAuth(context);
 
+    try {
+      const draftDoc = await Draft.findById(draftId)
+        .populate("draftAuthorId")
+        .exec();
+
+      return {
+        id: draftDoc._id,
+        draftAuther:
+          // To match GraphQl Schema
+          {
+            id: draftDoc.draftAuthorId._id,
+            name: draftDoc.draftAuthorId.name,
+            username: draftDoc.draftAuthorId.username,
+            email: draftDoc.draftAuthorId.email,
+            createdAt: draftDoc.draftAuthorId.createdAt,
+          },
+        ...draftDoc._doc,
+      };
+    } catch (error) {
+      throw new Error("Error" + error);
+    }
+  },
   editDraft: async (
     _,
     { id, draftID, contentInput: { title, body } },
@@ -148,7 +182,7 @@ module.exports.DraftControl = {
       throw new Error("Please Add Tags");
     }
     //Create Article
-    
+
     const article = await ArticleControl.createArticle(
       _,
       { draft, tags },
