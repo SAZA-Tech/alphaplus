@@ -7,6 +7,7 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+
 //Server URL
 
 const httpLink = createHttpLink({
@@ -30,6 +31,8 @@ const client = new ApolloClient({
 
 export default (
   <ApolloProvider client={client}>
-    <App />
+          <Provider store={store}>
+           <App/>
+          </Provider>
   </ApolloProvider>
 );

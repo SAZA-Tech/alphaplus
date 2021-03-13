@@ -24,8 +24,8 @@ import { AuthContext } from "../context/auth";
 import { useForm } from "../util/hooks";
 
 const LOGIN_ADMIN = gql`
-  mutation adminLogin($email: String!, $password: String!) {
-    adminLogin(email: $email, password: $password) {
+  mutation AdminLogin($email: String!, $password: String!) {
+    AdminLogin(email: $email, password: $password) {
       id
       email
       username

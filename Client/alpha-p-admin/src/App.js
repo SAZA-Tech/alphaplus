@@ -20,15 +20,17 @@ const TheLayout = React.lazy(() => import('./containers/TheLayout'));
 class App extends Component {
 
   render() {
-    return (
-      <AdminLogin/>
-     
-    //  <AuthProvider>
-    //  <Router>
+     return (
       
-    //      <AuthRoute exact path='/AdminLogin' component={AdminLogin} />
-    //  </Router>
-    //  </AuthProvider>
+      //<AdminLogin/> 
+      <AuthProvider>
+                <Router>
+                  
+                    <AuthRoute exact path='/AdminLogin' component={AdminLogin} />
+                </Router>
+            </AuthProvider>
+
+     
     );
   }
 }
