@@ -50,6 +50,39 @@ module.exports.login = async (_, { email, password }) => {
   };
 };
 
+module.exports.adminLogin = async (_, { email, password }) => {
+  const { errors, valid } = validateLoginInput(email, password);
+
+  if (!valid) {
+    throw new UserInputError("Errors", { errors });
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    errors.general = "User not found";
+    throw new UserInputError("User not found", { errors });
+  }
+
+  const match = await bcrypt.compare(password, user.password);
+  const adminmatch = await bcrypt.compare(type, user.type);
+
+  if (!match) {
+    errors.general = "Wrong crendetials";
+    throw new UserInputError("Wrong crendetials", { errors });
+  }
+
+  const token = generateToken(user);
+
+  return {
+    ...user._doc,
+    id: user._id,
+    token,
+  };
+};
+
+
+
 //SignUp
 module.exports.register = async (
   _,

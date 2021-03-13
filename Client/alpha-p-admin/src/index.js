@@ -12,12 +12,37 @@ import { icons } from './assets/icons'
 import { Provider } from 'react-redux'
 import store from './store'
 
+import {ApolloClient,ApolloProvider,InMemoryCache,createHttpLink} from '@apollo/client'
+
+
+//Server URL
+
+const httpLink = createHttpLink({
+    uri:'http://localhost:4000/graphql'
+
+});
+
+const client = new ApolloClient({
+    link:httpLink,
+    cache: new InMemoryCache()
+});
+
+// export default(
+//     <ApolloProvider client={client}>
+//         <App/>
+//     </ApolloProvider>
+// )
+
 React.icons = icons
 
 ReactDOM.render(
+  <ApolloProvider client={client}>
+
   <Provider store={store}>
     <App/>
-  </Provider>,
+  </Provider>
+  </ApolloProvider>
+   ,
   document.getElementById('root')
 );
 

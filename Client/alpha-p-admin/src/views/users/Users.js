@@ -6,16 +6,45 @@ import {
   CButton,
   CCollapse
   } from '@coreui/react'
-import usersData from './UsersData'
 import InputFormUser from './InputFormUser'
+import { gql, useQuery } from '@apollo/client';
+import { useMutation } from "@apollo/client";
 
+const GET_USERS = gql`
+ query getUsers {
+  getUsers{
+  email
+  username
+  id
+  name
+  createdAt
+  type
+  }
+ }`
+  ;
 
+  const DELETE_USER = gql`
+  mutation deleteUser($id: ID!) {
+    deleteUser(id: $id) 
+  }
+`;
+ 
 const Users = () => {
 
+
   
+
   
   const [details, setDetails] = useState([])
-   const [items, setItems] = useState(usersData)
+   const [items, setItems] = useState([])
+   const { loading, error, data } = useQuery(GET_USERS,{
+    onCompleted(data){
+      setItems(data.getUsers);    
+    }
+  }) 
+  
+  const [deleteUser] = useMutation(DELETE_USER);
+
    const history = useHistory()
   const toggleDetails = (index) => {
     const position = details.indexOf(index)
@@ -30,13 +59,13 @@ const Users = () => {
 
 
   const fields = [
-    { key: 'UserName', _style: { width: '20%'} },
-    { key: 'UserId', _style: { width: '20%'} },
-    { key: 'UserEmail', _style: { width: '20%'} },
+    { key: 'username', _style: { width: '20%'} },
+    { key: 'id', _style: { width: '20%'} },
+    { key: 'email', _style: { width: '20%'} },
     { key: 'UserTwitterAcc', _style: { width: '20%'} },
     { key: 'UserGoogleAcc', _style: { width: '20%'} },
-    { key: 'Role', _style: { width: '20%'} },
-    { key: 'RegisterDate', _style: { width: '20%'} },
+    { key: 'type', _style: { width: '20%'} },
+    { key: 'createdAt', _style: { width: '20%'} },
    
   
 
@@ -49,17 +78,19 @@ const Users = () => {
     }
   ]
 
-  
+  //setItems(data.getUsers);
 
   return (
 
-
-    
+   
+    loading?<div>
+      loading 
+    </div>:
     <CDataTable
 
     
       
-      items={usersData}
+      items={items}
       fields={fields}
       columnFilter
       
@@ -105,7 +136,7 @@ const Users = () => {
                   <CButton>
                     <InputFormUser name="Edit"/>
                   </CButton>
-                  <CButton size="sm" color="danger" className="ml-1">
+                  <CButton type="submit" size="sm" color="danger" className="ml-1">
                     Delete
                   </CButton>
                 </CCardBody>

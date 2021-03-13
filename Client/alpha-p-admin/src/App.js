@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { HashRouter, Route,Router, Switch } from 'react-router-dom';
 import './scss/style.scss';
+import AdminLogin from './views/AdminLogin';
+import AuthRoute from './components/AuthRoute';
+import { AuthProvider } from './context/auth';
+
 
 const loading = (
   <div className="pt-3 text-center">
@@ -17,14 +21,14 @@ class App extends Component {
 
   render() {
     return (
-      <HashRouter>
-          <React.Suspense fallback={loading}>
-            <Switch>
-              
-              <Route path="/" name="Home" render={props => <TheLayout {...props}/>} />
-            </Switch>
-          </React.Suspense>
-      </HashRouter>
+      <AdminLogin/>
+     
+    //  <AuthProvider>
+    //  <Router>
+      
+    //      <AuthRoute exact path='/AdminLogin' component={AdminLogin} />
+    //  </Router>
+    //  </AuthProvider>
     );
   }
 }
