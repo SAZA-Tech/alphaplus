@@ -7,6 +7,10 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+import { icons } from './assets/icons'
+
+import { Provider } from 'react-redux'
+import store from './store'
 
 //Server URL
 

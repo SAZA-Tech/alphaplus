@@ -52,7 +52,7 @@ module.exports.login = async (_, { email, password }) => {
 
 module.exports.adminLogin = async (_, { email, password }) => {
   const { errors, valid } = validateLoginInput(email, password);
-
+  const AdminType = 'Admin';
   if (!valid) {
     throw new UserInputError("Errors", { errors });
   }
@@ -65,9 +65,9 @@ module.exports.adminLogin = async (_, { email, password }) => {
   }
 
   const match = await bcrypt.compare(password, user.password);
-  const adminmatch = await bcrypt.compare(type, user.type);
+  const adminmatch = AdminType.localeCompare(user.type);
 
-  if (!match) {
+  if (!match || adminmatch!=0) {
     errors.general = "Wrong crendetials";
     throw new UserInputError("Wrong crendetials", { errors });
   }

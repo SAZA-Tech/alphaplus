@@ -10,7 +10,7 @@ const Sectors = React.lazy(() => import('./views/sectors/Sectors'));
 const Users = React.lazy(() => import('./views/users/Users'));
 
 const routes = [
-  { path: '/', exact: true, name: 'Home' },
+  { path: '/',  name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/companies', name: 'Companies', component: Companies },
   { path: '/news', name: 'News', component: News },
@@ -19,7 +19,7 @@ const routes = [
   { path: '/comments', name: 'Comments', component: Comments },
   { path: '/articles', name: 'Articles', component: Articles },
   
-  { path: '/users', exact: true,  name: 'Users', component: Users },
+  { path: '/users',   name: 'Users', component: Users },
 ];
 
 export default routes;

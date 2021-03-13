@@ -38,7 +38,7 @@ function authReducer(state, action) {
   }
 }
 
-function AuthProvider(props) {
+function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   function login(userData) {
@@ -57,8 +57,10 @@ function AuthProvider(props) {
   return (
     <AuthContext.Provider
       value={{ user: state.user, login, logout }}
-      {...props}
-    />
+    
+    >
+      {children}
+    </AuthContext.Provider>
   );
 }
 
