@@ -15,15 +15,14 @@ export const CREATE_DRAFT = gql`
 `;
 
 export const GET_DRAFTS = gql`
-  query getDrafts($id: ID!) {
-    getDrafts(id: $id) {
+  query getDrafts($autherId: ID!) {
+    getDrafts(autherId: $autherId) {
       draftBody
       draftAuther {
         username
         name
         id
         email
-        type
       }
       createdAt
       draftName

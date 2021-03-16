@@ -25,15 +25,15 @@ export class App extends Component {
         <AuthProvider>
           <Router>
             <Navbar />
-            <Container>
+            <div>
               <Route exact path="/" component={Home} />
               <Route exact path="/article" component={Article} />
-              <Route exact path="/draft/:draftId" component={Draft} />
+              <Route  path="/draft/:draftId" component={Draft} />
               <Route exact path="/MyAuthers/:username/" component={MyAuthors} />
               <AuthRoute exact path="/Signup" component={SignUp} />
 
               <AuthRoute exact path="/Login" component={Login} />
-            </Container>
+            </div>
           </Router>
         </AuthProvider>
       </ThemeProvider>

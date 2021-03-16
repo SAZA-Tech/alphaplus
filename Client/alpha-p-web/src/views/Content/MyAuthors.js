@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { useParams, Link as RouterLink } from "react-router-dom";
+import { useParams, Link as RouterLink, Link } from "react-router-dom";
 import {
   Container,
   Grid,
@@ -31,27 +31,30 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(4),
     },
   },
-  titleSection:{
-      padding:theme.spacing(2),
-      marginLeft:theme.spacing(2)
-  }
+  titleSection: {
+    padding: theme.spacing(2),
+    marginLeft: theme.spacing(2),
+  },
 }));
 export function MyAuthors(props) {
   const classes = useStyles();
 
   const context = useContext(AuthContext);
-  const [state, setState] = useState({
-    drafts: [],
-  });
+  const [drafts, setDrafts] = useState([]);
+  // useEffect(() => {
+  //   console.log(`Drafts are Fetched`);
+  // }, [state.drafts]);
   const params = props.match.params.username;
-  const { loading } = useQuery(GET_DRAFTS, {
+  const { loading, data, error } = useQuery(GET_DRAFTS, {
     onCompleted(data) {
-      setState({
-        drafts: data.getDrafts,
-      });
+      setDrafts(data.getDrafts);
+      console.log(`Drafts length ${drafts.length}`);
     },
     variables: {
-      id: context.user.id,
+      autherId: params,
+    },
+    onError(error) {
+      console.log(`F}ailed to fetch drafts : ${error}`);
     },
   });
 
@@ -61,23 +64,34 @@ export function MyAuthors(props) {
     ) : (
       <Container className={classes.Section}>
         <Card>
-          <Typography variant="h4" className={classes.titleSection}>
-            My Drafts
-          </Typography>
-
-          <List>
-            {state.drafts.map((e) => {
-              return (
-                <ListItem>
-                  <ContentCards
-                    crudOtin
-                    title={e.draftName}
-                    link={`/draft/${e.id}`}
-                  />
-                </ListItem>
-              );
-            })}
-          </List>
+          <Container>
+            <Typography variant="h4" className={classes.titleSection}>
+              My Drafts
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              component={Link}
+              to="/draft/new"
+            >
+              Create New Draft
+            </Button>
+          </Container>
+          <Container>
+            <List>
+              {drafts.map((e) => {
+                return (
+                  <ListItem>
+                    <ContentCards
+                      crudOtin
+                      title={e.draftName}
+                      link={`/draft/${e.id}`}
+                    />
+                  </ListItem>
+                );
+              })}
+            </List>
+          </Container>
         </Card>
       </Container>
     );

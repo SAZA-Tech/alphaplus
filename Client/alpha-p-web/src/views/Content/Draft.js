@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import Editor from "../../components/Editor";
+import { Editor } from "../../components/Editor";
 import { Button, Container } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
@@ -24,23 +24,21 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
     width: "25ch",
   },
-  publishBtn:{
-    backgroundColor:theme.palette.success.light,
-    "&:hover":{
-      backgroundColor:theme.palette.success.main,
-
+  publishBtn: {
+    backgroundColor: theme.palette.success.light,
+    "&:hover": {
+      backgroundColor: theme.palette.success.main,
     },
-    color:theme.palette.common.white,
-    marginLeft:theme.spacing(2)
+    color: theme.palette.common.white,
+    marginLeft: theme.spacing(2),
   },
-  saveBtn:{
-    backgroundColor:theme.palette.primary.light,
-    "&:hover":{
-      backgroundColor:theme.palette.primary.main,
-
+  saveBtn: {
+    backgroundColor: theme.palette.primary.light,
+    "&:hover": {
+      backgroundColor: theme.palette.primary.main,
     },
-    color:theme.palette.common.white,
-  }
+    color: theme.palette.common.white,
+  },
 }));
 
 function Draft(props) {
@@ -55,7 +53,18 @@ function Draft(props) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [files, setFiles] = useState([]);
+  const [newDraft,setNewDraft] = useState(false); 
+  const params = props.match.params.draftId;
+  if(params=='new'){
+    setNewDraft(true);
+  }else{
 
+  }
+
+  useEffect(() => {
+
+
+  }, [body, title]);
   const [createDraft, { loading }] = useMutation(CREATE_DRAFT, {
     onError(err) {
       console.log(`Error on ${err}`);
@@ -83,10 +92,10 @@ function Draft(props) {
     createDraft();
   }
 
-  const onEditorChange = (value) => {
+  function onEditorChange(value) {
     setBody(value);
-    console.log(body);
-  };
+    // console.log(`New Body :${body}`);
+  }
   const onTitleChange = (value) => {
     setTitle(value.target.value);
     console.log(title);
@@ -117,20 +126,31 @@ function Draft(props) {
       <Editor
         placeholder={"Start Posting Something"}
         onEditorChange={onEditorChange}
+        value={body}
+        onChange
         onFilesChange={onFilesChange}
       />
 
       <div style={{ textAlign: "center", margin: "2rem" }}>
         {loading ? (
           <CircularProgress />
-        ) : (<Container>
-          <Button size='large'   variant='contained'
-          className={classes.saveBtn}>Save</Button>
-          <Button size="large" 
-          variant='contained'
-          className={classes.publishBtn} onClick={onSubmit}>
-            Publish Draft
-          </Button>
+        ) : (
+          <Container>
+            <Button
+              size="large"
+              variant="contained"
+              className={classes.saveBtn}
+            >
+              Save
+            </Button>
+            <Button
+              size="large"
+              variant="contained"
+              className={classes.publishBtn}
+              onClick={onSubmit}
+            >
+              Publish Draft
+            </Button>
           </Container>
         )}
       </div>

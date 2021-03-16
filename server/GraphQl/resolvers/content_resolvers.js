@@ -19,6 +19,7 @@ module.exports = {
     addComment: Content.CommentControl.addComment,
     deleteComment: Content.CommentControl.deleteComment,
     likeArticle: Content.ArticleControl.likeArticle,
-    singleUpload: Content.FileUploadControl.singleUpload,
+    // singleUpload: Content.FileUploadControl.singleUpload,
+    signS3: Content.FileUploadControl.signS3,
   },
 };

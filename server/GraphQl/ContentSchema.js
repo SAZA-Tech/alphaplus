@@ -30,8 +30,15 @@ const contentShcema = gql`
     likeArticle(articleId: ID!): Article!
 
     # Upload File
-    singleUpload(file: Upload!): UploadedFileResponse!
+    # singleUpload(file: Upload!): UploadedFileResponse!
+    signS3(filename: String!, filetype: String!): S3Payload!
+
   }
+  type S3Payload {
+    signedRequest: String!,
+    url: String!,
+  }
+
   type Draft {
     id: ID!
     draftName: String!
