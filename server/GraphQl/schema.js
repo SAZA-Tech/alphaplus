@@ -1,5 +1,5 @@
 const { gql } = require("apollo-server-express");
-
+// const contentShcema = require('./ContentSchema');
 module.exports = gql`
   type Query {
     findUser(id: ID!): User!
