@@ -11,6 +11,12 @@ import {
     CInput,
     CRow
   } from '@coreui/react' 
+  import { gql, useMutation } from '@apollo/client';
+ 
+ 
+ 
+
+
 
 
 
@@ -32,6 +38,7 @@ import {
       
       
       <CModal
+       
         show={modal}
         onClose={toggle}
       >
@@ -48,18 +55,18 @@ import {
               <CLabel htmlFor="name">User Name</CLabel>
               <CInput
                 type="name"
-                id="UserName"
+                id="name"
                 name="name"
                 placeholder="Enter User name"
                 autoComplete="name"
               />
             </CFormGroup>
             <CFormGroup>
-              <CLabel htmlFor="UserId">User Id</CLabel>
+              <CLabel htmlFor="id">User Id</CLabel>
               <CInput
                 type="number"
-                id="UserId"
-                name="UserId"
+                id="id"
+                name="id"
                 placeholder="Enter User Id"
                 
               />
@@ -95,12 +102,12 @@ import {
               />
             </CFormGroup>
             <CFormGroup>
-              <CLabel htmlFor="Role">Role</CLabel>
+              <CLabel htmlFor="type">Role</CLabel>
               <CInput
                 type="text"
-                id="Role"
-                name="Role"
-                placeholder="Enter User Role"
+                id="type"
+                name="type"
+                placeholder="Enter User type"
                 
               />
             </CFormGroup>
@@ -123,7 +130,9 @@ import {
 
         </CModalBody>
         <CModalFooter>
-          <CButton color="primary">Submit</CButton>{' '}
+          <CButton color="primary" 
+          type="submit"
+          >Submit</CButton>{' '}
           <CButton
             color="secondary"
             onClick={toggle}

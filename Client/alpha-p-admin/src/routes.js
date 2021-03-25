@@ -7,7 +7,9 @@ const Articles = React.lazy(() => import('./views/articles/Articles'));
 const Companies = React.lazy(() => import('./views/companies/Companies'));
 const News = React.lazy(() => import('./views/news/News'));
 const Sectors = React.lazy(() => import('./views/sectors/Sectors'));
-const Users = React.lazy(() => import('./views/users/Users'));
+const UsersInfo = React.lazy(() => import('./views/users/usersInfo/UsersInfo'));
+const UsersRequests = React.lazy(() => import('./views/users/usersRequests/UsersRequests'));
+
 
 const routes = [
   { path: '/',  name: 'Home' },
@@ -19,7 +21,11 @@ const routes = [
   { path: '/comments', name: 'Comments', component: Comments },
   { path: '/articles', name: 'Articles', component: Articles },
   
-  { path: '/users',   name: 'Users', component: Users },
+  { path: '/users', name: 'Users'},
+  { path: '/users/usersInfo', name: 'UsersInfo', component: UsersInfo },
+  { path: '/users/usersRequests', name: 'UsersRequests', component: UsersRequests },
+
+
 ];
 
 export default routes;

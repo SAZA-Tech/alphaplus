@@ -4,7 +4,8 @@ import {
   CCardBody,
   CDataTable,
   CButton,
-  CCollapse
+  CCollapse,
+  CForm
   } from '@coreui/react'
 import InputFormUser from './InputFormUser'
 import { gql, useQuery } from '@apollo/client';
@@ -28,6 +29,15 @@ const GET_USERS = gql`
     deleteUser(id: $id) 
   }
 `;
+
+const UPDATEUSERINFO = gql`
+mutation updateUserInfo($id: ID!, $name: String! , $type: String!) {
+  updateUserInfo(id: $id,name: $name ,type: $type) {
+    id
+    type
+  }
+}
+`;
  
 const Users = () => {
 
@@ -42,6 +52,7 @@ const Users = () => {
       setItems(data.getUsers);    
     }
   }) 
+  
   
   const [deleteUser] = useMutation(DELETE_USER);
 
@@ -77,6 +88,7 @@ const Users = () => {
       filter: false
     }
   ]
+  const [updateUserInfo] = useMutation(UPDATEUSERINFO);
 
   //setItems(data.getUsers);
 
@@ -86,13 +98,14 @@ const Users = () => {
     loading?<div>
       loading 
     </div>:
-    <CDataTable
+    <CDataTable 
 
     
       
       items={items}
       fields={fields}
       columnFilter
+      
       
       theadTopSlot={ <CButton>
         <InputFormUser name="Add User"/>
@@ -103,7 +116,9 @@ const Users = () => {
       hover
       sorter
       pagination
+      
       scopedSlots = {{
+        
         
         'show_details':
           (item, index)=>{
@@ -133,12 +148,25 @@ const Users = () => {
                   <h4>
                     {item.username}
                   </h4>
+                 
+                
                   <CButton>
-                    <InputFormUser name="Edit"/>
+                    <InputFormUser name="Edit"  onSubmit={e => {
+                        e.preventDefault();
+                        updateUserInfo();
+                      }}/>
                   </CButton>
-                  <CButton type="submit" size="sm" color="danger" className="ml-1">
+                  
+                  <CButton type="submit" 
+                      onSubmit={event => {
+                      event.preventDefault();
+                      deleteUser({id:item.id});
+                     
+                   }}
+                    size="sm" color="danger" className="ml-1">
                     Delete
                   </CButton>
+
                 </CCardBody>
               </CCollapse>
             )
