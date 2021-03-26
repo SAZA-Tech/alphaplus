@@ -9,6 +9,7 @@ import {
 } from '@coreui/react'
 
 import companiesData from './CompaniesData'
+import InputFormCompany from './InputFormCompany'
 
 
 const Companies = () => {
@@ -56,7 +57,9 @@ const Companies = () => {
       items={companiesData}
       fields={fields}
       columnFilter
-      tableFilter
+      theadTopSlot={ <CButton>
+        <InputFormCompany name="Add Company"/>
+    </CButton>}
       footer
       itemsPerPageSelect
       itemsPerPage={5}
@@ -96,9 +99,8 @@ const Companies = () => {
                   <h4>
                     {item.username}
                   </h4>
-                  <p className="text-muted">User since: {item.registered}</p>
-                  <CButton size="sm" color="info">
-                   Edit
+                  <CButton>
+                    <InputFormCompany name="Edit"/>
                   </CButton>
                   <CButton size="sm" color="danger" className="ml-1">
                     Delete

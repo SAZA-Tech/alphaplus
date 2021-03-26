@@ -19,6 +19,7 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import sectorsData from './SectorsData'
+import InputFormSector from './InputFormSector'
 
 
 
@@ -60,7 +61,9 @@ const Sectors = () => {
       items={sectorsData}
       fields={fields}
       columnFilter
-      tableFilter
+      theadTopSlot={ <CButton>
+        <InputFormSector name="Add Sector"/>
+    </CButton>}
       footer
       itemsPerPageSelect
       itemsPerPage={5}
@@ -93,8 +96,9 @@ const Sectors = () => {
                   <h4>
                     {item.username}
                   </h4>
-                  <p className="text-muted">User since: {item.registered}</p>
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Open modal for @getbootstrap</button>
+                  <CButton>
+                    <InputFormSector name="Edit"/>
+                  </CButton>
                   <CButton size="sm" color="danger" className="ml-1">
                     Delete
                   </CButton>
