@@ -1,7 +1,7 @@
 const { model, Schema } = require('mongoose');
 
 const sectorSchema = new Schema({
-  secName: String,
+  Secname: String,
   sectorCompanies:[{
     type:Schema.Types.ObjectId,
     ref:"Company"

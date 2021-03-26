@@ -14,13 +14,20 @@ const CompanySchema = new Schema({
   market: String,
   comname: String,
   symbol: String,
-  exchange: String,
-  Open:Number,
-  high:Number,
-  low:Number,
-  close:Number,
-  volume:Number,
 
+  financialData:{
+    type:Map,
+    of: [{
+      exchange: String,
+      Open:Number,
+       high:Number,
+       low:Number,
+       close:Number,
+       volume:Number,
+    }],
+    
+
+  },
 });
 
 module.exports = model('Company', CompanySchema);

@@ -8,22 +8,22 @@ createSector:async (
     _,
     {
     SectorInput:{
-      Secname
+      SecnameInput
     },
     
     },
     
   ) => {
     const { valid, errors } = validateSectorInput(
-        Secname,
+      SecnameInput,
       );
       if (!valid) {
         throw new UserInputError("Errors", { errors });
       }
-      const secName = Secname;
+      const Secname = SecnameInput;
 
       const newSector = new Sector({
-        secName,
+        Secname,
       });
    
       const res = await newSector.save();
@@ -57,11 +57,46 @@ deleteSector: async (_, { sectorID }) => {
 getSectors:async(_,) => {
 
   try {
-    const sectors = await Sector.find();
-    return sectors;
+    const sectorsdoc = await Sector.find().populate("sectorCompanies").exec();
+    const sector=[];
+    sectorsdoc.map((e)=>{
+      sector.push({
+        id:e._id,
+        ...e._doc,
+      });
+
+    });
+    return sector;
   } catch (err) {
     throw new Error(err);
   }
+
+},
+editSector:async(_,sectorID,{SectorInput:{SecnameInput}},) => {
+  try {
+    const sectordoc= await Sector.findById(sectorID).populate("sectorCompanies").exec();
+
+    if(sectordoc.$isValid){
+      sectordoc.Secname=SecnameInput;
+      
+      const res =await sectordoc.save();
+
+      return{
+        id:res._id,
+
+        ...res._doc,
+      }
+
+    }else{
+      throw new Error("sector Not Found");
+    }
+
+    
+  } catch (error) {
+    throw new Error(`Error Happend ${error}`);
+    
+  }
+
 
 },
 

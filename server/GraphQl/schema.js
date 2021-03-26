@@ -2,7 +2,7 @@ const { gql } = require("apollo-server-express");
 // const contentShcema = require('./ContentSchema');
 module.exports = gql`
 input SectorInput{
-  Secname:String!
+  SecnameInput:String!
 
 }
 
@@ -19,7 +19,7 @@ input CompanyInput {
 type Sector {
   id: ID!
   Secname:String!
-  companies:[Company]
+  sectorCompanies:[Company]
 }
 
 type Company {
@@ -66,8 +66,10 @@ type Company {
   type Mutation {
     createSector(SectorInput: SectorInput!): Sector!
     deleteSector(sectorID: ID!): String!
-    createCompany(CompanyInput: CompanyInput!): Company!   #require api
+    createCompany(CompanyInput: CompanyInput!): String   #require api
     deleteCompany(companyId: ID!): String!
+    editSector(sectorID: ID!,SectorInput: SectorInput!): Sector!
+    editCompany(companyId: ID!,CompanyInput: CompanyInput!):Company!
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
     updateUserInfo(
