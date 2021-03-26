@@ -1,11 +1,46 @@
 const { gql } = require("apollo-server-express");
 // const contentShcema = require('./ContentSchema');
 module.exports = gql`
+input SectorInput{
+  Secname:String!
+
+}
+
+input CompanyInput {
+  Symbol: String
+  Comname: String
+  SectorID:String
+  Market: String
+  CompanyID: String
+
+}
+
+
+type Sector {
+  id: ID!
+  Secname:String!
+  companies:[Company]
+}
+
+type Company {
+  id: ID!
+  sectorId: ID!
+  market: String
+  comname: String
+  symbol: String
+  exchange: String
+  Open: Float
+  high: Float
+  low: Float
+  close: Float
+  volume: Float
+  #articles: [Article]
+}
   type Query {
     findUser(id: ID!): User!
     getUsers: [User!]!
-    getCompanies: [Company!]!
-    findCompany(symbol: String!):Company!
+    getCompanies(CompanyInput: CompanyInput!): [Company!]! 
+    getSectors:[Sector!]!
   }
 
   type User {
@@ -19,22 +54,7 @@ module.exports = gql`
     token: String!
   }
 
-  type Post {
-    id: ID!
-    post: String!
-  }
-  #list of posts ?
-  type Company {
-    id: ID!
-    symbol: String!
-    exchange: String!
-    open: Float!
-    high: Float!
-    low: Float!
-    close: Float!
-    volume: Float!
-    posts: [Post]
-  }
+
   # TODO: add defualt value for type
   input RegisterInput {
     name: String
@@ -44,6 +64,10 @@ module.exports = gql`
     email: String!
   }
   type Mutation {
+    createSector(SectorInput: SectorInput!): Sector!
+    deleteSector(sectorID: ID!): String!
+    createCompany(CompanyInput: CompanyInput!): Company!   #require api
+    deleteCompany(companyId: ID!): String!
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
     updateUserInfo(

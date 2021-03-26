@@ -65,3 +65,14 @@ module.exports.validateContentInput = (title, body
     valid: Object.keys(errors).length < 1,
   };
 };
+module.exports.validateSectorInput = (Secname)=> {
+  const errors = {};
+  if (Secname.trim() == "") {
+    errors.Secname = "Sector name must not be empty";
+  }
+  return {
+    errors,
+    valid: Object.keys(errors).length < 1,
+  };
+
+};

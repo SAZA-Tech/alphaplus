@@ -11,7 +11,7 @@ module.exports = {
     ...contentResolvers.Query,
   },
   Mutation: {
-    // ...companyResovlers.Mutation,
+    ...companyResovlers.Mutation,
     ...userResovlers.Mutation,
     ...contentResolvers.Mutation,
   },
