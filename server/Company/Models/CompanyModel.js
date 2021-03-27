@@ -17,14 +17,14 @@ const CompanySchema = new Schema({
 
   financialData:{
     type:Map,
-    of: [{
+    of: {
       exchange: String,
       Open:Number,
        high:Number,
        low:Number,
        close:Number,
        volume:Number,
-    }],
+    },
     
 
   },

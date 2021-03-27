@@ -211,7 +211,25 @@ module.exports.CompanyControl = {
                      
                      const res = await newCompany.save()
                      sector.sectorCompanies.push(res._id);
-                   await sector.save();
+                     await sector.save();
+
+                     const company = {
+                      id:res._id,
+                      sectorId:sector._id,
+                      market:market,
+                      comname:comname,
+                      symbol:symbol,
+                      exchange:exchange1,
+                      Open:Open1,
+                      high:high1,
+                      low:low1,
+                      close:close1,
+                      volume:volume1,
+                     }
+                     console.log(company);
+
+                     return company;
+                   
   
                     break;
 
