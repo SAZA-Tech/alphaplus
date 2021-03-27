@@ -66,7 +66,7 @@ type Company {
   type Mutation {
     createSector(SectorInput: SectorInput!): Sector!
     deleteSector(sectorID: ID!): String!
-    createCompany(CompanyInput: CompanyInput!): String   #require api
+    createCompany(CompanyInput: CompanyInput!): Company   #require api
     deleteCompany(companyId: ID!): String!
     editSector(sectorID: ID!,SectorInput: SectorInput!): Sector!
     editCompany(companyId: ID!,CompanyInput: CompanyInput!):Company!
