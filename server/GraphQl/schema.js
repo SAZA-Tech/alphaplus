@@ -40,7 +40,7 @@ type Company {
     findUser(id: ID!): User!
     getUsers: [User!]!
     getCompanies(CompanyInput: CompanyInput!): [Company!]! 
-    getSectors:[Sector!]!
+    getSectors:[Sector!]
   }
 
   type User {

@@ -1,7 +1,6 @@
-const { model, Schema } = require('mongoose');
+const { model, Schema } = require("mongoose");
 
 const CompanySchema = new Schema({
-
   // articleId: {
   //   type: Schema.Types.ObjectId,
   //   ref: "Article",
@@ -9,25 +8,23 @@ const CompanySchema = new Schema({
 
   sectorId: {
     type: Schema.Types.ObjectId,
-    ref:"Sector"
+    ref: "Sector",
   },
   market: String,
   comname: String,
   symbol: String,
 
-  financialData:{
-    type:Map,
+  financialData: {
+    type: Map,
     of: {
       exchange: String,
-      Open:Number,
-       high:Number,
-       low:Number,
-       close:Number,
-       volume:Number,
+      Open: Number,
+      high: Number,
+      low: Number,
+      close: Number,
+      volume: Number,
     },
-    
-
   },
 });
 
-module.exports = model('Company', CompanySchema);
+module.exports = model("Company", CompanySchema);
