@@ -1,5 +1,6 @@
 const {
   login,
+  adminLogin,
   register,
   findUser,
   getUsers,
@@ -11,6 +12,7 @@ module.exports = {
   Query: { findUser, getUsers },
   Mutation: {
     login,
+    adminLogin,
     register,
     updateUserInfo,
     deleteUser,
