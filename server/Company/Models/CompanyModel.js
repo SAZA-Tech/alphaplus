@@ -23,6 +23,7 @@ const CompanySchema = new Schema({
       low: Number,
       close: Number,
       volume: Number,
+      date:String,
     },
   },
 });

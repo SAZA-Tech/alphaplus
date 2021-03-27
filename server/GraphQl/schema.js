@@ -20,8 +20,8 @@ type Sector {
   id: ID!
   Secname:String!
   sectorCompanies:[Company]
-}
 
+}
 type Company {
   id: ID!
   sectorId: ID!
@@ -34,6 +34,7 @@ type Company {
   low: Float
   close: Float
   volume: Float
+  date: String
   #articles: [Article]
 }
   type Query {
