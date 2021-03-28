@@ -7,7 +7,7 @@ import "quill/dist/quill.snow.css"; // Add css for snow theme
 // or import 'quill/dist/quill.bubble.css'; // Add css for bubble theme
 import axios from "axios";
 import moment from "moment";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { useForm } from "../util/hooks";
 const s3SignMutation = gql`
   mutation($filename: String!, $filetype: String!) {
@@ -72,18 +72,16 @@ export function Editor(props) {
     formats,
     placeholder,
   });
+  const [hasBody, setHasBody] = useState(false);
   const [body, setBody] = useState("");
   const [files, setFiles] = useState([]);
   const [filename, setFileName] = useState();
   const [filetype, setFileType] = useState();
 
-  //   console.log(quill); // undefined > Quill Object
-  //   console.log(quillRef); // { current: undefined } > { current: Quill Editor Reference }
   // Insert Image(selected by user) to quill
   const insertToEditor = (url) => {
     const range = quill.getSelection();
     quill.insertEmbed(range.index, "image", url);
-    
   };
   const [getS3SignedUrl, { loading, data, error }] = useMutation(
     s3SignMutation,
@@ -150,6 +148,16 @@ export function Editor(props) {
   };
   React.useEffect(() => {
     if (quill) {
+      if (props.body != "" && !hasBody) {
+        console.log(`assign body`);
+
+        setHasBody(true);
+        const fetchedBody = props.body;
+        console.log(fetchedBody);
+        quill.clipboard.dangerouslyPasteHTML(fetchedBody);
+      } else {
+        console.log(`No Body`);
+      }
       quill.on("editor-change", () => {
         handleChange();
       });

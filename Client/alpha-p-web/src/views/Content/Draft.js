@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { useParams } from "react-router-dom";
 import { Editor } from "../../components/Editor";
 import { Button, Container } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -9,8 +10,9 @@ import { CustomizedSnackbars } from "../../components/UI/messages";
 // import MuiAlert from '@material-ui/lab/Alert';
 import { AuthContext } from "../../context/auth";
 import { useForm } from "../../util/hooks";
-import { CREATE_DRAFT } from "../../graphql/Content/draftsGql";
-import { useMutation } from "@apollo/client";
+import { CREATE_DRAFT, GET_DRAFT } from "../../graphql/Content/draftsGql";
+import { useMutation, useLazyQuery, useQuery } from "@apollo/client";
+import { func } from "prop-types";
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -50,21 +52,55 @@ function Draft(props) {
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
   const { onSubmit } = useForm(createDraftCallback, {});
+
+  const [newDraft, setNewDraft] = useState(false);
+  const [fetched, setFetched] = useState(false);
+
+  let { draftId } = useParams();
+  if (draftId == "new" && !newDraft) {
+    setNewDraft(true);
+  }
+  const [content, setContent] = useState({
+    title: "",
+    //  () => {
+    //   if (!newDraft) {
+    //     fetchDraft();
+    //     if (!fetchLoading) return fetchedDraft.getDraft.title.toString();
+    //   } else return "";
+    // }
+    body: "",
+    //  () => {
+    //   if (!newDraft) {
+    //     fetchDraft();
+    //     if (!fetchLoading) return fetchedDraft.getDraft.body.toString();
+    //   } else return "";
+    // }
+  });
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+
   const [files, setFiles] = useState([]);
-  const [newDraft,setNewDraft] = useState(false); 
-  const params = props.match.params.draftId;
-  if(params=='new'){
-    setNewDraft(true);
-  }else{
+  const { loading: fetchLoading, data: fetchedData } = useQuery(GET_DRAFT, {
+    variables: {
+      draftId,
+    },
+    onCompleted(data) {
+      setFetched(true);
+      setTitle(fetchedData.getDraft.draftName);
+      // setContent({
+      //   body: fetchedData.getDraft.draftBody,
+      // });
+      setBody(fetchedData.getDraft.draftBody);
+      console.log(`body`, fetchedData.getDraft.draftBody);
+    },
+    skip: newDraft || fetched,
+  });
 
-  }
+  // useEffect(() => {
+  //   if (!fetchLoading && !fetched) {
 
-  useEffect(() => {
-
-
-  }, [body, title]);
+  //   }
+  // });
   const [createDraft, { loading }] = useMutation(CREATE_DRAFT, {
     onError(err) {
       console.log(`Error on ${err}`);
@@ -93,19 +129,45 @@ function Draft(props) {
   }
 
   function onEditorChange(value) {
-    setBody(value);
+    setBody(value)
     // console.log(`New Body :${body}`);
   }
   const onTitleChange = (value) => {
     setTitle(value.target.value);
-    console.log(title);
   };
 
   const onFilesChange = (files) => {
     setFiles(files);
   };
-
-  return (
+  const buttons = () => {
+    return newDraft ? (
+      // Create Button For New Draft
+      <Container>
+        <Button
+          size="large"
+          variant="contained"
+          className={classes.saveBtn}
+          onClick={onSubmit}
+        >
+          Create
+        </Button>
+      </Container>
+    ) : (
+      <Container>
+        {/* Save Draft 📝 */}
+        <Button size="large" variant="contained" className={classes.saveBtn}>
+          Save
+        </Button>
+        {/* Publish Draft 📑 */}
+        <Button size="large" variant="contained" className={classes.publishBtn}>
+          Publish Draft
+        </Button>
+      </Container>
+    );
+  };
+  return fetchLoading ? (
+    <CircularProgress />
+  ) : (
     <div style={{ maxWidth: "700px", margin: "2rem auto" }}>
       <div style={{ alignItems: "center" }}>
         <TextField
@@ -119,6 +181,7 @@ function Draft(props) {
           InputLabelProps={{
             shrink: true,
           }}
+          value={title}
           variant="outlined"
           onChange={onTitleChange}
         />{" "}
@@ -126,33 +189,13 @@ function Draft(props) {
       <Editor
         placeholder={"Start Posting Something"}
         onEditorChange={onEditorChange}
-        value={body}
+        body={fetched ? body : ""}
         onChange
         onFilesChange={onFilesChange}
       />
 
       <div style={{ textAlign: "center", margin: "2rem" }}>
-        {loading ? (
-          <CircularProgress />
-        ) : (
-          <Container>
-            <Button
-              size="large"
-              variant="contained"
-              className={classes.saveBtn}
-            >
-              Save
-            </Button>
-            <Button
-              size="large"
-              variant="contained"
-              className={classes.publishBtn}
-              onClick={onSubmit}
-            >
-              Publish Draft
-            </Button>
-          </Container>
-        )}
+        {loading ? <CircularProgress /> : buttons()}
       </div>
       {success && (
         <div>

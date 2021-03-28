@@ -30,3 +30,35 @@ export const GET_DRAFTS = gql`
     }
   }
 `;
+export const GET_DRAFT = gql`
+  query getDraft($draftId: ID!) {
+    getDraft(draftId: $draftId) {
+      createdAt
+      draftBody
+      draftName
+      updatedAt
+      id
+      draftAuther {
+        username
+        id
+        email
+      }
+    }
+  }
+`;
+
+export const EDIT_DRAFT =gql`
+mutation editDraft($draftId: ID!,$id: ID!) {
+  editDraft(draftID: $draftID, id: $id) {
+    createdAt
+    updatedAt
+    id
+    draftName
+    draftBody
+    draftAuther {
+      id
+      username
+    }
+  }
+}
+`;
