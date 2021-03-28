@@ -1,6 +1,7 @@
 const Sector = require("./Models/SectorModel");
 const { UserInputError } = require("apollo-server");
 const { validateSectorInput } = require("../Auth/validators");
+const {CompanyControl} = require("./companyControl");
 module.exports.SectorControl = {
 
 // create Sector
@@ -57,12 +58,24 @@ deleteSector: async (_, { sectorID }) => {
 getSectors:async(_,) => {
 
   try {
-    const sectorsdoc = await Sector.find().populate("sectorCompanies").exec();
-    const sector=[];
+    const sectorsdoc = await Sector.find().exec();
+   
+    var sector=[];
     sectorsdoc.map((e)=>{
+      console.log(e)
+      var companies =[];
+      companies =  CompanyControl.getCompanies(_,{
+        CompanyInput:{
+        Symbol:null,
+        SectorID:e._id,
+        Market:null,
+        Comname:null,
+        CompanyID:null
+      }});
       sector.push({
         id:e._id,
-        ...e._doc,
+        Secname:e.Secname,
+        sectorCompanies:companies
       });
 
     });
@@ -74,17 +87,27 @@ getSectors:async(_,) => {
 },
 editSector:async(_,sectorID,{SectorInput:{SecnameInput}},) => {
   try {
-    const sectordoc= await Sector.findById(sectorID).populate("sectorCompanies").exec();
+    const sectordoc= await Sector.findById(sectorID).exec();
 
     if(sectordoc.$isValid){
       sectordoc.Secname=SecnameInput;
       
       const res =await sectordoc.save();
 
+      var companies =[];
+      companies =  CompanyControl.getCompanies(_,{
+        CompanyInput:{
+        Symbol:null,
+        SectorID:res._id,
+        Market:null,
+        Comname:null,
+        CompanyID:null
+      }});
+
       return{
         id:res._id,
-
-        ...res._doc,
+        Secname:res.Secname,
+        sectorCompanies:companies
       }
 
     }else{

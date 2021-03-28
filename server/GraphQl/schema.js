@@ -22,6 +22,17 @@ type Sector {
   sectorCompanies:[Company]
 
 }
+type finance{
+  exchange: String
+  Open: Float
+  high: Float
+  low: Float
+  close: Float
+  volume: Float
+  date: String
+}
+
+
 type Company {
   id: ID!
   sectorId: ID!
@@ -35,10 +46,12 @@ type Company {
   close: Float
   volume: Float
   date: String
+  financialData:[finance]
   #articles: [Article]
 }
   type Query {
     findUser(id: ID!): User!
+    validateTags(tags:[String]):[Company]
     getUsers: [User!]!
     getCompanies(CompanyInput: CompanyInput!): [Company!]! 
     getSectors:[Sector!]

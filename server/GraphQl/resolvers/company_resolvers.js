@@ -5,6 +5,7 @@ module.exports = {
   Query: {
     getSectors:Company.SectorControl.getSectors,
     getCompanies:Company.CompanyControl.getCompanies,
+    validateTags:Company.CompanyControl.validateTags,
   },
   Mutation: {
     createSector: Company.SectorControl.createSector,

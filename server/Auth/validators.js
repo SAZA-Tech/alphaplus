@@ -76,3 +76,35 @@ module.exports.validateSectorInput = (Secname)=> {
   };
 
 };
+module.exports.validateCompanyInput=(Symbol,Market,Comname)=>{
+  const errors = {};
+  if (Symbol.trim() == "") {
+    errors.Symbol = "Symbol name must not be empty";
+  }
+  if (Market.trim() == "") {
+    errors.Market = "Market name must not be empty";
+  }
+  if (Comname.trim() == "") {
+    errors.Comname = "Comname name must not be empty";
+  }
+  return {
+    errors,
+    valid: Object.keys(errors).length < 1,
+  };
+
+
+}
+module.exports.validateSymbols=({arr})=>{
+  const errors = {};
+  console.log(arr)
+  for (let index = 0; index < arr.length; index++) {
+
+    if (arr[index].trim() == "") {
+      errors.Symbol = "Symbol name must not be empty";
+    }
+  }
+  return {
+    errors,
+    valid: Object.keys(errors).length < 1,
+  };
+}
