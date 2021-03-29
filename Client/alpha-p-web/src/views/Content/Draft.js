@@ -10,7 +10,11 @@ import { CustomizedSnackbars } from "../../components/UI/messages";
 // import MuiAlert from '@material-ui/lab/Alert';
 import { AuthContext } from "../../context/auth";
 import { useForm } from "../../util/hooks";
-import { CREATE_DRAFT, GET_DRAFT } from "../../graphql/Content/draftsGql";
+import {
+  CREATE_DRAFT,
+  EDIT_DRAFT,
+  GET_DRAFT,
+} from "../../graphql/Content/draftsGql";
 import { useMutation, useLazyQuery, useQuery } from "@apollo/client";
 import { func } from "prop-types";
 function sleep(ms) {
@@ -51,7 +55,7 @@ function Draft(props) {
   const { user } = useContext(AuthContext);
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
-  const { onSubmit } = useForm(createDraftCallback, {});
+  const { onSubmit } = useForm(actionDraftCallback, {});
 
   const [newDraft, setNewDraft] = useState(false);
   const [fetched, setFetched] = useState(false);
@@ -60,22 +64,6 @@ function Draft(props) {
   if (draftId == "new" && !newDraft) {
     setNewDraft(true);
   }
-  const [content, setContent] = useState({
-    title: "",
-    //  () => {
-    //   if (!newDraft) {
-    //     fetchDraft();
-    //     if (!fetchLoading) return fetchedDraft.getDraft.title.toString();
-    //   } else return "";
-    // }
-    body: "",
-    //  () => {
-    //   if (!newDraft) {
-    //     fetchDraft();
-    //     if (!fetchLoading) return fetchedDraft.getDraft.body.toString();
-    //   } else return "";
-    // }
-  });
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
@@ -101,7 +89,7 @@ function Draft(props) {
 
   //   }
   // });
-  const [createDraft, { loading }] = useMutation(CREATE_DRAFT, {
+  const [createDraft, { loading: createLoading }] = useMutation(CREATE_DRAFT, {
     onError(err) {
       console.log(`Error on ${err}`);
       setErrors(
@@ -123,13 +111,36 @@ function Draft(props) {
       sleep(2000).then(() => props.history.push("/"));
     },
   });
-
-  function createDraftCallback() {
-    createDraft();
+  const [saveDraft, { loading: saveLoading }] = useMutation(EDIT_DRAFT, {
+    onError(err) {
+      console.log(`Error on ${err}`);
+      setErrors(
+        err && err.graphQLErrors[0]
+          ? err.graphQLErrors[0].extensions.exception.errors
+          : {}
+      );
+    },
+    variables: {
+      id: user.id,
+      draftID: draftId,
+      contentInput: {
+        title,
+        body,
+      },
+    },
+    onCompleted(data) {
+      console.log(`Draft is Updated ${data.editDraft.id}`);
+      setSuccess(true);
+      sleep(2000).then(() => props.history.push("/"));
+    },
+  });
+  function actionDraftCallback() {
+    if (newDraft) createDraft();
+    else saveDraft();
   }
 
   function onEditorChange(value) {
-    setBody(value)
+    setBody(value);
     // console.log(`New Body :${body}`);
   }
   const onTitleChange = (value) => {
@@ -155,7 +166,12 @@ function Draft(props) {
     ) : (
       <Container>
         {/* Save Draft 📝 */}
-        <Button size="large" variant="contained" className={classes.saveBtn}>
+        <Button
+          size="large"
+          variant="contained"
+          className={classes.saveBtn}
+          onClick={onSubmit}
+        >
           Save
         </Button>
         {/* Publish Draft 📑 */}
@@ -195,7 +211,7 @@ function Draft(props) {
       />
 
       <div style={{ textAlign: "center", margin: "2rem" }}>
-        {loading ? <CircularProgress /> : buttons()}
+        {saveLoading | createLoading ? <CircularProgress /> : buttons()}
       </div>
       {success && (
         <div>

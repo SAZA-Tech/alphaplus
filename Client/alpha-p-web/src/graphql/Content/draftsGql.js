@@ -47,18 +47,18 @@ export const GET_DRAFT = gql`
   }
 `;
 
-export const EDIT_DRAFT =gql`
-mutation editDraft($draftId: ID!,$id: ID!) {
-  editDraft(draftID: $draftID, id: $id) {
-    createdAt
-    updatedAt
-    id
-    draftName
-    draftBody
-    draftAuther {
+export const EDIT_DRAFT = gql`
+  mutation editDraft($draftID: ID!, $id: ID!, $contentInput: ContentInput) {
+    editDraft(draftID: $draftID, id: $id, contentInput: $contentInput) {
+      createdAt
+      updatedAt
       id
-      username
+      draftName
+      draftBody
+      draftAuther {
+        id
+        username
+      }
     }
   }
-}
 `;
