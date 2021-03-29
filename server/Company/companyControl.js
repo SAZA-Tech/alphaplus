@@ -50,7 +50,6 @@ module.exports.CompanyControl = {
           const apiResponse = response.data;
 
           var length = apiResponse["data"].length - 1;
-          console.log(length);
           for (let index = 0; index <= length; index++) {
             if (!myMap.has(apiResponse["data"][index]["date"]))
               myMap.set(
@@ -67,7 +66,6 @@ module.exports.CompanyControl = {
                   date: apiResponse["data"][index]["date"],
                 }
               );
-            console.log(new Date(myMap.keys[0]).toString());
           }
         })
         .catch((err) => {
@@ -81,7 +79,6 @@ module.exports.CompanyControl = {
         });
 
       const arrMap = Array.from(myMap.values());
-      console.log(arrMap);
       newCompany.financialData = myMap;
       const res = await newCompany.save();
       sector.sectorCompanies.push(res._id);
@@ -152,49 +149,49 @@ module.exports.CompanyControl = {
       todayDate.setHours(0);
       todayDate.setMinutes(0);
       todayDate.setMilliseconds(0);
-      if(!fin.has(todayDate.toISOString))  {
-         await axios.get(
-          `http://api.marketstack.com/v1/eod?access_key=${api_key}&limit=1&symbols=${e.symbol}`
-        )
-        .then(async (response) => {
-          const apiResponse = response.data;
-          fin.set(
-                // Key
-                apiResponse["data"][0]["date"],
-                // Value
-                {
-                  exchange: apiResponse["data"][0]["exchange"],
-                  Open: apiResponse["data"][0]["open"],
-                  high: apiResponse["data"][0]["high"],
-                  low: apiResponse["data"][0]["low"],
-                  close: apiResponse["data"][0]["close"],
-                  volume: apiResponse["data"][0]["volume"],
-                  date: apiResponse["data"][0]["date"],
-                }
-              );
-          
-        })
-        .catch((err) => {
-          if (err.response) {
-            throw new Error(
-              "client recieved an erorr response(5xx,4xx) wrong input/out of credit"
+      if (!fin.has(todayDate.toISOString)) {
+        axios
+          .get(
+            `http://api.marketstack.com/v1/eod?access_key=${api_key}&limit=1&symbols=${e.symbol}`
+          )
+          .then(async (response) => {
+            const apiResponse = response.data;
+            fin.set(
+              // Key
+              apiResponse["data"][0]["date"],
+              // Value
+              {
+                exchange: apiResponse["data"][0]["exchange"],
+                Open: apiResponse["data"][0]["open"],
+                high: apiResponse["data"][0]["high"],
+                low: apiResponse["data"][0]["low"],
+                close: apiResponse["data"][0]["close"],
+                volume: apiResponse["data"][0]["volume"],
+                date: apiResponse["data"][0]["date"],
+              }
             );
-          } else {
-            console.log(err);
-          }
-        })
-        e.financialData=fin;
-        await e.save();
+          })
+          .catch((err) => {
+            if (err.response) {
+              throw new Error(
+                "client recieved an erorr response(5xx,4xx) wrong input/out of credit"
+              );
+            } else {
+              console.log(err);
+            }
+          });
+        e.financialData = fin;
+        e.save();
       }
       var arr = Array.from(fin.values());
-      //Check has latest price 
+      //Check has latest price
       companies.push({
         id: e._id,
         sectorId: e.sectorId,
         market: e.market,
         comname: e.comname,
         symbol: e.symbol,
-        financialData:arr ,
+        financialData: arr,
         todayFinance: arr[0],
       });
     });
@@ -204,7 +201,7 @@ module.exports.CompanyControl = {
 
   validateTags: async (_, arr) => {
     var symbols = [];
-    symbols = arr.tags;
+    symbols = arr;
     for (let index = 0; index < symbols.length; index++) {
       if (symbols[index].trim() == "") {
         throw new UserInputError(`wrong input`);
@@ -226,7 +223,7 @@ module.exports.CompanyControl = {
       });
 
       if (companiespart[0] == null) {
-        throw new Error("wrong symbol");
+        throw new Error(`${symbols[index]} is not listed in Alpha+`);
       }
 
       for (let j = 0; j < companiespart.length; j++) {
@@ -239,10 +236,11 @@ module.exports.CompanyControl = {
 };
 
 function latestPrice(fin) {
-    //Check if map has today's finance data 
-    if(fin.keys){}
+  //Check if map has today's finance data
+  if (fin.keys) {
+  }
 
-    //today == weekend :true
-    
-    // not weekend + missing fin data : False
+  //today == weekend :true
+
+  // not weekend + missing fin data : False
 }
