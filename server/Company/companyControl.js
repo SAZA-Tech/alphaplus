@@ -5,9 +5,12 @@ const { UserInputError } = require("apollo-server");
 const { validateCompanyInput } = require("../Auth/validators");
 
 const axios = require("axios");
-const api_key = "654fbc8fbce32c1f6acb1c5744730a1f";
+const api_key = "1cfa225648705ed25cf698d3f8ce2c06";
 const { isAuthrized } = require("../Auth/Autherization");
 const checkAuth = require("../Auth/check-auth");
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 module.exports.CompanyControl = {
   createCompany: async (
     _,
@@ -143,16 +146,20 @@ module.exports.CompanyControl = {
       CompanyDocs = await Company.find(Filter).exec();
     }
     const companies = [];
-    CompanyDocs.map((e) => {
+    var apiCount = 0;
+    CompanyDocs.map(async (e) => {
       var fin = new Map(e.financialData);
-      const todayDate = new Date();
-      todayDate.setHours(0);
-      todayDate.setMinutes(0);
-      todayDate.setMilliseconds(0);
-      if (!fin.has(todayDate.toISOString)) {
-        axios
+      const todayDate = new Date().toISOString().split("T")[0];
+      const formatedDate = `${todayDate}T00:00:00+0000`;
+     
+      if (!fin.has(formatedDate.toString())) {
+        console.log('called yes')
+        if (apiCount % 5 == 0) {
+          sleep(1000);
+        }
+        await axios
           .get(
-            `http://api.marketstack.com/v1/eod?access_key=${api_key}&limit=1&symbols=${e.symbol}`
+            `http://api.marketstack.com/v1/eod?access_key=${api_key}&symbols=${e.symbol}`
           )
           .then(async (response) => {
             const apiResponse = response.data;
@@ -173,15 +180,14 @@ module.exports.CompanyControl = {
           })
           .catch((err) => {
             if (err.response) {
-              throw new Error(
-                "client recieved an erorr response(5xx,4xx) wrong input/out of credit"
-              );
+              throw new Error(`Error happend fetching new finance data ${err}`);
             } else {
               console.log(err);
             }
           });
         e.financialData = fin;
-        e.save();
+        await e.save();
+        apiCount++;
       }
       var arr = Array.from(fin.values());
       //Check has latest price
