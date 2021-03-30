@@ -1,10 +1,19 @@
-const {
-    
-  } = require("../../Company/company");
+const { compare } = require("bcryptjs");
+const Company = require("../../Company");
 
-  module.exports = {
-    Query: { },
-    Mutation: {
-      
-    },
-  };
+module.exports = {
+  Query: {
+    getSectors:Company.SectorControl.getSectors,
+    getCompanies:Company.CompanyControl.getCompanies,
+    validateTags:Company.CompanyControl.validateTags,
+  },
+  Mutation: {
+    createSector: Company.SectorControl.createSector,
+    deleteSector: Company.SectorControl.deleteSector,
+    createCompany: Company.CompanyControl.createCompany,
+    deleteCompany:Company.CompanyControl.deleteCompany,
+    editSector:Company.SectorControl.editSector,
+    
+
+  },
+};
