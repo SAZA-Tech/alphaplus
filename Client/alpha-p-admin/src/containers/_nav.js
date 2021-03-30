@@ -9,9 +9,22 @@ const _nav =  [
   },
 
   {
-    _tag: 'CSidebarNavItem',
+    _tag: 'CSidebarNavDropdown',
     name: 'Users',
-    to: '/users',
+    route: '/users',
+    _children: [
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'UsersInfo',
+        to: '/users/usersInfo',
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'UsersRequests',
+        to: '/users/usersRequests',
+      },]
+
+
   },
  
   {

@@ -1,54 +1,36 @@
 import React, { useState, useEffect } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
 import {
-  
-  CCard,
   CCardBody,
-  CCardHeader,
-  CCol,
   CDataTable,
-  CRow,
-  CPagination,
-  CContainer,
   CButton,CBadge,CCollapse,
-  CInput,
-  CInputGroup,
-  CInputGroupPrepend,
-  CInputGroupAppend,
-  CInputGroupText,
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import usersData from './UsersData'
+import usersRequestData from './UsersRequestData'
 
 
 
 
-const Users = () => {
+const UsersRequests = () => {
   
   const [details, setDetails] = useState([])
-   const [items, setItems] = useState(usersData)
+    const [items, setItems] = useState(usersRequestData)
 
   const toggleDetails = (index) => {
     const position = details.indexOf(index)
-    let newDetails = details.slice()
+    let usersRequestData = details.slice()
     if (position !== -1) {
-      newDetails.splice(position, 1)
+        usersRequestData.splice(position, 1)
     } else {
-      newDetails = [...details, index]
+        usersRequestData = [...details, index]
     }
-    setDetails(newDetails)
+    setDetails(usersRequestData)
   }
 
 
   const fields = [
     { key: 'UserName', _style: { width: '20%'} },
     { key: 'UserId', _style: { width: '20%'} },
-    { key: 'UserEmail', _style: { width: '20%'} },
-    { key: 'UserTwitterAcc', _style: { width: '20%'} },
-    { key: 'UserGoogleAcc', _style: { width: '20%'} },
-    { key: 'Role', _style: { width: '20%'} },
-    { key: 'RegisterDate', _style: { width: '20%'} },
-
+    { key: 'email', _style: { width: '20%'} },
+    { key: 'type', _style: { width: '20%'} },
 
     {
       key: 'show_details',
@@ -63,10 +45,12 @@ const Users = () => {
 
   return (
     <CDataTable
-      items={usersData}
+      items={usersRequestData}
       fields={fields}
       columnFilter
-      tableFilter
+    //   theadTopSlot={ <CButton>
+    //     <InputFormNews name="Add News"/>
+    // </CButton>}
       footer
       itemsPerPageSelect
       itemsPerPage={5}
@@ -99,12 +83,11 @@ const Users = () => {
                   <h4>
                     {item.username}
                   </h4>
-                  <p className="text-muted">User since: {item.registered}</p>
-                  <CButton size="sm" color="info">
-                   Edit
+                  <CButton size="sm" color="primary" className="ml-1">
+                  Accept
                   </CButton>
                   <CButton size="sm" color="danger" className="ml-1">
-                    Delete
+                  Reject
                   </CButton>
                 </CCardBody>
               </CCollapse>
@@ -117,4 +100,4 @@ const Users = () => {
 
 }
 
-export default Users
+export default UsersRequests

@@ -28,7 +28,12 @@ module.exports = gql`
   type Mutation {
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
-    updateUserInfo(id: ID!, name: String!, type: String!): User!
+    adminLogin(email: String!, password: String!): User!
+    updateUserInfo(
+      id:ID!
+      name:String!
+      type: String!
+    ): User!
     deleteUser(id: ID!): String!
   }
   enum UserType {

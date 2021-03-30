@@ -1,24 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
 import {
-  
-  CCard,
   CCardBody,
-  CCardHeader,
-  CCol,
   CDataTable,
-  CRow,
-  CPagination,
-  CContainer,
-  CButton,CBadge,CCollapse,
-  CInput,
-  CInputGroup,
-  CInputGroupPrepend,
-  CInputGroupAppend,
-  CInputGroupText,
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+  CButton,CCollapse,
+  } from '@coreui/react'
 import articlesData from './ArticlesData'
+import InputFormArticle from './InputFormArticle'
 
 
 
@@ -62,7 +49,9 @@ const Articles = () => {
       items={articlesData}
       fields={fields}
       columnFilter
-      tableFilter
+      theadTopSlot={ <CButton>
+        <InputFormArticle name="Add Article"/>
+    </CButton>}
       footer
       itemsPerPageSelect
       itemsPerPage={5}
@@ -95,9 +84,8 @@ const Articles = () => {
                   <h4>
                     {item.username}
                   </h4>
-                  <p className="text-muted">User since: {item.registered}</p>
-                  <CButton size="sm" color="info">
-                   Edit
+                  <CButton>
+                    <InputFormArticle name="Edit"/>
                   </CButton>
                   <CButton size="sm" color="danger" className="ml-1">
                     Delete
