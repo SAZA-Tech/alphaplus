@@ -11,6 +11,7 @@ import {
   Avatar,
   TextField,
   FormHelperText,
+  CircularProgress,
 } from "@material-ui/core";
 import ReplyIcon from "@material-ui/icons/Reply";
 import ThumbUpAltOutlinedIcon from "@material-ui/icons/ThumbUpAltOutlined";
@@ -20,7 +21,11 @@ import {
   ArticleAutherInfo,
   ArticleAutherInfoExpanded,
 } from "../../components/AnalystInfo";
+import { useParams } from "react-router-dom";
+
 import { fade, makeStyles } from "@material-ui/core/styles";
+import { useQuery } from "@apollo/client";
+import { GET_ARTICLE } from "../../graphql/Content/articleGql";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -70,26 +75,23 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   comment: {
-    padding:theme.spacing(2),
+    padding: theme.spacing(2),
     "& .MuiAvatar-root": {
       marginRight: theme.spacing(2),
     },
     "& .MuiDivider-root": {
       marginBottom: theme.spacing(2),
     },
-    "& .MuiGrid-root":{
+    "& .MuiGrid-root": {
       marginBottom: theme.spacing(2),
-
     },
-    '& .commentBody':{
+    "& .commentBody": {
       paddingBottom: theme.spacing(2),
-
-    }
+    },
   },
-  commentBtn:{
-    paddingTop:theme.spacing(4),
-  }
-
+  commentBtn: {
+    paddingTop: theme.spacing(4),
+  },
 }));
 
 const img = "avatars/7.jpg";
@@ -121,13 +123,33 @@ const commentsDocs = [
 
 const Article = (props) => {
   const classes = useStyles();
-
-  return (
+  let { articleId } = useParams();
+  const { loading, data, error } = useQuery(GET_ARTICLE, {
+    onCompleted(data) {
+      console.log(data.getArticle.articleTitle);
+    },
+    variables: {
+      articleId: articleId,
+    },
+    onError(err) {
+      console.log(`Error Happend ${err}`);
+    },
+  });
+  return loading ? (
+    <CircularProgress />
+  ) : (
     <div className="background">
       <div className={classes.articleLayout}>
-        <ArticleSection />
-        {/* Comments Section */}
-        <CommentsSection />
+        <ArticleSection
+          title={data.getArticle.articleTitle}
+          body={data.getArticle.articleBody}
+          auther={data.getArticle.articleAuthor}
+        />
+
+        <CommentsSection
+          commentCount={data.getArticle.commentCount}
+          cooments={data.getArticle.articleComments}
+        />
       </div>
     </div>
   );
@@ -143,8 +165,8 @@ const ArticleSection = (props) => {
     <Container>
       <Paper elevation={2}>
         <ArticleAutherInfo
-          img={analystInfo.img}
-          name={analystInfo.name}
+          img={props.auther.img}
+          name={props.auther.name}
           bio={analystInfo.bio}
         />
         {/* Title + Body Container */}
@@ -159,7 +181,7 @@ const ArticleSection = (props) => {
               alignItems="baseline"
             >
               <Grid item>
-                <h1>First Article on alpha+</h1>
+                <h1>{props.title}</h1>
               </Grid>
               <Grid item container direction="row" spacing={1}>
                 <Grid item xs>
@@ -177,7 +199,7 @@ const ArticleSection = (props) => {
           </Container>
           {/* Body */}
           <Container className={classes.body}>
-            <Typography variant="body1">{body}</Typography>
+            <div dangerouslySetInnerHTML={{ __html: props.body }} />
           </Container>
           <Divider variant="middle" />
           {/* Article Buttons */}
@@ -280,7 +302,7 @@ const CreateComment = (props) => {
         </Grid>
         <Typography variant="caption">{props.date}</Typography>
       </Grid>
-      <Container className='commentBody'>
+      <Container className="commentBody">
         <Typography variant="body2">{props.body}</Typography>
       </Container>
       <Container className={classes.commentBtn}>

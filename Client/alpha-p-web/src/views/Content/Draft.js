@@ -6,6 +6,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import { CustomizedSnackbars } from "../../components/UI/messages";
+
 // import Snackbar from '@material-ui/core/Snackbar';
 // import MuiAlert from '@material-ui/lab/Alert';
 import { AuthContext } from "../../context/auth";
@@ -14,9 +15,13 @@ import {
   CREATE_DRAFT,
   EDIT_DRAFT,
   GET_DRAFT,
+  PUBLISH_DRAFT,
 } from "../../graphql/Content/draftsGql";
 import { useMutation, useLazyQuery, useQuery } from "@apollo/client";
-import { func } from "prop-types";
+import TagsInput from "react-tagsinput";
+
+import "react-tagsinput/react-tagsinput.css"; // If using WebPack and style-loader.
+
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -45,6 +50,10 @@ const useStyles = makeStyles((theme) => ({
     },
     color: theme.palette.common.white,
   },
+  tagsInputStyle: {
+    marginBottom: theme.spacing(4),
+    marginTop: theme.spacing(4),
+  },
 }));
 
 function Draft(props) {
@@ -55,8 +64,9 @@ function Draft(props) {
   const { user } = useContext(AuthContext);
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const { onSubmit } = useForm(actionDraftCallback, {});
-
+  const [startPublish, setPublish] = useState(false);
   const [newDraft, setNewDraft] = useState(false);
   const [fetched, setFetched] = useState(false);
 
@@ -66,7 +76,7 @@ function Draft(props) {
   }
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-
+  const [tags, setTags] = useState([]);
   const [files, setFiles] = useState([]);
   const { loading: fetchLoading, data: fetchedData } = useQuery(GET_DRAFT, {
     variables: {
@@ -107,6 +117,7 @@ function Draft(props) {
     },
     onCompleted(data) {
       console.log(`Draft is success ${data.createDraft.id}`);
+      setSuccessMessage("Draft is created");
       setSuccess(true);
       sleep(2000).then(() => props.history.push("/"));
     },
@@ -130,13 +141,51 @@ function Draft(props) {
     },
     onCompleted(data) {
       console.log(`Draft is Updated ${data.editDraft.id}`);
+      setSuccessMessage("Draft is Saveed");
+
       setSuccess(true);
-      sleep(2000).then(() => props.history.push("/"));
+      if (!startPublish)
+        sleep(2000).then(() =>
+          props.history.push(`/MyAuthers/${data.editDraft.draftAuther.id}`)
+        );
+    },
+  });
+  const [publishDraft] = useMutation(PUBLISH_DRAFT, {
+    onError(err) {
+      console.log(`Error on ${err}`);
+      setErrors(
+        err && err.graphQLErrors[0]
+          ? err.graphQLErrors[0].extensions.exception.errors
+          : {}
+      );
+    },
+    variables: {
+      id: user.id,
+      draftID: draftId,
+      tags: tags,
+    },
+    onCompleted(data) {
+      console.log(`Draft is Published ${data.publishDraft.id}`);
+      setSuccessMessage("Draft is published");
+      setSuccess(true);
+      sleep(2000).then(() =>
+        props.history.push(`/MyAuthers/${user.id}`)
+      );
     },
   });
   function actionDraftCallback() {
     if (newDraft) createDraft();
-    else saveDraft();
+    else {
+      saveDraft();
+    }
+  }
+  function publishDraftCall() {
+    setPublish(true);
+    saveDraft().then(() => publishDraft());
+  }
+  function handleTagsChange(tags) {
+    setTags(tags);
+    console.log(tags);
   }
 
   function onEditorChange(value) {
@@ -175,7 +224,12 @@ function Draft(props) {
           Save
         </Button>
         {/* Publish Draft 📑 */}
-        <Button size="large" variant="contained" className={classes.publishBtn}>
+        <Button
+          size="large"
+          variant="contained"
+          className={classes.publishBtn}
+          onClick={publishDraftCall}
+        >
           Publish Draft
         </Button>
       </Container>
@@ -202,6 +256,14 @@ function Draft(props) {
           onChange={onTitleChange}
         />{" "}
       </div>
+      {!newDraft && (
+        <div
+          style={{ alignItems: "center" }}
+          className={classes.tagsInputStyle}
+        >
+          <TagsInput value={tags} onChange={handleTagsChange} />
+        </div>
+      )}
       <Editor
         placeholder={"Start Posting Something"}
         onEditorChange={onEditorChange}
@@ -215,7 +277,7 @@ function Draft(props) {
       </div>
       {success && (
         <div>
-          <CustomizedSnackbars color="success" message="Draft is created" />;
+          <CustomizedSnackbars color="success" message={successMessage} />;
         </div>
       )}
       {Object.keys(errors).length > 0 && (

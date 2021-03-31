@@ -21,6 +21,7 @@ import { GET_DRAFTS } from "../../graphql/Content/draftsGql";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import { ContentCards } from "../../components/Content/ContentCards";
 import { AuthContext } from "../../context/auth";
+import { GET_ARTICLES } from "../../graphql/Content/articleGql";
 const useStyles = makeStyles((theme) => ({
   root: {
     marginLeft: 0,
@@ -41,11 +42,13 @@ export function MyAuthors(props) {
 
   const context = useContext(AuthContext);
   const [drafts, setDrafts] = useState([]);
+  const [articles, setArticles] = useState([]);
+
   // useEffect(() => {
   //   console.log(`Drafts are Fetched`);
   // }, [state.drafts]);
   const params = props.match.params.username;
-  const { loading, data, error } = useQuery(GET_DRAFTS, {
+  const { loading: draftFetchingLoading } = useQuery(GET_DRAFTS, {
     onCompleted(data) {
       setDrafts(data.getDrafts);
       console.log(`Drafts length ${drafts.length}`);
@@ -57,9 +60,50 @@ export function MyAuthors(props) {
       console.log(`F}ailed to fetch drafts : ${error}`);
     },
   });
-
+  const { loading: articlesFethcingLoading } = useQuery(GET_ARTICLES, {
+    onCompleted(data) {
+      setArticles(data.getArticles);
+      console.log(`Articles length ${articles.length}`);
+    },
+    variables: {
+      userId: params,
+    },
+    onError(error) {
+      console.log(`F}ailed to fetch articles : ${error}`);
+    },
+  });
+  const articlesSection = () => {
+    return articlesFethcingLoading ? (
+      <CircularProgress />
+    ) : (
+      <Container className={classes.Section}>
+        <Card>
+          <Container>
+            <Typography variant="h4" className={classes.titleSection}>
+              My Articles{" "}
+            </Typography>
+          </Container>
+          <Container>
+            <List>
+              {articles.map((e) => {
+                return (
+                  <ListItem>
+                    <ContentCards
+                      
+                      title={e.articleTitle}
+                      link={`/article/${e.id}`}
+                    />
+                  </ListItem>
+                );
+              })}
+            </List>
+          </Container>
+        </Card>
+      </Container>
+    );
+  };
   const draftSection = () => {
-    return loading ? (
+    return draftFetchingLoading ? (
       <CircularProgress />
     ) : (
       <Container className={classes.Section}>
@@ -96,5 +140,12 @@ export function MyAuthors(props) {
       </Container>
     );
   };
-  return <Container>{draftSection()}</Container>;
+  return (
+    <Container>
+      <Grid>
+        <Grid item>{articlesSection()}</Grid>
+        <Grid item>{draftSection()}</Grid>
+      </Grid>
+    </Container>
+  );
 }

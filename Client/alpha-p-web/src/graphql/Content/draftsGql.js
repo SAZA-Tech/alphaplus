@@ -62,3 +62,15 @@ export const EDIT_DRAFT = gql`
     }
   }
 `;
+
+export const PUBLISH_DRAFT = gql`
+  mutation publishDraft($draftID: ID!, $tags: [String!]!) {
+    publishDraft(draftID: $draftID, tags: $tags) {
+      articleTags
+      articleTitle
+      createdAt
+      articleBody
+      id
+    }
+  }
+`;

@@ -9,7 +9,7 @@ import { AuthProvider } from "./context/auth";
 import "./scss/style.scss";
 import Login from "./views/Login";
 import SignUp from "./views/Sign-up";
-import AuthRoute from "./components/AuthRoute";
+import { AuthRoute, ProtectedRoute } from "./components/AuthRoute";
 import Home from "./views/Home";
 import Navbar from "./components/Navbar";
 import Article from "./views/Content/Article";
@@ -27,9 +27,13 @@ export class App extends Component {
             <Navbar />
             <div>
               <Route exact path="/" component={Home} />
-              <Route exact path="/article" component={Article} />
-              <Route  path="/draft/:draftId" component={Draft} />
-              <Route exact path="/MyAuthers/:username/" component={MyAuthors} />
+              <Route path="/article/:articlesId" component={Article} />
+              <ProtectedRoute path="/draft/:draftId" component={Draft} />
+              <ProtectedRoute
+                exact
+                path="/MyAuthers/:username/"
+                component={MyAuthors}
+              />
               <AuthRoute exact path="/Signup" component={SignUp} />
 
               <AuthRoute exact path="/Login" component={Login} />
