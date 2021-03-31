@@ -146,15 +146,15 @@ module.exports.CompanyControl = {
       CompanyDocs = await Company.find(Filter).exec();
     }
     const companies = [];
-    var apiCount = 0;
+    var apiCount = 1;
     CompanyDocs.map(async (e) => {
       var fin = new Map(e.financialData);
-      const todayDate = new Date().toISOString().split("T")[0];
-      const formatedDate = `${todayDate}T00:00:00+0000`;
-     
+      // const todayDate = new Date().toISOString().split("T")[0];
+      const formatedDate = todayDate();
+      console.log(formatedDate);
       if (!fin.has(formatedDate.toString())) {
-        console.log('called yes')
-        if (apiCount % 5 == 0) {
+        console.log("called yes");
+        if (apiCount % 5 == 1) {
           sleep(1000);
         }
         await axios
@@ -177,6 +177,7 @@ module.exports.CompanyControl = {
                 date: apiResponse["data"][0]["date"],
               }
             );
+            console.log(`Called Api`);
           })
           .catch((err) => {
             if (err.response) {
@@ -189,7 +190,14 @@ module.exports.CompanyControl = {
         await e.save();
         apiCount++;
       }
+      const getLastDate = fin.get(formatedDate);
+      console.log(getLastDate);
+
       var arr = Array.from(fin.values());
+      // const findLast = arr.find((element) => element.date == formatedDate);
+      // var todayFinance =
+      //   getLastDate == undefined ? arr[arr.lastIndex - 1] : getLastDate;
+      // console.log(arr[arr.lastIndex - 1]);
       //Check has latest price
       companies.push({
         id: e._id,
@@ -198,7 +206,7 @@ module.exports.CompanyControl = {
         comname: e.comname,
         symbol: e.symbol,
         financialData: arr,
-        todayFinance: arr[0],
+        todayFinance: getLastDate,
       });
     });
 
@@ -241,12 +249,19 @@ module.exports.CompanyControl = {
   },
 };
 
-function latestPrice(fin) {
+function todayDate() {
   //Check if map has today's finance data
-  if (fin.keys) {
-  }
+  const date = new Date();
+  const day = date.getDay;
+  // Check if its a weekend
+  if (day > 4) date.setDate(date.getDate() - 2);
+  // Check if its the end of the day ?
+  if (date.getHours() < 16) date.setDate(date.getDate() - 1);
+  // console.log(date.getHours().valueOf() )
+  todayDate = date.toISOString().split("T")[0];
 
-  //today == weekend :true
+  const formatedDate = `${todayDate}T00:00:00+0000`;
 
+  return formatedDate;
   // not weekend + missing fin data : False
 }
