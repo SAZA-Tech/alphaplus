@@ -10,11 +10,60 @@ import {
 
 import companiesData from './CompaniesData'
 import InputFormCompany from './InputFormCompany'
+import { gql, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
+
+const GET_COMPANIES = gql`
+
+  query getCompanies(
+    $Comname: String = null
+    $Symbol: String = null
+    $CompanyID: String = null
+    $Market: String = null
+    $SectorID: String = null
+
+  ) {
+    getCompanies(
+
+      CompanyInput:{
+        Comname: $Comname
+        Symbol: $Symbol
+        CompanyID: $CompanyID
+        Market: $Market
+        SectorID: $SectorID
+
+      }
+    ) {
+      market
+      sectorId
+      id
+      comname
+      symbol
+
+    }
+  }
+`;
+
+const DELETE_COMPANY = gql`
+  mutation deleteCompany($companyId: ID!) {
+    deleteCompany(companyId: $companyId)
+  }
+`;
 
 
 const Companies = () => {
   const [details, setDetails] = useState([])
-   const [items, setItems] = useState(companiesData)
+   const [items, setItems] = useState([])
+   const [warning, setWarning] = useState(false);
+
+   const { loading, error, data } = useQuery(GET_COMPANIES, {
+    onCompleted(data) {
+      console.log(data.getCompanies)
+      setItems(data.getCompanies);
+    },
+  });
+  const [delteCompany, { loading: deleteLoading }] = useMutation(DELETE_COMPANY); 
+
 
   const toggleDetails = (index) => {
     const position = details.indexOf(index)
@@ -31,8 +80,8 @@ const Companies = () => {
   const fields = [
     { key: 'CompanyName', _style: { width: '40%'} },
     { key: 'CompanyId', _style: { width: '20%'} },
-    { key: 'CompanyEmail', _style: { width: '20%'} },
-    { key: 'Sectors', _style: { width: '20%'} },
+    { key: 'symbol', _style: { width: '20%'} },
+    { key: 'sectorId', _style: { width: '20%'} },
     {
       key: 'show_details',
       label: '',
@@ -52,9 +101,11 @@ const Companies = () => {
     }
   }
 
-  return (
+  return loading ? (
+    <div>loading</div>
+  ) : (
     <CDataTable
-      items={companiesData}
+      items={items}
       fields={fields}
       columnFilter
       theadTopSlot={ <CButton>
@@ -67,17 +118,8 @@ const Companies = () => {
       sorter
       pagination
       scopedSlots = {{
-        'status':
-          (item)=>(
-            <td>
-              <CBadge color={getBadge(item.status)}>
-                {item.status}
-              </CBadge>
-            </td>
-          ),
-        'show_details':
-          (item, index)=>{
-            return (
+        show_details:(item, index)=>{
+            return (             
               <td className="py-2">
                 <CButton
                   color="primary"
@@ -91,16 +133,22 @@ const Companies = () => {
               </td>
               )
           },
-        'details':
+          details:
             (item, index)=>{
               return (
               <CCollapse show={details.includes(index)}>
                 <CCardBody>
                   <h4>
-                    {item.username}
+                    {item.comname}
                   </h4>
                   <CButton>
-                    <InputFormCompany name="Edit"/>
+                    <InputFormCompany name="Edit"
+
+                    name={item.comname}
+                    id={item.id}
+                    type={item.symbol}
+
+                    />
                   </CButton>
                   <CButton size="sm" color="danger" className="ml-1">
                     Delete
@@ -111,7 +159,8 @@ const Companies = () => {
           }
       }}
     />
-  )
+
+  );
   
 
 }
