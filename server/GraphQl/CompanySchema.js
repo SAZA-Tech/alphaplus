@@ -47,7 +47,7 @@ const companySchema = gql`
   }
   extend type Query {
     validateTags(tags: [String]): [Company]
-    getCompanies(CompanyInput: CompanyInput!): [Company!]!
+    getCompanies(CompanyInput: CompanyInput!): [Company]!
     getSectors: [Sector!]
   }
 
