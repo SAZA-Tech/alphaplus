@@ -9,25 +9,26 @@ module.exports.CommentControl = {
   addComment: async (_, { autherId, articleId, commentBody }, context) => {
     // const { valid, errors } = validateContentInput(title, body);
 
-    if (commentBody.trim() === '') {
-      throw new UserInputError('Empty comment', {
+    if (commentBody.trim() === "") {
+      throw new UserInputError("Empty comment", {
         errors: {
-          body: 'Comment body must not empty'
-        }
+          body: "Comment body must not empty",
+        },
       });
     }
     if (isAuthrized(_, { autherId }, context)) {
       const article = await Article.findById(articleId);
       const commentAuthor = await findUser(_, { id: autherId });
+      console.log(`comment auther id :${commentAuthor._id}`);
       const comment = new Comment({
         articleId: article._id,
-        commentAutherId: commentAuthor._id,
+        commentAuthorId: commentAuthor._id,
         commentBody: commentBody,
         createdAt: new Date().toISOString(),
       });
       const res = await comment.save();
-       article.articleComments.push(res._id);
-       await article.save();
+      article.articleComments.push(res._id);
+      await article.save();
       return {
         id: res._id,
         ...res._doc,
@@ -54,7 +55,7 @@ module.exports.CommentControl = {
     { filter: { userId, articleId, companyId, tags } },
     context
   ) => {
-    const commentDocs = [];
+    let commentDocs = [];
     if (
       (userId == null) &
       (articleId == null) &
@@ -76,24 +77,17 @@ module.exports.CommentControl = {
       // Find the articles
       commentDocs = await Comment.find(Filter)
         .populate("commentAuthorId")
-        .populate("articleId")
         .exec();
     }
     // get auther data
-    const comments = [];
-    commentDocs.map(async (e) => {
+    let comments = [];
+    commentDocs.map((e) => {
       comments.push({
-        commentAuthor: {
-          id: e.commentAuthorId._id,
-          name: e.commentAuthorId.name,
-          username: e.commentAuthorId.username,
-          email: e.commentAuthorId.email,
-          createdAt: e.commentAuthorId.createdAt,
-        },
+        commentAuthor: e.commentAuthorId._doc,
         id: e._id,
         ...e._doc,
       });
-      return comments;
     });
+    return comments;
   },
 };

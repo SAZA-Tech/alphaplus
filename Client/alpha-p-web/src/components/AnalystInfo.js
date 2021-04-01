@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 0,
   },
   wideFollowBtn: {
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up("md")]: {
       width: theme.spacing(20),
     },
   },
@@ -67,23 +67,26 @@ export function ArticleAutherInfoExpanded(props) {
   return (
     <Container className={classes.root}>
       <Grid
-        spacing={4}
+        spacing={2}
         container
         direction="row"
         justify="flex-start"
         alignItems="flex-start"
       >
-        <Grid item xs={2}>
+        <Grid item xs={0}>
           <Avatar alt={props.name} src={props.img} />
         </Grid>
         {/* // Analyst info  */}
         <Grid item xs={4} sm spacing={0}>
           <Grid item xs container direction="column" spacing={0}>
-            <Grid item xs>
-              <Typography gutterBottom variant="subtitle1">
-                {props.name}
+            <Grid item xs sm>
+              <Typography  variant="body1">
+                {props.name == null ? "Name Null" : props.name}
               </Typography>
-              <Typography variant="subtitle2" gutterBottom noWrap>
+              <Typography variant="caption"  noWrap>
+                {props.username}
+              </Typography>
+              <Typography variant="body2" >
                 {props.bio}
               </Typography>
             </Grid>
@@ -110,7 +113,9 @@ export function ArticleAutherInfoExpanded(props) {
           </Grid>
 
           <Grid item spacing={2} alignItems="center" alignContent="center">
-            <Typography gutterBottom variant="caption">100 Followers</Typography>
+            <Typography gutterBottom variant="caption">
+              100 Followers
+            </Typography>
           </Grid>
         </Grid>
       </Grid>
