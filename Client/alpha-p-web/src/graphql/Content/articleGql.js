@@ -29,26 +29,49 @@ export const GET_ARTICLES = gql`
 `;
 
 export const GET_ARTICLE = gql`
-  query getArticle($articleId: ID = "") {
+  query getArticleAndComments($articleId: ID = "") {
     getArticle(articleId: $articleId) {
+      articleAuthor {
+        name
+        username
+        createdAt
+        email
+        id
+      }
       articleBody
       articleTags
       articleTitle
+      commentCount
+      createdAt
       id
       likeCount
-      updatedAt
-      articleComments {
-        commentBody
+      likes {
         createdAt
+        user {
+          username
+        }
         id
       }
-      articleAuthor {
-        id
-        name
+      updatedAt
+    }
+    getComments(
+      filter: {
+        userId: null
+        articleId: $articleId
+        companyId: null
+        tags: null
+      }
+    ) {
+      id
+      articleId
+      commentAuthor {
         username
-        email
+        type
+        createdAt
+        name
       }
-      commentCount
+      commentBody
+      createdAt
     }
   }
 `;

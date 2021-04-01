@@ -4,6 +4,10 @@ const { validateContentInput } = require("../Auth/validators");
 const Article = require("./Models/ArticleModel");
 const { findUser } = require("../Auth/AuthControl");
 const checkAuth = require("../Auth/check-auth");
+const { CommentControl } = require("./CommentControl");
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 module.exports.ArticleControl = {
   // Create Article and refrence to to copmany db using tags
   createArticle: async (_, { draft, tags }, context) => {
@@ -92,16 +96,7 @@ module.exports.ArticleControl = {
         ...e._doc,
       });
     });
-    // for (let index = 0; index < articlesDocs.length; index++) {
-    //   const articleAuthor = await findUser(_, {
-    //     id: articlesDocs[index].articleAuthorId,
-    //   });
-    //   articles.push({
-    //     articleAuthor,
-    //     id: articlesDocs[index].id,
-    //     ...articlesDocs[index]._doc,
-    //   });
-    // }
+
     return articles;
   },
   getArticle: async (_, { articleId }, context) => {
@@ -109,21 +104,33 @@ module.exports.ArticleControl = {
       .populate("articleAuthorId")
       .populate("articleComments")
       .exec();
+    var articleComments = [];
     if (article.$isValid) {
-      return {
-        id: article._id,
-        articleAuthor: {
-          id: article.articleAuthorId._id,
-          name: article.articleAuthorId.name,
-          username: article.articleAuthorId.username,
-          email: article.articleAuthorId.email,
-          createdAt: article.articleAuthorId.createdAt,
+      articleComments = await CommentControl.getComments(_, {
+        filter: {
+          articleId: articleId,
+          companyId: null,
+          tags: null,
+          userId: null,
         },
-        ...article._doc,
-      };
+      });
+      console.log(articleComments);
     } else {
       throw new Error(`Article is not found`);
     }
+    return {
+      articleComments: articleComments.values(),
+      id: article._id,
+
+      articleAuthor: {
+        id: article.articleAuthorId._id,
+        name: article.articleAuthorId.name,
+        username: article.articleAuthorId.username,
+        email: article.articleAuthorId.email,
+        createdAt: article.articleAuthorId.createdAt,
+      },
+      ...article._doc,
+    };
   },
   editArticle: async (
     _,

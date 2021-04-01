@@ -27,7 +27,7 @@ export class App extends Component {
             <Navbar />
             <div>
               <Route exact path="/" component={Home} />
-              <Route path="/article/:articlesId" component={Article} />
+              <Route path="/article/:articleId" component={Article} />
               <ProtectedRoute path="/draft/:draftId" component={Draft} />
               <ProtectedRoute
                 exact
