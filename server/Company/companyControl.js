@@ -123,6 +123,22 @@ module.exports.CompanyControl = {
   ) => {
     let CompanyDocs = [];
     var companies = [];
+    function todayDate() {
+      //Check if map has today's finance data
+      const date = new Date();
+      const day = date.getDay;
+      // Check if its a weekend
+      if (day > 4) date.setDate(date.getDate() - 2);
+      // Check if its the end of the day ?
+      if (date.getHours() < 16) date.setDate(date.getDate() - 1);
+      // console.log(date.getHours().valueOf() )
+      todayDate = date.toISOString().split("T")[0];
+    
+      const formatedDate = `${todayDate}T00:00:00+0000`;
+    
+      return formatedDate;
+      // not weekend + missing fin data : False
+    }
 
     if (
       (Symbol == null) &
@@ -247,19 +263,3 @@ module.exports.CompanyControl = {
   },
 };
 
-function todayDate() {
-  //Check if map has today's finance data
-  const date = new Date();
-  const day = date.getDay;
-  // Check if its a weekend
-  if (day > 4) date.setDate(date.getDate() - 2);
-  // Check if its the end of the day ?
-  if (date.getHours() < 16) date.setDate(date.getDate() - 1);
-  // console.log(date.getHours().valueOf() )
-  todayDate = date.toISOString().split("T")[0];
-
-  const formatedDate = `${todayDate}T00:00:00+0000`;
-
-  return formatedDate;
-  // not weekend + missing fin data : False
-}
