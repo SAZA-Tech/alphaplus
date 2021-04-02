@@ -53,7 +53,7 @@ const companySchema = gql`
     createCompany(CompanyInput: CompanyInput!): Company #require api
     deleteCompany(companyId: ID!): String!
     editSector(sectorID: ID!, SectorInput: SectorInput!): Sector!
-    editCompany(companyId: ID!, CompanyInput: CompanyInput!): Company!
+    editCompany(CompanyInput: CompanyInput!): Company!
   }
 `;
 module.exports = companySchema;

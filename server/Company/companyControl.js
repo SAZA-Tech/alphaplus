@@ -261,5 +261,58 @@ module.exports.CompanyControl = {
 
     return companies;
   },
+
+  editCompany: async (
+    _,
+    { CompanyInput: { Symbol, SectorID, Market, Comname, CompanyID } }
+  ) => {
+    try {
+      const companydoc= await Company.findById(CompanyID).exec();
+  
+      if(companydoc.$isValid){
+        
+        if(Comname!=null){
+          companydoc.comname=Comname;
+
+        }
+        if(Market!=null){
+          companydoc.market=Market;
+
+        }
+        if(SectorID!=null){
+          companydoc.sectorId=SectorID;
+
+        }
+        
+        const res =await companydoc.save();
+
+        const arrMap = Array.from(res.financialData.values());
+        
+        return{
+          id:res._id,
+          sectorId:res.sectorId,
+          market:res.market,
+          comname:res.comname,
+          symbol:res.symbol,
+          todayFinance:arrMap[arrMap.length-1],
+          financialData:arrMap,
+        }
+  
+      }else{
+        throw new Error("sector Not Found");
+      }
+  
+      
+    } catch (error) {
+      throw new Error(`Error Happend ${error}`);
+      
+    }
+
+
+
+
+  }
+
+
 };
 

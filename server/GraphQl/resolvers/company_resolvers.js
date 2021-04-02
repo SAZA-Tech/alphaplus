@@ -13,6 +13,8 @@ module.exports = {
     createCompany: Company.CompanyControl.createCompany,
     deleteCompany:Company.CompanyControl.deleteCompany,
     editSector:Company.SectorControl.editSector,
+    editCompany:Company.CompanyControl.editCompany,
+
     
 
   },
