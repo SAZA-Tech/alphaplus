@@ -2,11 +2,18 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import {
-  CButton,CDataTable,CBadge,
- CCollapse,
   CCardBody,
- 
-} from '@coreui/react'
+  CDataTable,
+  CButton,
+  CCollapse,
+  CForm,
+  CSpinner,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 
 import companiesData from './CompaniesData'
 import InputFormCompany from './InputFormCompany'
@@ -52,13 +59,13 @@ const DELETE_COMPANY = gql`
 
 
 const Companies = () => {
+
   const [details, setDetails] = useState([])
    const [items, setItems] = useState([])
    const [warning, setWarning] = useState(false);
 
    const { loading, error, data } = useQuery(GET_COMPANIES, {
     onCompleted(data) {
-      console.log(data.getCompanies)
       setItems(data.getCompanies);
     },
   });
@@ -78,10 +85,11 @@ const Companies = () => {
 
 
   const fields = [
-    { key: 'CompanyName', _style: { width: '40%'} },
-    { key: 'CompanyId', _style: { width: '20%'} },
+    { key: 'comname', _style: { width: '40%'} },
+    { key: 'id', _style: { width: '20%'} },
     { key: 'symbol', _style: { width: '20%'} },
     { key: 'sectorId', _style: { width: '20%'} },
+    { key: 'market', _style: { width: '20%'} },
     {
       key: 'show_details',
       label: '',
@@ -101,15 +109,62 @@ const Companies = () => {
     }
   }
 
+
+  const deleteCompanyAction = (companyId) => {
+    return (
+      <>
+        <CButton
+          type="submit"
+          onClick={() => setWarning(true)}
+          size="sm"
+          color="danger"
+          className="ml-1"
+        >
+          Delete
+        </CButton>
+        <CModal
+          show={warning}
+          onClose={() => setWarning(!warning)}
+          color="warning"
+        >
+          <CModalHeader closeButton>
+            <CModalTitle>Delete Company</CModalTitle>
+          </CModalHeader>
+          {deleteLoading ? (
+            <CSpinner />
+          ) : (
+            <CModalBody>Are you sure you want to delete this Company ?</CModalBody>
+          )}{" "}
+          <CModalFooter>
+            <CButton
+              color="danger"
+              onClick={() => {
+                delteCompany({ variables: { companyId } });
+                if (!deleteLoading) setWarning(!warning);
+              }}
+            >
+              Yes{" "}
+            </CButton>
+            <CButton color="secondary" onClick={() => setWarning(!warning)}>
+              no
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </>
+    );
+  };
+
+
+
   return loading ? (
     <div>loading</div>
-  ) : (
+    ) : (
     <CDataTable
       items={items}
       fields={fields}
       columnFilter
       theadTopSlot={ <CButton>
-        <InputFormCompany name="Add Company"/>
+        <InputFormCompany buttonName="Add Company"/>
     </CButton>}
       footer
       itemsPerPageSelect
@@ -119,7 +174,12 @@ const Companies = () => {
       pagination
       scopedSlots = {{
         show_details:(item, index)=>{
-            return (             
+            return (
+              (
+                <CButton size="sm" color="danger" className="ml-1">
+                  Delete
+                </CButton>
+              ),             
               <td className="py-2">
                 <CButton
                   color="primary"
@@ -142,7 +202,7 @@ const Companies = () => {
                     {item.comname}
                   </h4>
                   <CButton>
-                    <InputFormCompany name="Edit"
+                    <InputFormCompany buttonName="Edit"
 
                     name={item.comname}
                     id={item.id}
@@ -150,9 +210,7 @@ const Companies = () => {
 
                     />
                   </CButton>
-                  <CButton size="sm" color="danger" className="ml-1">
-                    Delete
-                  </CButton>
+                  {deleteCompanyAction(item.id)}
                 </CCardBody>
               </CCollapse>
             )

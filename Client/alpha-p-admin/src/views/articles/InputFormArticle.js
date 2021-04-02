@@ -24,7 +24,7 @@ import {
      <CButton name=""
         onClick={toggle}
          size="sm" color="primary"
-      >{props.name} </CButton>
+      >{props.buttonName} </CButton>
       <CModal
         show={modal}
         onClose={toggle}

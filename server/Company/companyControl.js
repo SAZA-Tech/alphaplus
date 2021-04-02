@@ -122,6 +122,7 @@ module.exports.CompanyControl = {
     { CompanyInput: { Symbol, SectorID, Market, Comname, CompanyID } }
   ) => {
     let CompanyDocs = [];
+    var companies = [];
 
     if (
       (Symbol == null) &
@@ -145,24 +146,25 @@ module.exports.CompanyControl = {
 
       CompanyDocs = await Company.find(Filter).exec();
     }
-    const companies = [];
-    var apiCount = 1;
-    CompanyDocs.map(async (e) => {
-      var fin = new Map(e.financialData);
-      // const todayDate = new Date().toISOString().split("T")[0];
-      const formatedDate = todayDate();
-      console.log(formatedDate);
-      if (!fin.has(formatedDate.toString())) {
-        console.log("called yes");
-        if (apiCount % 5 == 1) {
-          sleep(1000);
+    for (let index = 0; index < CompanyDocs.length; index++) {
+      const element = CompanyDocs[index];
+
+      var apiCount = 1;
+
+      var fin = new Map(element.financialData);
+      var formatedDate = todayDate();
+
+      if (!fin.has(formatedDate)) {
+        if (apiCount % 5 == 0) {
+          await sleep(1000);
         }
         await axios
           .get(
-            `http://api.marketstack.com/v1/eod?access_key=${api_key}&symbols=${e.symbol}`
+            `http://api.marketstack.com/v1/eod?access_key=${api_key}&limit=1&symbols=${element.symbol}`
           )
           .then(async (response) => {
             const apiResponse = response.data;
+            // console.log(apiResponse);
             fin.set(
               // Key
               apiResponse["data"][0]["date"],
@@ -177,38 +179,34 @@ module.exports.CompanyControl = {
                 date: apiResponse["data"][0]["date"],
               }
             );
-            console.log(`Called Api`);
+            formatedDate = apiResponse["data"][0]["date"];
           })
           .catch((err) => {
-            if (err.response) {
-              throw new Error(`Error happend fetching new finance data ${err}`);
-            } else {
-              console.log(err);
-            }
+            throw new Error(`Error happend fetching new finance data ${err}`);
           });
-        e.financialData = fin;
-        await e.save();
+        element.financialData = fin;
+        await element.save();
         apiCount++;
       }
+      var apiCount = 1;
+      // console.log(e);
       const getLastDate = fin.get(formatedDate);
-      console.log(getLastDate);
+      // console.log(getLastDate);
 
       var arr = Array.from(fin.values());
-      // const findLast = arr.find((element) => element.date == formatedDate);
-      // var todayFinance =
-      //   getLastDate == undefined ? arr[arr.lastIndex - 1] : getLastDate;
-      // console.log(arr[arr.lastIndex - 1]);
       //Check has latest price
       companies.push({
-        id: e._id,
-        sectorId: e.sectorId,
-        market: e.market,
-        comname: e.comname,
-        symbol: e.symbol,
+        id: element._id,
+        sectorId: element.sectorId,
+        market: element.market,
+        comname: element.comname,
+        symbol: element.symbol,
         financialData: arr,
         todayFinance: getLastDate,
       });
-    });
+      console.log(companies);
+    }
+    console.log(`last call`, companies);
 
     return companies;
   },
