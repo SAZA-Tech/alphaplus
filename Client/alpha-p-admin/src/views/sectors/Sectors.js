@@ -1,33 +1,54 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import {
-  
-  CCard,
   CCardBody,
-  CCardHeader,
-  CCol,
   CDataTable,
-  CRow,
-  CPagination,
-  CContainer,
-  CButton,CBadge,CCollapse,
-  CInput,
-  CInputGroup,
-  CInputGroupPrepend,
-  CInputGroupAppend,
-  CInputGroupText,
-} from '@coreui/react'
+  CButton,
+  CCollapse,
+  CForm,
+  CSpinner,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
 import CIcon from '@coreui/icons-react'
 import sectorsData from './SectorsData'
 import InputFormSector from './InputFormSector'
+import { gql, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 
+const GET_SECTORS = gql`
 
+  query getSectors{
+    getSectors{
+     
+      id
+      Secname
+   
+    }
+  }
+`;
+const DELETE_SECTOR = gql`
+  mutation deleteSector($sectorID: ID!) {
+    deleteSector(sectorID: $sectorID)
+  }
+`;
 
 
 const Sectors = () => {
   
   const [details, setDetails] = useState([])
-   const [items, setItems] = useState(sectorsData)
+  const [items, setItems] = useState([])
+  const [warning, setWarning] = useState(false);
+
+  const { loading, error, data } = useQuery(GET_SECTORS, {
+   onCompleted(data) {
+     setItems(data.getSectors);
+   },
+ });
+ const [delteSector, { loading: deleteLoading }] = useMutation(DELETE_SECTOR); 
 
   const toggleDetails = (index) => {
     const position = details.indexOf(index)
@@ -42,8 +63,8 @@ const Sectors = () => {
 
 
   const fields = [
-    { key: 'SectorId', _style: { width: '20%'} },
-    { key: 'SectorTopic', _style: { width: '20%'} },
+    { key: 'id', _style: { width: '20%'} },
+    { key: 'Secname', _style: { width: '20%'} },
 
     {
       key: 'show_details',
@@ -54,15 +75,61 @@ const Sectors = () => {
     }
   ]
 
+  const deleteSectorAction = (sectorID) => {
+    return (
+      <>
+        <CButton
+          type="submit"
+          onClick={() => setWarning(true)}
+          size="sm"
+          color="danger"
+          className="ml-1"
+        >
+          Delete
+        </CButton>
+        <CModal
+          show={warning}
+          onClose={() => setWarning(!warning)}
+          color="warning"
+        >
+          <CModalHeader closeButton>
+            <CModalTitle>Delete Sector</CModalTitle>
+          </CModalHeader>
+          {deleteLoading ? (
+            <CSpinner />
+          ) : (
+            <CModalBody>Are you sure you want to delete this Sector ?</CModalBody>
+          )}{" "}
+          <CModalFooter>
+            <CButton
+              color="danger"
+              onClick={() => {
+                delteSector({ variables: { sectorID } });
+                if (!deleteLoading) setWarning(!warning);
+              }}
+            >
+              Yes{" "}
+            </CButton>
+            <CButton color="secondary" onClick={() => setWarning(!warning)}>
+              no
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </>
+    );
+  };
+
   
 
-  return (
+  return loading ? (
+    <div>loading</div>
+    ) : (
     <CDataTable
-      items={sectorsData}
+      items={items}
       fields={fields}
       columnFilter
       theadTopSlot={ <CButton>
-        <InputFormSector name="Add Sector"/>
+        <InputFormSector buttonName="Add Sector"/>
     </CButton>}
       footer
       itemsPerPageSelect
@@ -72,9 +139,14 @@ const Sectors = () => {
       pagination
       scopedSlots = {{
         
-        'show_details':
+        show_details:
           (item, index)=>{
             return (
+              (
+                <CButton size="sm" color="danger" className="ml-1">
+                  Delete
+                </CButton>
+              ),
               <td className="py-2">
                 <CButton
                   color="primary"
@@ -88,7 +160,7 @@ const Sectors = () => {
               </td>
               )
           },
-        'details':
+          details:
             (item, index)=>{
               return (
               <CCollapse show={details.includes(index)}>
@@ -97,11 +169,17 @@ const Sectors = () => {
                     {item.username}
                   </h4>
                   <CButton>
-                    <InputFormSector name="Edit"/>
+                    <InputFormSector buttonName="Edit"
+                    
+                    name={item.Secname}
+                    id={item.id}
+                    type={item.Secname}
+
+                    />
                   </CButton>
-                  <CButton size="sm" color="danger" className="ml-1">
-                    Delete
-                  </CButton>
+
+                  {deleteSectorAction(item.id)}
+
                 </CCardBody>
               </CCollapse>
             )

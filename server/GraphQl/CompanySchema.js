@@ -4,7 +4,6 @@ const companySchema = gql`
   input SectorInput {
     SecnameInput: String!
   }
-
   input CompanyInput {
     Symbol: String
     Comname: String
@@ -12,7 +11,6 @@ const companySchema = gql`
     Market: String
     CompanyID: String
   }
-
   type Sector {
     id: ID!
     Secname: String!
@@ -27,7 +25,6 @@ const companySchema = gql`
     volume: Float
     date: String
   }
-
   type Company {
     id: ID!
     sectorId: ID!
@@ -47,17 +44,16 @@ const companySchema = gql`
   }
   extend type Query {
     validateTags(tags: [String]): [Company]
-    getCompanies(CompanyInput: CompanyInput!): [Company!]!
+    getCompanies(CompanyInput: CompanyInput!): [Company]!
     getSectors: [Sector!]
   }
-
   extend type Mutation {
     createSector(SectorInput: SectorInput!): Sector!
     deleteSector(sectorID: ID!): String!
     createCompany(CompanyInput: CompanyInput!): Company #require api
     deleteCompany(companyId: ID!): String!
     editSector(sectorID: ID!, SectorInput: SectorInput!): Sector!
-    editCompany(companyId: ID!, CompanyInput: CompanyInput!): Company!
+    editCompany(CompanyInput: CompanyInput!): Company!
   }
 `;
 module.exports = companySchema;
