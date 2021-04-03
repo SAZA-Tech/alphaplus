@@ -1,156 +1,131 @@
 import React from "react";
 import { fade, makeStyles } from "@material-ui/core/styles";
-import Box from '@material-ui/core/Box';
-import { sizing } from '@material-ui/system';
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
+
 import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
-import Badge from "@material-ui/core/Badge";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import MoreIcon from "@material-ui/icons/MoreVert";
-import { red, white } from "@material-ui/core/colors";
-import { Button, Grid } from "@material-ui/core";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
-import TwitterIcon from "@material-ui/icons/Twitter";
-import EmailIcon from "@material-ui/icons/Email";
+
+import { Button, Container, Grid, Paper } from "@material-ui/core";
+
 import { Link } from "react-router-dom";
-import Container from '@material-ui/core/Container';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import { Height } from "@material-ui/icons";
-import { borders } from '@material-ui/system';
-import { useTheme } from '@material-ui/core/styles';
+
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CompanyCard from "../components/Company/CompanyCard";
+import { ContentCards } from "../components/Content/ContentCards";
 
 const useStyles = makeStyles((theme) => ({
   topContainer: {
-  fontStyle: "oblique",
-  color: "red",
-  fontSize: "30px",
-  border: "none"
-  
-   
-},
-rootCom: {
-  minWidth: 275,
-  // padding: '50px 250px',
-  height: 400,
-  width: "98.5%", 
-  // borderTop: 5,
-  // border: 0,
-  borderRadius: 5,
-  marginTop: theme.spacing(1),
-  marginLeft: theme.spacing(1),
-  marginRight: theme.spacing(1),
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center', 
-},
-rootAna: {
-  minWidth: 275,
-  // padding: '50px 250px',
-  height: 400,
-  width: "45%", 
-  // borderTop: 5,
-  // border: 0,
-  borderRadius: 5,
-  marginTop: theme.spacing(1),
-  marginLeft: theme.spacing(1),
-  marginRight: theme.spacing(1),
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'left', 
-},
-
-titleCom: {
-  fontSize: 43,
-},
-titleAna: {
-  fontSize: 24,
-  marginLeft: theme.spacing(1),
-},
-pos: {
-  marginBottom: 12,
-},
-LearnMoreCommunity: {
-  // marginBottom: theme.spacing(10),
-  margin: theme.spacing(30, 30, 30),
-
-},
+    // height: theme.spacing(40),
+  },
+  rootCom: {
+    width: "100%",
+    marginTop: theme.spacing(1),
+    [theme.breakpoints.up("lg")]: {
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1),
+    },
+  },
+  companyLine: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "no-wrap",
+    overflowX: "scroll",
+    overflowY: "hidden",
+    // whiteSpace: 'nowrap',
+    padding: theme.spacing(0),
+    "-webkit-overflow-scrolling": "touch",
+    "&::-webkit-scrollbar": {
+      display: "none",
+    },
+    // marginTop: theme.spacing(1),
+    // marginLeft: theme.spacing(1),
+    // marginRight: theme.spacing(1),
+  },
+  cardLayout: {
+    [theme.breakpoints.up("lg")]: {
+      width: "50%",
+      alignContent: "start",
+    },
+    paddingTop: theme.spacing(4),
+    alignContent: "center",
+    display: "flex",
+    justifyContent: "center",
+  },
 }));
 
-
-export default function Home(){
+export default function Home() {
   const classes = useStyles();
   return (
-    <div className='background'>
-    <Card className={classes.rootCom} variant="h1">
-      <CardContent>
-        <Typography className={classes.titleCom} color="textSecondary" gutterBottom>
-          Community
-        </Typography>
-       
-      </CardContent>
-      <CardActions>
-        <Button size="medium" color="primary" className={classes.LearnMoreCommunity}>Learn More</Button>
-      </CardActions>
-    </Card>
-    <Grid>
-    <Card className={classes.rootAna} variant="h1">
-      <CardContent>
-        <Typography className={classes.titleAna} color="textSecondary" gutterBottom>
-          Trending Analysis
-        </Typography>
-      </CardContent>
-    </Card>
+    <div className={classes.rootCom}>
+      {/* Compnany line + 2 Content cards  */}
 
-    <Card className={classes.rootAna} variant="h1">
-      <CardContent>
-        <Typography className={classes.titleAna} color="textSecondary" gutterBottom>
-          Latest News
-        </Typography>
-      </CardContent>
-    </Card>
-    </Grid>
+      <Paper className={classes.topContainer}>
+        <Grid container direction="column">
+          {/* Company Line */}
+          <Grid item className={classes.companyLine}>
+            {companydummyData.map((e) => (
+              <CompanyCard
+                vertical={true}
+                Symbol={e.Symbol}
+                price={e.price}
+                change={e.changePrice}
+              />
+            ))}
+          </Grid>
+          <Grid item direction="column" classname={classes.cardLayout}>
+            {/* Trending Card */}
+            <Typography variant="h5" align="center">
+              Trending Analysis
+            </Typography>
+            {contentdummyData.map((e) => (
+              <ContentCards
+                title={e.title}
+                name={e.name}
+                img={e.img}
+                withAuther
+              />
+            ))}
+            <Grid item></Grid>
+            {/* News */}
+            <Grid item></Grid>
+          </Grid>
+        </Grid>
+      </Paper>
 
-    <Card className={classes.rootCom} variant="h1">
-      <CardContent>
-        <Typography className={classes.titleCom} color="textSecondary" gutterBottom>
-          Portfolilo
-        </Typography>
-       
-      </CardContent>
-    </Card>
+      {/* Editors Picks + Latest Articles */}
+      <Grid container></Grid>
+      {/* Portfolio : (Compnay + Articles) */}
+      <Grid container></Grid>
+      {/* About Alpha+ ? */}
+      <Container></Container>
     </div>
   );
 }
 
-// const Home = () => {
-//   return (
-//     <div className='background'> 
-//       <Grid container spacing={2} >
-//         <Grid item xs = {10} lg={10} style={{ width: "100%"}}>
-//           <Cards />
-//           <Card>
-//             <Grid>
-//               kkokk
-//             </Grid>
-//           </Card>
-//         </Grid>
-//         {/* <Grid item xs={5}>
-//           <Cards />
-//         </Grid> */}
-//       </Grid>
-//     </div>
-//   );
-// };
-
-// export default Home;
+const companydummyData = [
+  { Symbol: "AAPL", price: 293, changePrice: +192 },
+  { Symbol: "GOOG", price: 351, changePrice: -122 },
+  { Symbol: "AMZN", price: 120, changePrice: +50 },
+  { Symbol: "EBSY", price: 963, changePrice: +124 },
+  { Symbol: "MOZA", price: 56, changePrice: -56 },
+  { Symbol: "NANI", price: 123, changePrice: +21 },
+  { Symbol: "AAPL", price: 293, changePrice: +192 },
+  { Symbol: "GOOG", price: 351, changePrice: -122 },
+  { Symbol: "AMZN", price: 120, changePrice: +50 },
+  { Symbol: "EBSY", price: 963, changePrice: +124 },
+  { Symbol: "MOZA", price: 56, changePrice: -56 },
+  { Symbol: "NANI", price: 123, changePrice: +21 },
+];
+const contentdummyData = [
+  { name: "jhon Doe", img: "Jh", title: "This a test dummy title" },
+  { name: "Ziad Fnan", img: "Zi", title: "Don't Miss This intersting analyst" },
+  { name: "Abo Motlaq", img: "AH", title: "I only love apple products" },
+  { name: "Aziz Amir", img: "AA", title: "Play it cool with your stocks" },
+  {
+    name: "Saleh Mogren",
+    img: "SM",
+    title: "How to write dummy data like a pro",
+  },
+];

@@ -16,10 +16,15 @@ import { Link as RouterLink } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root: {
     marginLeft: 0,
-    padding: theme.spacing(2),
+    paddingTop : theme.spacing(1),
+    paddingLeft: theme.spacing(2),
+      "& hr": {
+      margin: theme.spacing(1),
+      alignSelf: "stretch",
+    },
   },
   title: {
-    fontSize: theme.typography.fontSize * 2,
+    fontSize: theme.typography.fontSize,
     textDecoration: "none",
     "&:visited": {
       color: theme.palette.common.black,
@@ -44,9 +49,9 @@ function ContentCards(props) {
   });
   const classes = useStyles();
   return (
-    <Container className={classes.root}>
+    <div className={classes.root}>
       <Grid
-        spacing={4}
+        spacing={2}
         container
         direction="row"
         justify="flex-start"
@@ -59,14 +64,14 @@ function ContentCards(props) {
         </Grid>
 
         {/* // Content info  */}
-        <Grid item xs={2} sm>
-          <Grid item container direction="column" spacing={2}>
+        <Grid item  sm>
+          <Grid item container direction="column" >
             <Grid item>
               <Typography
                 component={RouterLink}
                 to={props.link}
                 gutterBottom
-                variant="subtitle1"
+                variant="h6"
                 className={classes.title}
               >
                 {props.title}
@@ -86,9 +91,9 @@ function ContentCards(props) {
           </Grid>
         ) : null}
       </Grid>
-      <Divider  />
+      <Divider  variant='fullWidth'/>
 
-    </Container>
+    </div>
   );
 }
 
