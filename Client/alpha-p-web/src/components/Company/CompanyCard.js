@@ -1,4 +1,5 @@
-import React from "react";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { fade, makeStyles } from "@material-ui/core/styles";
 import { Container, Divider, Typography, Grid } from "@material-ui/core";
 
@@ -71,3 +72,20 @@ const CompanyCard = (props) => {
 };
 
 export default CompanyCard;
+
+
+export class CompanyCard extends Component {
+  static propTypes = {
+
+  }
+
+  render() {
+    return (
+      <div>
+        
+      </div>
+    )
+  }
+}
+
+export default CompanyCard
