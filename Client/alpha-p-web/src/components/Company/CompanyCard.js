@@ -73,19 +73,3 @@ const CompanyCard = (props) => {
 
 export default CompanyCard;
 
-
-export class CompanyCard extends Component {
-  static propTypes = {
-
-  }
-
-  render() {
-    return (
-      <div>
-        
-      </div>
-    )
-  }
-}
-
-export default CompanyCard

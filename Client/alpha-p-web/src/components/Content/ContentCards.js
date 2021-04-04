@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import PropTypes, { func } from "prop-types";
 import {
   Avatar,
   ButtonBase,
@@ -16,18 +16,30 @@ import { Link as RouterLink } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root: {
     marginLeft: 0,
-    paddingTop : theme.spacing(1),
+    paddingTop: theme.spacing(1),
     paddingLeft: theme.spacing(2),
-      "& hr": {
+    "& hr": {
       margin: theme.spacing(1),
       alignSelf: "stretch",
     },
+    alignItems: "center",
   },
   title: {
-    fontSize: theme.typography.fontSize,
     textDecoration: "none",
     "&:visited": {
       color: theme.palette.common.black,
+    },
+    padding: theme.spacing(1),
+  },
+  cardLayout: {
+    marginTop: theme.spacing(2),
+    "& .MuiTypography-h5": {
+      paddingLeft: theme.spacing(2),
+      color: theme.palette.grey[700],
+    },
+    [theme.breakpoints.down("sm")]: {
+      fontSize: theme.typography.fontSize,
+      marginTop: theme.spacing(4),
     },
   },
 }));
@@ -35,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 function ContentCards(props) {
   const [state, setState] = useState({
     withAuther: false,
-    crudOtion: true,
+    crudOtion: false,
   });
   useEffect(() => {
     if (props.withAuther)
@@ -46,12 +58,11 @@ function ContentCards(props) {
       setState({
         crudOtion: props.crudOtion,
       });
-  });
+  }, []);
   const classes = useStyles();
   return (
     <div className={classes.root}>
       <Grid
-        spacing={2}
         container
         direction="row"
         justify="flex-start"
@@ -64,24 +75,24 @@ function ContentCards(props) {
         </Grid>
 
         {/* // Content info  */}
-        <Grid item  sm>
-          <Grid item container direction="column" >
+        <Grid item sm>
+          <Grid item container direction="column">
             <Grid item>
               <Typography
-                component={RouterLink}
-                to={props.link}
-                gutterBottom
+                // component={RouterLink}
+                // to={props.link == null ? null : props.link}
                 variant="h6"
                 className={classes.title}
               >
                 {props.title}
               </Typography>
+              <Typography variant="subtitle1">{props.bio}</Typography>
             </Grid>
           </Grid>
         </Grid>
         {/* // Crud Buttons */}
         {state.crudOtion ? (
-          <Grid container item xs={2}>
+          <Grid container item>
             <Button variant="contained" color="primary">
               Edit
             </Button>
@@ -91,10 +102,41 @@ function ContentCards(props) {
           </Grid>
         ) : null}
       </Grid>
-      <Divider  variant='fullWidth'/>
-
+      <Divider variant="fullWidth" />
     </div>
   );
 }
 
-export { ContentCards };
+const ContentCardPaper = (props) => {
+  const classes = useStyles();
+
+  const ContentCardsItems = () =>
+    props.data.slice(0, props.limit).map((e) => {
+      return (
+        <ContentCards
+          title={e.title}
+          name={e.name}
+          img={e.img}
+          bio={e.bio}
+          withAuther={props.auther}
+        />
+      );
+    });
+  return (
+    <div className={classes.cardLayout}>
+      <Typography variant="h5">{props.title}</Typography>
+      {ContentCardsItems()}
+    </div>
+  );
+};
+ContentCardPaper.defaultProps = {
+  auther: false,
+};
+ContentCardPaper.propTypes = {
+  limit: PropTypes.number,
+  title: PropTypes.string,
+  data: PropTypes.array,
+  auther: PropTypes.bool,
+};
+
+export { ContentCards, ContentCardPaper };
