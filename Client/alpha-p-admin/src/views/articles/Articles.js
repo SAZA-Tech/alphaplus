@@ -103,7 +103,7 @@ const Articles = () => {
       filter: false
     }
   ]
-  const deleteArticleAction = (id,articleId) => {
+  const deleteArticleAction = (articleId) => {
     return (
       <>
         <CButton
@@ -132,6 +132,7 @@ const Articles = () => {
             <CButton
               color="danger"
               onClick={() => {
+                const id="604cb03f70aeaa09fc60fff7"; //temp
                 deleteArticle({ variables: { id,articleId} });
                 if (!deleteLoading) setWarning(!warning);
               }}
@@ -205,7 +206,8 @@ const Articles = () => {
                     />
                   </CButton>
 
-                  {deleteArticleAction(item.id,"604cb03f70aeaa09fc60fff7")}
+                  { 
+                  deleteArticleAction(item.id)}
 
                 </CCardBody>
               </CCollapse>

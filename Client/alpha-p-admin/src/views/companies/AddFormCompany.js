@@ -21,7 +21,7 @@ import {
 
   const CREATE_COMPANY = gql`
 
-  mutation createCompany($CompanyInput: CompanyInput!  ) {
+  mutation createCompany($CompanyInput: CompanyInput! ) {
     createCompany(CompanyInput:$CompanyInput) {
     
       market
@@ -32,19 +32,8 @@ import {
     }
   }
 `;
-const EDIT_COMPANY = gql`
 
-mutation editCompany($CompanyInput: CompanyInput!) {
-  editCompany(CompanyInput:$CompanyInput){
-  
-    market
-    id
-  }
-}
-`;
-
-
-  const InputFormCompany = (props) => {
+  const AddFormCompany = (props) => {
     const [modal, setModal] = useState(false);
     const toggle = () => {
       setModal(!modal);
@@ -55,9 +44,9 @@ mutation editCompany($CompanyInput: CompanyInput!) {
       Comname: props.Comname,
       SectorID: props.SectorID,
       Market:props.Market,
-      Symbol:null
+      Symbol:props.Symbol
     });
-    const [CreateCompanyInfo, { loading }] = useMutation(EDIT_COMPANY, {
+    const [CreateCompanyInfo, { loading }] = useMutation(CREATE_COMPANY, {
       onError(error) {
         console.log(`Error Happend Updating user info ${error}`);
       },
@@ -96,14 +85,14 @@ mutation editCompany($CompanyInput: CompanyInput!) {
               Comname: values.Comname,
               SectorID: values.SectorID,
               Market:values.Market,
-              Symbol:null
+              Symbol:values.Symbol
 
             };
             CreateCompanyInfo({ variables: {CompanyInput  } });
           }}>
 
             <CFormGroup>
-              <CLabel htmlFor="Comname">old company name:  {values.Comname}	</CLabel>
+              <CLabel htmlFor="Comname">company name {values.Comname}</CLabel>
               <CInput
                 id="Comname"
                 name="Comname"
@@ -115,7 +104,7 @@ mutation editCompany($CompanyInput: CompanyInput!) {
             </CFormGroup>
 
             <CFormGroup>
-              <CLabel htmlFor="Market">old market:  {values.Market}	</CLabel>
+              <CLabel htmlFor="Market">market</CLabel>
               <CInput
                 name="Market"
                 id="Market"
@@ -125,18 +114,19 @@ mutation editCompany($CompanyInput: CompanyInput!) {
               />
             </CFormGroup>
 
-            {
-            /* <CFormGroup>
-              <CLabel htmlFor="symbol	">Company symbol	</CLabel>
+             
+             <CFormGroup>
+              <CLabel htmlFor="Symbol">Company symbol</CLabel>
               <CInput
-                 name="symbol"
+                 name="Symbol"
+                 id="Symbol"
                 placeholder="Enter User symbol"
-                autoComplete="symbol"
+                autoComplete="Symbol"
                 onChange={onChange}
               />
-            </CFormGroup> */}
+            </CFormGroup> 
             <CFormGroup>
-              <CLabel htmlFor="SectorID">old sector:  {values.SectorID}</CLabel>
+              <CLabel htmlFor="SectorID">sector</CLabel>
               <CInput
                 id="SectorID"
                 name="SectorID"
@@ -168,4 +158,4 @@ mutation editCompany($CompanyInput: CompanyInput!) {
 
   } 
 
-  export default InputFormCompany
+  export default AddFormCompany

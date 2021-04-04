@@ -51,7 +51,7 @@ const companySchema = gql`
     createSector(SectorInput: SectorInput!): Sector!
     deleteSector(sectorID: ID!): String!
     createCompany(CompanyInput: CompanyInput!): Company #require api
-    deleteCompany(companyId: ID!): String!
+    deleteCompany(id: ID!,companyId: ID!): String!
     editSector(sectorID: ID!, SectorInput: SectorInput!): Sector!
     editCompany(CompanyInput: CompanyInput!): Company!
   }

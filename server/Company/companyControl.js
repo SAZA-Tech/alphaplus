@@ -17,25 +17,25 @@ module.exports.CompanyControl = {
     { CompanyInput: { Symbol, SectorID, Market, Comname } },
     context
   ) => {
-    const { valid, errors } = validateCompanyInput(Symbol, Market, Comname);
-    const auth = checkAuth(context);
+    // const { valid, errors } = validateCompanyInput(Symbol, Market, Comname);
+    // const auth = checkAuth(context);
 
-    if (auth) {
-      if (!valid) {
-        throw new UserInputError("Errors", { errors });
-      }
+    // if (auth) {
+    //   if (!valid) {
+    //     throw new UserInputError("Errors", { errors });
+    //   }
       const sector = await Sector.findById(SectorID);
       var market = Market;
       var comname = Comname;
       var symbol = Symbol;
 
-      const companyExist = await Company.find({
-        symbol,
-      }).countDocuments();
+      // const companyExist = await Company.find({
+      //   symbol,
+      // }).countDocuments();
 
-      if (companyExist > 0) {
-        throw new Error(`Company Already Exist`);
-      }
+      // if (companyExist > 0) {
+      //   throw new Error(`Company Already Exist`);
+      // }
 
       const newCompany = new Company({
         sectorId: sector._id,
@@ -95,13 +95,15 @@ module.exports.CompanyControl = {
         financialData: arrMap,
         todayFinance: arrMap[0],
       };
+      console.log("created")
       return company;
-    } else {
-      throw new Error("Not Authrized to create");
-    }
+    // } else {
+    //   throw new Error("Not Authrized to create");
+    // }
   },
 
-  deleteCompany: async (_, id, { companyId }, context) => {
+  deleteCompany: async (_,  {id,companyId }, context) => {
+    
     if (isAuthrized(_, { id }, context)) {
       try {
         const deleteCompany = await Company.findById(companyId);
@@ -121,8 +123,6 @@ module.exports.CompanyControl = {
     _,
     { CompanyInput: { Symbol, SectorID, Market, Comname, CompanyID } }
   ) => {
-    let CompanyDocs = [];
-    var companies = [];
     function todayDate() {
       //Check if map has today's finance data
       const date = new Date();
@@ -140,6 +140,10 @@ module.exports.CompanyControl = {
       // not weekend + missing fin data : False
     }
 
+    let CompanyDocs = [];
+    var companies = [];
+ 
+
     if (
       (Symbol == null) &
       (SectorID == null) &
@@ -148,6 +152,7 @@ module.exports.CompanyControl = {
       (CompanyID == null)
     ) {
       CompanyDocs = await Company.find().exec();
+      
     } else {
       const Filter = {};
       if (CompanyID != null) Filter._id = CompanyID;
@@ -162,13 +167,14 @@ module.exports.CompanyControl = {
 
       CompanyDocs = await Company.find(Filter).exec();
     }
+    var formatedDate = todayDate();
     for (let index = 0; index < CompanyDocs.length; index++) {
       const element = CompanyDocs[index];
-
       var apiCount = 1;
 
       var fin = new Map(element.financialData);
-      var formatedDate = todayDate();
+      
+      console.log(formatedDate);
 
       if (!fin.has(formatedDate)) {
         if (apiCount % 5 == 0) {
@@ -220,10 +226,10 @@ module.exports.CompanyControl = {
         financialData: arr,
         todayFinance: getLastDate,
       });
-      console.log(companies);
+      
     }
     console.log(`last call`, companies);
-
+    console.log(companies.length);
     return companies;
   },
 
@@ -287,7 +293,7 @@ module.exports.CompanyControl = {
         const res =await companydoc.save();
 
         const arrMap = Array.from(res.financialData.values());
-        
+        console.log("edit")
         return{
           id:res._id,
           sectorId:res.sectorId,
