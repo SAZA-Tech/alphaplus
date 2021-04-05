@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("sm")]: {
       paddingRight: "79px",
       paddingLeft: "118px",
+      
     },
     flexGrow: 1,
     paddingLeft: 0,

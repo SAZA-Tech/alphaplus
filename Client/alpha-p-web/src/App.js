@@ -12,6 +12,8 @@ import SignUp from "./views/Sign-up";
 import AuthRoute from "./components/AuthRoute";
 import Home from "./views/Home";
 import Navbar from "./components/Navbar";
+import EndUserProfile from "./views/UsersProfiles/EndUserProfile";
+
 import Article from "./views/Content/Article";
 import Draft from "./views/Content/Draft";
 import { MyAuthors } from "./views/Content/MyAuthors";
@@ -27,6 +29,8 @@ export class App extends Component {
             <Navbar />
             <div>
               <Route exact path="/" component={Home} />
+              <Route exact path="/EndUserProfile" component={EndUserProfile} />
+
               <Route exact path="/article" component={Article} />
               <Route  path="/draft/:draftId" component={Draft} />
               <Route exact path="/MyAuthers/:username/" component={MyAuthors} />
