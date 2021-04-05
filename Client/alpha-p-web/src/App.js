@@ -12,6 +12,7 @@ import SignUp from "./views/Sign-up";
 import { AuthRoute, ProtectedRoute } from "./components/AuthRoute";
 import Home from "./views/Home";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import Article from "./views/Content/Article";
 import Draft from "./views/Content/Draft";
 import { MyAuthors } from "./views/Content/MyAuthors";
@@ -43,6 +44,8 @@ export class App extends Component {
 
               <AuthRoute exact path="/Login" component={Login} />
             </div>
+            <Footer />
+
           </Router>
         </AuthProvider>
       </ThemeProvider>
