@@ -85,9 +85,9 @@ getSectors:async(_,) => {
   }
 
 },
-editSector:async(_,sectorID,{SectorInput:{SecnameInput}},) => {
+editSector:async(_,{SectorInput:{SecnameInput ,SectorID}},) => {
   try {
-    const sectordoc= await Sector.findById(sectorID).exec();
+    const sectordoc= await Sector.findById(SectorID).exec();
 
     if(sectordoc.$isValid){
       sectordoc.Secname=SecnameInput;

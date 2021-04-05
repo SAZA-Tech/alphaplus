@@ -19,32 +19,30 @@ import {
   import { useMutation } from "@apollo/client";
   import { useForm } from "../../../../alpha-p-admin/src/util/hooks";
 
-const EDIT_COMPANY = gql`
 
-mutation editCompany($CompanyInput: CompanyInput!) {
-  editCompany(CompanyInput:$CompanyInput){
+const CREATE_SECTOR = gql`
+
+mutation createSector($SectorInput: SectorInput!) {
+    createSector(SectorInput:$SectorInput){
   
-    market
-    id
+    Secname
+    
   }
 }
 `;
 
 
-  const InputFormCompany = (props) => {
+  const AddFormSector = (props) => {
     const [modal, setModal] = useState(false);
     const toggle = () => {
       setModal(!modal);
       console.log(values);
     };
-    const { onChange, onSubmit, values } = useForm(CreateCompanyInfoCallBack, {
-      CompanyID: props.CompanyID,
-      Comname: props.Comname,
-      SectorID: props.SectorID,
-      Market:props.Market,
-      Symbol:null
+    const { onChange, onSubmit, values } = useForm(CreateSectorInfoCallBack, {
+      SectorID: null,
+      SecnameInput:null,
     });
-    const [CreateCompanyInfo, { loading }] = useMutation(EDIT_COMPANY, {
+    const [CreateSectorInfo, { loading }] = useMutation(CREATE_SECTOR, {
       onError(error) {
         console.log(`Error Happend Updating user info ${error}`);
       },
@@ -52,9 +50,9 @@ mutation editCompany($CompanyInput: CompanyInput!) {
         console.log("here");
       },
     });
-    function CreateCompanyInfoCallBack() {
+    function CreateSectorInfoCallBack() {
       console.log(`Called `);
-      CreateCompanyInfo();
+      CreateSectorInfo();
     }
   return (
     <>
@@ -78,30 +76,26 @@ mutation editCompany($CompanyInput: CompanyInput!) {
         <CCol sm="12">
           <CForm onSubmit={(event)=>{
             event.preventDefault();
-            var CompanyInput={
-              CompanyID: values.CompanyID,
-              Comname: values.Comname,
-              SectorID: values.SectorID,
-              Market:values.Market,
-              Symbol:null
-
-            };
-            CreateCompanyInfo({ variables: {CompanyInput  } });
+            var SectorInput={
+              SecnameInput:values.SecnameInput,
+              SectorID:values.SectorID
+            }
+            CreateSectorInfo({ variables: {SectorInput } });
           }}>
 
             <CFormGroup>
-              <CLabel htmlFor="Comname">old company name:  {values.Comname}	</CLabel>
+              <CLabel htmlFor="SecnameInput">Sector Name</CLabel>
               <CInput
-                id="Comname"
-                name="Comname"
-                placeholder="Enter Company Name"
-                autoComplete="Comname"
+                id="SecnameInput"
+                name="SecnameInput"
+                placeholder="Enter Sector Name"
+                autoComplete="SecnameInput"
                 onChange={onChange}
                 
               />
             </CFormGroup>
 
-            <CFormGroup>
+            {/* <CFormGroup>
               <CLabel htmlFor="Market">old market:  {values.Market}	</CLabel>
               <CInput
                 name="Market"
@@ -110,7 +104,7 @@ mutation editCompany($CompanyInput: CompanyInput!) {
                 autoComplete="Market"
                 onChange={onChange}
               />
-            </CFormGroup>
+            </CFormGroup> */}
 
             {
             /* <CFormGroup>
@@ -122,7 +116,7 @@ mutation editCompany($CompanyInput: CompanyInput!) {
                 onChange={onChange}
               />
             </CFormGroup> */}
-            <CFormGroup>
+            {/* <CFormGroup>
               <CLabel htmlFor="SectorID">old sector:  {values.SectorID}</CLabel>
               <CInput
                 id="SectorID"
@@ -132,7 +126,8 @@ mutation editCompany($CompanyInput: CompanyInput!) {
                 onChange={onChange}
                 
               />
-            </CFormGroup>
+            </CFormGroup> */}
+
             <CButton color="primary" type="submit">
                       Submit
                     </CButton>{" "}
@@ -155,4 +150,4 @@ mutation editCompany($CompanyInput: CompanyInput!) {
 
   } 
 
-  export default InputFormCompany
+  export default AddFormSector
