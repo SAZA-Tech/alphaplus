@@ -25,7 +25,12 @@ export class App extends Component {
         <AuthProvider>
           <Router>
             <Navbar />
-            <div style={{ backgroundColor: theme.palette.background.default }}>
+            <div
+              style={{
+                backgroundColor: theme.palette.background.default,
+                paddingBottom: theme.spacing(8),
+              }}
+            >
               <Route exact path="/" component={Home} />
               <Route path="/article/:articleId" component={Article} />
               <ProtectedRoute path="/draft/:draftId" component={Draft} />

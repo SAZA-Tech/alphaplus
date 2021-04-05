@@ -19,7 +19,7 @@ import {
 import { useQuery } from "@apollo/client";
 import { GET_DRAFTS } from "../../graphql/Content/draftsGql";
 import { fade, makeStyles } from "@material-ui/core/styles";
-import { ContentCards } from "../../components/Content/ContentCards";
+import { ContentCard } from "../../components/Content/ContentCards";
 import { AuthContext } from "../../context/auth";
 import { GET_ARTICLES } from "../../graphql/Content/articleGql";
 const useStyles = makeStyles((theme) => ({
@@ -88,7 +88,7 @@ export function MyAuthors(props) {
               {articles.map((e) => {
                 return (
                   <ListItem>
-                    <ContentCards
+                    <ContentCard
                       
                       title={e.articleTitle}
                       link={`/article/${e.id}`}
@@ -126,7 +126,7 @@ export function MyAuthors(props) {
               {drafts.map((e) => {
                 return (
                   <ListItem>
-                    <ContentCards
+                    <ContentCard
                       crudOtin
                       title={e.draftName}
                       link={`/draft/${e.id}`}

@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
     "& .MuiTypography-h5": {
       paddingLeft: theme.spacing(2),
       color: theme.palette.grey[700],
+      paddingTop: theme.spacing(2),
     },
     [theme.breakpoints.down("sm")]: {
       fontSize: theme.typography.fontSize,
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ContentCards(props) {
+function ContentCard(props) {
   const [state, setState] = useState({
     withAuther: false,
     crudOtion: false,
@@ -71,7 +72,9 @@ function ContentCards(props) {
         <Grid item>
           {state.withAuther ? (
             <Avatar alt={props.name} src={props.img} />
-          ) : null}
+          ) : (
+            <Container />
+          )}
         </Grid>
 
         {/* // Content info  */}
@@ -106,14 +109,27 @@ function ContentCards(props) {
     </div>
   );
 }
-
-const ContentCardPaper = (props) => {
+ContentCard.defaultProps = {
+  withAuther: false,
+  crudOtion: false,
+  link: null,
+};
+ContentCard.propTypes = {
+  withAuther: PropTypes.bool,
+  crudOtion: PropTypes.bool,
+  name: PropTypes.string,
+  img: PropTypes.string,
+  bio: PropTypes.string,
+  title: PropTypes.string,
+  link: PropTypes.string,
+};
+function ContentCardPaper(props) {
   const classes = useStyles();
 
   const ContentCardsItems = () =>
     props.data.slice(0, props.limit).map((e) => {
       return (
-        <ContentCards
+        <ContentCard
           title={e.title}
           name={e.name}
           img={e.img}
@@ -128,15 +144,15 @@ const ContentCardPaper = (props) => {
       {ContentCardsItems()}
     </div>
   );
-};
+}
 ContentCardPaper.defaultProps = {
   auther: false,
 };
 ContentCardPaper.propTypes = {
-  limit: PropTypes.number,
-  title: PropTypes.string,
-  data: PropTypes.array,
-  auther: PropTypes.bool,
+  limit: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  data: PropTypes.array.isRequired,
+  auther: PropTypes.bool.isRequired,
 };
 
-export { ContentCards, ContentCardPaper };
+export { ContentCard, ContentCardPaper };
