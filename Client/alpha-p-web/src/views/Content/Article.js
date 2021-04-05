@@ -1,5 +1,5 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useState, useContext } from "react";
+import PropTypes, { func } from "prop-types";
 import {
   Container,
   Grid,
@@ -11,7 +11,10 @@ import {
   Avatar,
   TextField,
   FormHelperText,
+  CircularProgress,
 } from "@material-ui/core";
+import { AuthContext } from "../../context/auth";
+
 import ReplyIcon from "@material-ui/icons/Reply";
 import ThumbUpAltOutlinedIcon from "@material-ui/icons/ThumbUpAltOutlined";
 import ShareIcon from "@material-ui/icons/Share";
@@ -20,7 +23,12 @@ import {
   ArticleAutherInfo,
   ArticleAutherInfoExpanded,
 } from "../../components/AnalystInfo";
+import { useParams, useHistory } from "react-router-dom";
+
 import { fade, makeStyles } from "@material-ui/core/styles";
+import { useMutation, useQuery } from "@apollo/client";
+import { GET_ARTICLE } from "../../graphql/Content/articleGql";
+import { ADD_COMMENT } from "../../graphql/Content/commentGql";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,6 +43,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("lg")]: {
       marginLeft: theme.spacing(40),
       marginRight: theme.spacing(40),
+    },
+    "& img": {
+      width: "100%",
     },
   },
   analystInfoSection: {
@@ -63,40 +74,38 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(2),
     paddingRight: theme.spacing(4),
     "& .MuiTextField-root": {
-      width: "60ch",
+      width: "100%",
       padding: theme.spacing(4),
       paddingTop: theme.spacing(1),
       borderTopLeftRadius: 0,
     },
   },
   comment: {
-    padding:theme.spacing(2),
+    padding: theme.spacing(2),
     "& .MuiAvatar-root": {
       marginRight: theme.spacing(2),
     },
     "& .MuiDivider-root": {
       marginBottom: theme.spacing(2),
     },
-    "& .MuiGrid-root":{
+    "& .MuiGrid-root": {
       marginBottom: theme.spacing(2),
-
     },
-    '& .commentBody':{
+    "& .commentBody": {
       paddingBottom: theme.spacing(2),
-
-    }
+    },
   },
-  commentBtn:{
-    paddingTop:theme.spacing(4),
-  }
-
+  commentBtn: {
+    paddingTop: theme.spacing(4),
+  },
 }));
 
 const img = "avatars/7.jpg";
 const analystInfo = {
   name: "jhon doe",
   img: img,
-  bio: "Analyst",
+  bio:
+    "This a logn bio from the user and should give a breif about the user prsonality",
 };
 const commentsDocs = [
   {
@@ -121,13 +130,34 @@ const commentsDocs = [
 
 const Article = (props) => {
   const classes = useStyles();
-
-  return (
+  let { articleId } = useParams();
+  console.log(articleId);
+  const { loading: articleFetchingLoading, data, error } = useQuery(
+    GET_ARTICLE,
+    {
+      variables: {
+        articleId: articleId,
+      },
+      onError(err) {
+        console.log(`Error Happend ${err}`);
+      },
+    }
+  );
+  return articleFetchingLoading ? (
+    <CircularProgress />
+  ) : (
     <div className="background">
       <div className={classes.articleLayout}>
-        <ArticleSection />
-        {/* Comments Section */}
-        <CommentsSection />
+        <ArticleSection
+          title={data.getArticle.articleTitle}
+          body={data.getArticle.articleBody}
+          auther={data.getArticle.articleAuthor}
+        />
+
+        <CommentsSection
+          commentCount={data.getArticle.commentCount}
+          cooments={data.getComments}
+        />
       </div>
     </div>
   );
@@ -143,9 +173,8 @@ const ArticleSection = (props) => {
     <Container>
       <Paper elevation={2}>
         <ArticleAutherInfo
-          img={analystInfo.img}
-          name={analystInfo.name}
-          bio={analystInfo.bio}
+          img={props.auther.img}
+          name={props.auther.username}
         />
         {/* Title + Body Container */}
         <Container>
@@ -159,7 +188,7 @@ const ArticleSection = (props) => {
               alignItems="baseline"
             >
               <Grid item>
-                <h1>First Article on alpha+</h1>
+                <h1>{props.title}</h1>
               </Grid>
               <Grid item container direction="row" spacing={1}>
                 <Grid item xs>
@@ -177,7 +206,7 @@ const ArticleSection = (props) => {
           </Container>
           {/* Body */}
           <Container className={classes.body}>
-            <Typography variant="body1">{body}</Typography>
+            <div dangerouslySetInnerHTML={{ __html: props.body }} />
           </Container>
           <Divider variant="middle" />
           {/* Article Buttons */}
@@ -216,8 +245,9 @@ const ArticleSection = (props) => {
       </Paper>
       <Paper elevation={2} className={classes.analystInfoSection}>
         <ArticleAutherInfoExpanded
-          img={analystInfo.img}
-          name={analystInfo.name}
+          img={props.auther.img}
+          name={props.auther.name}
+          username={props.auther.username}
           bio={analystInfo.bio}
         />
       </Paper>
@@ -228,26 +258,54 @@ const ArticleSection = (props) => {
 ArticleSection.propTypes = {};
 
 function CommentsSection(props) {
+  const { user } = useContext(AuthContext);
+
+  let { articleId } = useParams();
+  const [errors, setErrors] = useState({});
+  const [commentBody, setCommentBody] = useState("");
   const classes = useStyles();
   const comments = (commentsDocs) =>
     commentsDocs.map((v) => (
       <CreateComment
-        name={v.name}
-        body={v.body}
-        date={v.date}
-        avatar={v.Avatar}
+        name={v.commentAuthor.username}
+        body={v.commentBody}
+        date={v.createdAt}
+        avatar={v.commentAuthor.img}
       />
     ));
-
+  const [addComment, { laoding: commentLoading }] = useMutation(ADD_COMMENT, {
+    variables: {
+      autherId: !user ? "undefind" : user.id,
+      articleId: articleId,
+      commentBody: commentBody,
+    },
+    onCompleted(data) {
+      window.location.reload();
+    },
+    onError(err) {
+      console.log(`Error on ${err}`);
+      setErrors(
+        err && err.graphQLErrors[0]
+          ? err.graphQLErrors[0].extensions.exception.errors
+          : {}
+      );
+    },
+  });
+  function onCommentChange(value) {
+    setCommentBody(value.target.value);
+  }
+  function addCommentCall() {
+    if (commentBody.trim() != "") addComment();
+  }
   return (
     <Container className={classes.commentsLayout}>
       <Paper elevation={2}>
         <Container>
           <Container className={classes.commentsHeader}>
-            <Typography variant="h4">Comments(2)</Typography>
+            <Typography variant="h4">Comments({props.commentCount})</Typography>
           </Container>
           <Container className={classes.addComment}>
-            <form>
+            <form onSubmit={addCommentCall}>
               <Avatar>OP</Avatar>
               <TextField
                 id="outlined-multiline-static"
@@ -255,13 +313,21 @@ function CommentsSection(props) {
                 rows={4}
                 placeholder="add your comment.."
                 variant="outlined"
+                value={commentBody}
+                error={Object.keys(errors).length > 0}
+                onChange={onCommentChange}
+                disabled={!user}
               />
-              <Button variant="contained" color="primary">
-                Publish
-              </Button>
+              {commentLoading ? (
+                <CircularProgress />
+              ) : (
+                <Button variant="contained" color="primary" type="submit">
+                  Publish
+                </Button>
+              )}
             </form>
           </Container>
-          <Container>{comments(commentsDocs)}</Container>
+          <Container>{comments(props.cooments)}</Container>
         </Container>
       </Paper>
     </Container>
@@ -275,12 +341,14 @@ const CreateComment = (props) => {
       <Divider />
       <Grid container direction="row" justify="space-between">
         <Grid item container xs={4} sm>
-          <Avatar>{props.avatar}</Avatar>
+          <Avatar>
+            {props.avatar == null ? props.name.split(2) : props.avatar}
+          </Avatar>
           <Typography variant="subtitle1">{props.name}</Typography>
         </Grid>
         <Typography variant="caption">{props.date}</Typography>
       </Grid>
-      <Container className='commentBody'>
+      <Container className="commentBody">
         <Typography variant="body2">{props.body}</Typography>
       </Container>
       <Container className={classes.commentBtn}>
@@ -292,6 +360,3 @@ const CreateComment = (props) => {
 };
 
 CreateComment.propTypes = {};
-
-const body =
-  "Summary\n\nBoth Tilray and Aphria have seen 200% stock surges in just days from Reddit-style buying.\n\nThe 'blue wave' will help cannabis companies as federal legalization will open up new markets internally in the United States.\n\nRevenues and earnings for both companies are muted compared to the growth of other companies in the same sector.\n\nStock prices do not reflect potential growth of revenue and earnings for either of these companies.\n\nA couple of weeks ago, I reviewed the Tilray (TLRY) and Aphria (APHA) merger. I was neutral on the deal simply because although there would be potential cost savings, the stock price had already achieved a rational valuation based upon what could be earned. Since then, the stock has caught fire and shot up sharply. I received many messages from readers asking what I thought and if I still maintained my neutral position.\n\n\n\nYes, I will always be a ‘neutral’ on a stock that is overvalued.\n\n\n\nI felt the valuations were too rich before and now both stocks are up significantly.\n\n\n\nBut, there have been fundamental changes since that last review I did so I wanted to take another look at what has transpired.";
