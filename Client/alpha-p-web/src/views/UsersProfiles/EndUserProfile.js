@@ -124,7 +124,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   paper1: {
-    width: "100%",
+     width: theme.spacing(21),
     // height: theme.spacing(14),
     padding: theme.spacing(1),
 
@@ -179,7 +179,7 @@ const useStyles = makeStyles((theme) => ({
     // marginLeft: theme.spacing(2),
     marginBottom: theme.spacing(0.75),
     marginTop: theme.spacing(1),
-    width: "250px",
+    width: "100%",
     height: "auto",
     // fontSize: "12px",
     // fontStyle: "normal",
@@ -201,7 +201,7 @@ const useStyles = makeStyles((theme) => ({
 
   iconstyle: {
     [theme.breakpoints.between("xs", "sm")]: {
-      // fontSize: "small",
+    fontSize: "small",
     },
 
     [theme.breakpoints.between("sm", "md")]: {
@@ -210,10 +210,11 @@ const useStyles = makeStyles((theme) => ({
   },
 
   typogrLabel: {
-    // fontSize: "14px",
+    
 
     [theme.breakpoints.between("xs", "sm")]: {
-      fontSize: theme.typography.fontSize*.5,
+       fontSize: theme.typography.fontSize*0.3,
+
     },
   },
 }));
@@ -230,7 +231,7 @@ const EndUserProfile = (props) => {
         alignItems="flex-start"
         spacing={1}
       >
-        <Grid item>
+        <Grid item >
           <Paper className={classes.paper1} elevation={2}>
             <UserInfo
               img={userInfo.img}
@@ -240,7 +241,7 @@ const EndUserProfile = (props) => {
           </Paper>
         </Grid>
 
-        <Grid item>
+        <Grid item xs >
           <Paper className={classes.paper2} elevation={2}>
             <UserProfileDetails />
           </Paper>
@@ -284,7 +285,7 @@ export function UserProfileDetails(props) {
       alignItems="flex-start"
     >
       {/* // UserBio  */}
-      <Grid item>
+      <Grid item xs >
         <Typography className={classes.typogrAboutMe} variant="body1">
           ABOUT ME
         </Typography>
@@ -303,7 +304,7 @@ export function UserProfileDetails(props) {
       </Grid>
 
       {/* // UserSocialMediaAccounts  */}
-      <Grid item container direction="row" justify="flex-end">
+      <Grid item xs container direction="row" justify="flex-end">
         <IconButton size="small">
           {" "}
           <TwitterIcon
@@ -328,13 +329,13 @@ export function UserProfileDetails(props) {
       </Grid>
 
       {/* // UserProfileTabs  */}
-      <Grid item xs>
+      <Grid item xs >
         <Tabs
           value={value}
           onChange={handleChange}
           indicatorColor="primary"
-          textColor="black"
-          centered="true"
+          textColor="inherit"
+          
           variant="scrollable"
           scrollButtons="auto"
         >

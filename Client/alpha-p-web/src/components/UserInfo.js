@@ -17,8 +17,8 @@ const useStyles = makeStyles((theme) => ({
   },
 
   avatar: {
-    width: theme.spacing(4.5),
-    height: theme.spacing(4.5),
+    width: theme.spacing(8),
+    height: theme.spacing(8),
     marginTop: theme.spacing(0.75),
 
     [theme.breakpoints.between('sm', 'md')]: {
@@ -34,34 +34,34 @@ const useStyles = makeStyles((theme) => ({
   },
 
   avatar2: {
-    width: theme.spacing(4),
-    height: theme.spacing(4),
+    // width: theme.spacing(4),
+    // height: theme.spacing(4),
 
     [theme.breakpoints.between('sm', 'xl')]: {
-      width: theme.spacing(5.75),
-      height: theme.spacing(5.75),
+      // width: theme.spacing(5.75),
+      // height: theme.spacing(5.75),
     },
   },
 
   typography: {
-    fontSize: "12px",
+    fontSize: "20px",
     marginBottom: theme.spacing(1),
 
     [theme.breakpoints.between('sm', 'md')]: {
-      fontSize: "15.5px",
+      // fontSize: "15.5px",
     },
     [theme.breakpoints.between('md', 'xl')]: {
       marginBottom: theme.spacing(2),
-      fontSize: "20px",
+      fontSize: "22px",
       fontStyle: "normal",
       lineHeight: "32px",
     },
   },
 
   chip: {
-    fontSize: "5px",
-    height: theme.spacing(2),
-    marginBottom: theme.spacing(0.3),
+    fontSize: "14px",
+    height: theme.spacing(3),
+    marginBottom: theme.spacing(1),
 
     [theme.breakpoints.between('md', 'xl')]: {
       fontSize: "10px",
@@ -78,26 +78,19 @@ const useStyles = makeStyles((theme) => ({
   },
 
   followBt: {
-    fontSize: "14px",
-
-    [theme.breakpoints.between('xs', 'sm')]: {
-      height: theme.spacing(2.25),
-      fontSize: "1px",
-    },
+    
+    width:theme.spacing(11),
+    
   },
 
   FollowBtn2: {
 
     [theme.breakpoints.between('xs', 'sm')]: {
-      fontSize: "3px",
       width: theme.spacing(1),
-      height: theme.spacing(2),
       marginLeft: theme.spacing(-4),
     },
     [theme.breakpoints.between('sm', 'md')]: {
-      fontSize: "10px",
       width: theme.spacing(9),
-      height: theme.spacing(3),
       marginLeft: theme.spacing(1),
     },
   },
@@ -105,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
   typogrFollowerFollwing: {
 
     [theme.breakpoints.between('xs', 'sm')]: {
-      fontSize: '1px'
+      // fontSize: '1px'
     },
   },
 
