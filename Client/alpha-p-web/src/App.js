@@ -9,7 +9,7 @@ import { AuthProvider } from "./context/auth";
 import "./scss/style.scss";
 import Login from "./views/Login";
 import SignUp from "./views/Sign-up";
-import AuthRoute from "./components/AuthRoute";
+import {AuthRoute} from "./components/AuthRoute";
 import Home from "./views/Home";
 import Navbar from "./components/Navbar";
 import EndUserProfile from "./views/UsersProfiles/EndUserProfile";

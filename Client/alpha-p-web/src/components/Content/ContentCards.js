@@ -69,13 +69,13 @@ function ContentCard(props) {
         justify="flex-start"
         alignItems="flex-start"
       >
-        <Grid item>
+        {/* <Grid item>
           {state.withAuther ? (
             <Avatar alt={props.name} src={props.img} />
           ) : (
             <Container />
           )}
-        </Grid>
+        </Grid> */}
 
         {/* // Content info  */}
         <Grid item sm>
