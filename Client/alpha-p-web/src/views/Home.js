@@ -11,7 +11,10 @@ import PropTypes from "prop-types";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import { CompanyCardLine } from "../components/Company/CompanyCard";
+import {
+  CompanyCardLine,
+  MiniCompanyCardTable,
+} from "../components/Company/CompanyCard";
 import {
   ContentCard,
   ContentCardPaper,
@@ -69,7 +72,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
     padding: theme.spacing(1),
     marginBottom: theme.spacing(8),
-
+    "& .MuiGrid-container": {
+      alignItems: "center",
+    },
   },
 }));
 
@@ -142,10 +147,10 @@ function Home() {
             My Portfolio
           </Typography>
         </div>
-        <Grid container direction="row" justify="space-around">
+        <Grid container direction="row" justify="space-around" >
           {/* Company */}
           <Grid item>
-            <ContentCardPaper data={contentdummyData} limit={3} auther />
+            <MiniCompanyCardTable data={companydummyData} limit={3} />
           </Grid>
           {/* Articles */}
           <Grid item>
