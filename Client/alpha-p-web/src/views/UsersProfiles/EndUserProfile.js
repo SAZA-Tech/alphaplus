@@ -141,8 +141,8 @@ const useStyles = makeStyles((theme) => ({
   },
 
   paper2: {
-    width: "100%",
-    padding: theme.spacing(0.25),
+    // width: "100%",
+    padding: theme.spacing(3),
 
     [theme.breakpoints.between("sm", "md")]: {
       width: theme.spacing(72),
@@ -201,7 +201,7 @@ const useStyles = makeStyles((theme) => ({
 
   iconstyle: {
     [theme.breakpoints.between("xs", "sm")]: {
-    fontSize: "small",
+    fontSize: "xx-large",
     },
 
     [theme.breakpoints.between("sm", "md")]: {
@@ -213,7 +213,7 @@ const useStyles = makeStyles((theme) => ({
     
 
     [theme.breakpoints.between("xs", "sm")]: {
-       fontSize: theme.typography.fontSize*0.3,
+      //  fontSize: theme.typography.fontSize*0.3,
 
     },
   },
@@ -241,7 +241,7 @@ const EndUserProfile = (props) => {
           </Paper>
         </Grid>
 
-        <Grid item xs >
+        <Grid item xs sm md lg={8}>
           <Paper className={classes.paper2} elevation={2}>
             <UserProfileDetails />
           </Paper>
@@ -278,14 +278,13 @@ export function UserProfileDetails(props) {
 
   return (
     <Grid
-      spacing={1}
       container
       direction="column"
       justify="flex-start"
       alignItems="flex-start"
     >
       {/* // UserBio  */}
-      <Grid item xs >
+      <Grid item  >
         <Typography className={classes.typogrAboutMe} variant="body1">
           ABOUT ME
         </Typography>
