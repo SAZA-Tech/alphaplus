@@ -94,9 +94,9 @@ module.exports.validateCompanyInput=(Symbol,Market,Comname)=>{
 
 
 }
-module.exports.validateSymbols=({arr})=>{
+module.exports.validateSymbols=(arr)=>{
   const errors = {};
-  console.log(arr)
+  // console.log(arr)
   for (let index = 0; index < arr.length; index++) {
 
     if (arr[index].trim() == "") {

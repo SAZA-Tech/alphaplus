@@ -52,7 +52,7 @@ module.exports.login = async (_, { email, password }) => {
 
 module.exports.adminLogin = async (_, { email, password }) => {
   const { errors, valid } = validateLoginInput(email, password);
-  const AdminType = 'Admin';
+  const AdminType = "Admin";
   if (!valid) {
     throw new UserInputError("Errors", { errors });
   }
@@ -67,7 +67,7 @@ module.exports.adminLogin = async (_, { email, password }) => {
   const match = await bcrypt.compare(password, user.password);
   const adminmatch = AdminType.localeCompare(user.type);
 
-  if (!match || adminmatch!=0) {
+  if (!match || adminmatch != 0) {
     errors.general = "Wrong crendetials";
     throw new UserInputError("Wrong crendetials", { errors });
   }
@@ -80,8 +80,6 @@ module.exports.adminLogin = async (_, { email, password }) => {
     token,
   };
 };
-
-
 
 //SignUp
 module.exports.register = async (
@@ -158,7 +156,12 @@ module.exports.findUser = async (_, { id }) => {
 //List Of Users
 module.exports.getUsers = async () => {
   try {
-    const users = await User.find().sort({ createdAt: -1 });
+    const users = await User.find()
+      .populate("followers")
+      .populate("following")
+      .sort({ createdAt: -1 });
+    // await users.populate("followers").populate("following").execPopulate();
+
     return users;
   } catch (err) {
     throw new Error(err);
@@ -173,19 +176,19 @@ module.exports.updateUserInfo = async (_, { id, name, type }, context) => {
     // Update User Display Name
     if (!name.trim() == "") {
       update.name = name;
-    } else { 
+    } else {
       throw new Error("Name Must Not be empty");
     }
     // Updating the User Type
     // if (auth.username == "admin") {
-      if (!type.trim() == " ") {
-        update.type = type;
-      }
+    if (!type.trim() == " ") {
+      update.type = type;
+    }
 
     // } else {
     //   throw new Error("Only Aut Can Change Type");
     // }
-    return User.findByIdAndUpdate(id,update);
+    return User.findByIdAndUpdate(id, update);
     // return updatedUser;
   } else {
     throw new Error("User Not Found");
@@ -199,11 +202,11 @@ module.exports.deleteUser = async (_, { id }, context) => {
   const auth = checkAuth(context);
   try {
     // if (auth.username == "admin") {
-      return User.findByIdAndDelete(id)
-        .then(() => "User Delete Success")
-        .catch((err) => {
-          throw new Error(`Failed To delete user ${err}`);
-        });
+    return User.findByIdAndDelete(id)
+      .then(() => "User Delete Success")
+      .catch((err) => {
+        throw new Error(`Failed To delete user ${err}`);
+      });
     // } else {
     //   throw new Error("Not Authrized");
     // }
@@ -211,3 +214,38 @@ module.exports.deleteUser = async (_, { id }, context) => {
     throw new Error(error);
   }
 };
+
+module.exports.followUser = async (_, { userId }, context) => {
+  const auth = checkAuth(context);
+  const user = await User.findById(auth.id);
+
+  const user2follow = await User.findById(userId);
+  if (user2follow) {
+    //User Already Following -> Unfollow
+    const verdect = isFollowing(user.following, user2follow._id);
+    if (verdect) {
+      user.following = user.following.filter((u) => u != user2follow.id);
+      user2follow.followers = user2follow.followers.filter((u) => u != user.id);
+    } //Follow User
+    else {
+      user.following.push(user2follow.id);
+      user2follow.followers.push(user.id);
+    }
+    await user2follow.save();
+    const res = await user.save();
+    await res.populate("followers").populate("following").execPopulate();
+    return {
+      id: res._id,
+      ...res._doc,
+    };
+  } else {
+    throw new UserInputError(`User Not found`);
+  }
+};
+
+function isFollowing(current, toBeFollowed) {
+  const stringFID = JSON.stringify(toBeFollowed);
+
+  const result = current.find((item) => JSON.stringify(item) === stringFID);
+  return result ? true : false;
+}

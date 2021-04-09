@@ -4,7 +4,7 @@ const { validateContentInput } = require("../Auth/validators");
 const Article = require("./Models/ArticleModel");
 const { findUser } = require("../Auth/AuthControl");
 const checkAuth = require("../Auth/check-auth");
-const {CommentControl} = require("./CommentControl");
+const { CommentControl } = require("./CommentControl");
 const { CompanyControl } = require("../Company");
 
 module.exports.ArticleControl = {
@@ -75,7 +75,8 @@ module.exports.ArticleControl = {
       // TODO: Get Company Tag from company Id
       if (companyId != null) {
       }
-      if (tags != null) Filter.articleTags = tags;
+      if (tags != null) Filter.articleTags = { $all: tags };
+
       // Find the articles
       articlesDocs = await Article.find(Filter)
         .populate("articleAuthorId")
@@ -107,14 +108,18 @@ module.exports.ArticleControl = {
       .exec();
     var articleComments = [];
     if (article.$isValid) {
-      articleComments = await CommentControl.getComments(_, {
-        filter: {
-          articleId: articleId,
-          companyId: null,
-          tags: null,
-          userId: null,
+      articleComments = await CommentControl.getComments(
+        _,
+        {
+          filter: {
+            articleId: articleId,
+            companyId: null,
+            tags: null,
+            userId: null,
+          },
         },
-      },context);
+        context
+      );
       console.log(articleComments);
     } else {
       throw new Error(`Article is not found`);
@@ -193,16 +198,18 @@ module.exports.ArticleControl = {
   likeArticle: async (_, { articleId }, context) => {
     const auth = checkAuth(context);
     const article = await Article.findById(articleId);
+    const user = await findUser(_, { id: auth.id });
     if (article) {
-      if (article.likes.find((like) => like.username == auth.username)) {
+      if (article.likes.find((like) => like.username == user.username)) {
         //Article is already liked
         article.likes = article.likes.filter(
-          (like) => like.username !== auth.username
+          (like) => like.username !== user.username
         );
       } else {
         //Not liked
+        console.log(user.username);
         article.likes.push({
-          username: auth.username,
+          username: user.username,
           createdAt: new Date().toISOString(),
         });
       }
@@ -215,4 +222,5 @@ module.exports.ArticleControl = {
       throw new UserInputError("Article Not Found");
     }
   },
+  accessFun: () => console.log(`accessed`),
 };

@@ -3,19 +3,18 @@ const Company = require("../../Company");
 
 module.exports = {
   Query: {
-    getSectors:Company.SectorControl.getSectors,
-    getCompanies:Company.CompanyControl.getCompanies,
-    validateTags:Company.CompanyControl.validateTags,
+    getSectors: Company.SectorControl.getSectors,
+    getCompanies: Company.CompanyControl.getCompanies,
+    validateTags: Company.CompanyControl.validateTags,
+    getPortfolio: Company.PortfolioControl.getPortfolio,
   },
   Mutation: {
     createSector: Company.SectorControl.createSector,
     deleteSector: Company.SectorControl.deleteSector,
     createCompany: Company.CompanyControl.createCompany,
-    deleteCompany:Company.CompanyControl.deleteCompany,
-    editSector:Company.SectorControl.editSector,
-    editCompany:Company.CompanyControl.editCompany,
-
-    
-
+    deleteCompany: Company.CompanyControl.deleteCompany,
+    editSector: Company.SectorControl.editSector,
+    editCompany: Company.CompanyControl.editCompany,
+    createPortfolio: Company.PortfolioControl.createPortfolio,
   },
 };

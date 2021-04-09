@@ -70,7 +70,7 @@ const contentShcema = gql`
   type Like {
     id: ID!
     createdAt: String!
-    user: User!
+    username:String!
   }
   #Use filter values in the queries
   input Filter {

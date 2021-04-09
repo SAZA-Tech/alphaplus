@@ -220,9 +220,9 @@ module.exports.CompanyControl = {
         financialData: arr,
         todayFinance: getLastDate,
       });
-      console.log(companies);
+      // console.log(companies);
     }
-    console.log(`last call`, companies);
+    // console.log(`last call`, companies);
 
     return companies;
   },
