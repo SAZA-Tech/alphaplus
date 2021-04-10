@@ -2,14 +2,20 @@ const { UserInputError } = require("apollo-server-errors");
 const { findUser } = require("../Auth/AuthControl");
 const checkAuth = require("../Auth/check-auth");
 const { validateSymbols } = require("../Auth/validators");
-// const {
-//   ArticleControl,
-// } = require("C:/My Projects/alphaplus/server/Content/ArticlesControl.js");
-// const { getArticleWithTags } = require("../Content/");
-// const { ArticleControl } = require("../Content/ArticlesControl.js");
 const { CompanyControl } = require("./companyControl");
 const Portfolio = require("./Models/PortfolioModel");
 const getArticleWithTags = require("../Content/getArticlesTags");
+
+/**
+ * Create a new portfolio@
+ * @async
+ * @param {*} _
+ * @param {object} portfolio the portfolio object
+ * @param {string} portfolio.name name of the portfolio
+ * @param {string} portfolio[].tags company tags will be follwed in the tags
+ * @param {*} context checkAuth
+ * @returns {object} portfolio
+ */
 const createPortfolio = async (_, { name, tags }, context) => {
   const auth = checkAuth(context);
   const { errors, valid } = validateSymbols({ tags });
@@ -18,18 +24,7 @@ const createPortfolio = async (_, { name, tags }, context) => {
   }
 
   const user = await findUser(_, { id: auth.id });
-  //   console.log(user);
-  const companies = CompanyControl.validateTags(_, tags);
-  const relatedArticles = await getArticleWithTags(tags);
-  //   ArticleControl.accessFun();
-  //   const relatedArticles = ArticleControl.getArticles(_, {
-  //     filter: {
-  //       tags,
-  //       articleId: null,
-  //       companyId: null,
-  //       userId: null,
-  //     },
-  //   });
+
   if (companies) {
     const newPorto = new Portfolio({
       name: name,
@@ -39,19 +34,16 @@ const createPortfolio = async (_, { name, tags }, context) => {
     user.portfolios.push(res.id);
     await user.save();
 
-    return {
-      id: res._id,
-      followedCompanies: companies,
-      relatedArticles: relatedArticles,
-      ...res._doc,
-    };
+    return getPortfolio(_, { portoId: res.id });
+  } else {
+    throw new Error("Invalid Tags");
   }
 };
 const getPortfolio = async (_, { portoId }) => {
   const porto = await Portfolio.findById(portoId);
   const tags = porto.follwedTags;
   if (porto.$isValid) {
-    const followedCompanies =  CompanyControl.validateTags(_, tags);
+    const followedCompanies = CompanyControl.validateTags(_, tags);
     const relatedArticles = await getArticleWithTags(tags);
     return {
       id: porto.id,
@@ -61,7 +53,38 @@ const getPortfolio = async (_, { portoId }) => {
     };
   }
 };
+
+const editPortfolio = async (_, { portoId, name, tags }, context) => {
+  const auth = checkAuth(context);
+  const porto = await Portfolio.findById(portoId);
+  if (porto.$isValid) {
+    if (name != "") porto.name = name;
+    if (validateSymbols(tags).valid) porto.tags = tags;
+    const res = await porto.save();
+    return getPortfolio(_, { portoId: res.id });
+  } else {
+    throw new Error(`Invalid Id`);
+  }
+};
+const deletePortfolio = async (_, { portoId }, context) => {
+  if (isAuthrized(_, { portoId }, context)) {
+    try {
+      const deletePorto = await Portfolio.findById(portoId);
+
+      return deletePorto
+        .delete()
+        .then(() => "Portfolio is deleted successfully")
+        .catch((err) => console.log(`Failed to delete the portfolio ${err}`));
+    } catch (error) {
+      throw new Error(`Error Happend ${error}`);
+    }
+  } else {
+    throw new Error("No Autrhized");
+  }
+};
 module.exports.PortfolioControl = {
   createPortfolio,
   getPortfolio,
+  editPortfolio,
+  deletePortfolio,
 };
