@@ -10,6 +10,11 @@ const companySchema = gql`
     SectorID: String
     Market: String
     CompanyID: String
+    intro: String
+    address: String
+    website: String
+    phoneNum: String
+    Industry: String
   }
   type Sector {
     id: ID!
@@ -25,6 +30,14 @@ const companySchema = gql`
     volume: Float
     date: String
   }
+  type info{
+    intro: String
+    address: String
+    website: String
+    phoneNum: String
+    Industry: String
+  }
+
   type Company {
     id: ID!
     sectorId: ID!
@@ -32,6 +45,8 @@ const companySchema = gql`
     comname: String
     symbol: String
     todayFinance: finance
+    change: Float
+    info: info
     # exchange: String
     # Open: Float
     # high: Float

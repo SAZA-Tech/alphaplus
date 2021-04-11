@@ -13,7 +13,11 @@ const CompanySchema = new Schema({
   market: String,
   comname: String,
   symbol: String,
-
+  Industry: String,
+  phoneNum: String,
+  website: String,
+  address: String,
+  intro: String,
   financialData: {
     type: Map,
     of: {
