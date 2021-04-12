@@ -12,7 +12,10 @@ import SignUp from "./views/Sign-up";
 import {AuthRoute} from "./components/AuthRoute";
 import Home from "./views/Home";
 import Navbar from "./components/Navbar";
-import EndUserProfile from "./views/UsersProfiles/EndUserProfile";
+import EndUserProfile from "./views/EndUserProfile";
+import ProfileSetting from "./views/profileSetting/ProfileSetting";
+import AccountSecurty from "./views/profileSetting/AccountSecurty";
+
 
 import Article from "./views/Content/Article";
 import Draft from "./views/Content/Draft";
@@ -30,6 +33,10 @@ export class App extends Component {
             <div>
               <Route exact path="/" component={Home} />
               <Route exact path="/EndUserProfile" component={EndUserProfile} />
+              <Route exact path="/ProfileSetting" component={ProfileSetting} />
+              <Route exact path="/AccountSecurty" component={AccountSecurty} />
+
+
 
               <Route exact path="/article" component={Article} />
               <Route  path="/draft/:draftId" component={Draft} />
