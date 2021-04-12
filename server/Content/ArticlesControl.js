@@ -4,7 +4,7 @@ const { validateContentInput } = require("../Auth/validators");
 const Article = require("./Models/ArticleModel");
 const { findUser } = require("../Auth/AuthControl");
 const checkAuth = require("../Auth/check-auth");
-
+const {CommentControl} = require("./CommentControl");
 const { CompanyControl } = require("../Company");
 
 module.exports.ArticleControl = {
@@ -73,9 +73,8 @@ module.exports.ArticleControl = {
       if (articleId != null) Filter._id = articleId;
 
       // TODO: Get Company Tag from company Id
-        if(companyId!=null) {
-          
-        }
+      if (companyId != null) {
+      }
       if (tags != null) Filter.articleTags = tags;
       // Find the articles
       articlesDocs = await Article.find(Filter)
@@ -115,7 +114,7 @@ module.exports.ArticleControl = {
           tags: null,
           userId: null,
         },
-      });
+      },context);
       console.log(articleComments);
     } else {
       throw new Error(`Article is not found`);

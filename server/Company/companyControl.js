@@ -123,6 +123,22 @@ module.exports.CompanyControl = {
   ) => {
     let CompanyDocs = [];
     var companies = [];
+    function todayDate() {
+      //Check if map has today's finance data
+      const date = new Date();
+      const day = date.getDay;
+      // Check if its a weekend
+      if (day > 4) date.setDate(date.getDate() - 2);
+      // Check if its the end of the day ?
+      if (date.getHours() < 16) date.setDate(date.getDate() - 1);
+      // console.log(date.getHours().valueOf() )
+      todayDate = date.toISOString().split("T")[0];
+    
+      const formatedDate = `${todayDate}T00:00:00+0000`;
+    
+      return formatedDate;
+      // not weekend + missing fin data : False
+    }
 
     if (
       (Symbol == null) &
@@ -245,21 +261,58 @@ module.exports.CompanyControl = {
 
     return companies;
   },
+
+  editCompany: async (
+    _,
+    { CompanyInput: { Symbol, SectorID, Market, Comname, CompanyID } }
+  ) => {
+    try {
+      const companydoc= await Company.findById(CompanyID).exec();
+  
+      if(companydoc.$isValid){
+        
+        if(Comname!=null){
+          companydoc.comname=Comname;
+
+        }
+        if(Market!=null){
+          companydoc.market=Market;
+
+        }
+        if(SectorID!=null){
+          companydoc.sectorId=SectorID;
+
+        }
+        
+        const res =await companydoc.save();
+
+        const arrMap = Array.from(res.financialData.values());
+        
+        return{
+          id:res._id,
+          sectorId:res.sectorId,
+          market:res.market,
+          comname:res.comname,
+          symbol:res.symbol,
+          todayFinance:arrMap[arrMap.length-1],
+          financialData:arrMap,
+        }
+  
+      }else{
+        throw new Error("sector Not Found");
+      }
+  
+      
+    } catch (error) {
+      throw new Error(`Error Happend ${error}`);
+      
+    }
+
+
+
+
+  }
+
+
 };
 
-function todayDate() {
-  //Check if map has today's finance data
-  const date = new Date();
-  const day = date.getDay;
-  // Check if its a weekend
-  if (day > 4) date.setDate(date.getDate() - 2);
-  // Check if its the end of the day ?
-  if (date.getHours() < 16) date.setDate(date.getDate() - 1);
-  // console.log(date.getHours().valueOf() )
-  todayDate = date.toISOString().split("T")[0];
-
-  const formatedDate = `${todayDate}T00:00:00+0000`;
-
-  return formatedDate;
-  // not weekend + missing fin data : False
-}
