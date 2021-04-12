@@ -123,6 +123,7 @@ module.exports.CompanyControl = {
   ) => {
     let CompanyDocs = [];
     var companies = [];
+<<<<<<< HEAD
     function todayDate() {
       //Check if map has today's finance data
       const date = new Date();
@@ -139,6 +140,8 @@ module.exports.CompanyControl = {
       return formatedDate;
       // not weekend + missing fin data : False
     }
+=======
+>>>>>>> Testing
 
     if (
       (Symbol == null) &
