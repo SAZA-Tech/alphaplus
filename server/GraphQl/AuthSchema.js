@@ -8,13 +8,16 @@ module.exports = gql`
 
   type User {
     id: ID!
-    type: String!
+    type: UserType!
     username: String!
     name: String
     password: String
     email: String!
     createdAt: String
     token: String!
+    following: [User]!
+    followers: [User]!
+    portofolio: [Portfolio!]
   }
 
   # TODO: add defualt value for type
@@ -29,12 +32,9 @@ module.exports = gql`
     register(registerInput: RegisterInput): User!
     login(email: String!, password: String!): User!
     adminLogin(email: String!, password: String!): User!
-    updateUserInfo(
-      id:ID!
-      name:String!
-      type: String!
-    ): User!
+    updateUserInfo(id: ID!, name: String!, type: String!): User!
     deleteUser(id: ID!): String!
+    followUser(userId: ID!): User!
   }
   enum UserType {
     Admin

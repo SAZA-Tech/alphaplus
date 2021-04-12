@@ -10,6 +10,11 @@ const companySchema = gql`
     SectorID: String
     Market: String
     CompanyID: String
+    intro: String
+    address: String
+    website: String
+    phoneNum: String
+    Industry: String
   }
   type Sector {
     id: ID!
@@ -25,6 +30,14 @@ const companySchema = gql`
     volume: Float
     date: String
   }
+  type info{
+    intro: String
+    address: String
+    website: String
+    phoneNum: String
+    Industry: String
+  }
+
   type Company {
     id: ID!
     sectorId: ID!
@@ -32,6 +45,8 @@ const companySchema = gql`
     comname: String
     symbol: String
     todayFinance: finance
+    change: Float
+    info: info
     # exchange: String
     # Open: Float
     # high: Float
@@ -46,6 +61,7 @@ const companySchema = gql`
     validateTags(tags: [String]): [Company]
     getCompanies(CompanyInput: CompanyInput!): [Company]!
     getSectors: [Sector!]
+    getPortfolio(portoId: ID!): Portfolio
   }
   extend type Mutation {
     createSector(SectorInput: SectorInput!): Sector!
@@ -54,6 +70,16 @@ const companySchema = gql`
     deleteCompany(companyId: ID!): String!
     editSector(sectorID: ID!, SectorInput: SectorInput!): Sector!
     editCompany(CompanyInput: CompanyInput!): Company!
+    createPortfolio(name: String, tags: [String!]): Portfolio!
+    editPortfolio(portoId: ID!, name: String!, tags: [String!]): Portfolio!
+    deletePortfolio(portoId: ID!): String!
+  }
+  type Portfolio {
+    id: ID!
+    name: String!
+    followedCompanies: [Company!]
+    relatedArticles: [Article!]
+    follwedTags: [String!]
   }
 `;
 module.exports = companySchema;
