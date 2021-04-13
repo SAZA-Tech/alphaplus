@@ -16,7 +16,11 @@ import {
   Container,
   Tab,
   Paper,
+  CircularProgress,
 } from "@material-ui/core";
+import { Redirect, useParams } from "react-router";
+import { useQuery } from "@apollo/client";
+import { PROFILE_GQL } from "../graphql/Auth/authGql";
 
 const img = "avatars/7.jpg";
 const userInfo = {
@@ -120,11 +124,11 @@ const FollowersDocs = [
 const useStyles = makeStyles((theme) => ({
   root: {
     paddingTop: theme.spacing(4),
-    background: theme.palette.grey[400],
+    // background: theme.palette.grey[400],
   },
 
   paper1: {
-     width: theme.spacing(21),
+    width: theme.spacing(21),
     // height: theme.spacing(14),
     padding: theme.spacing(1),
 
@@ -201,7 +205,7 @@ const useStyles = makeStyles((theme) => ({
 
   iconstyle: {
     [theme.breakpoints.between("xs", "sm")]: {
-    fontSize: "xx-large",
+      fontSize: "xx-large",
     },
 
     [theme.breakpoints.between("sm", "md")]: {
@@ -210,18 +214,22 @@ const useStyles = makeStyles((theme) => ({
   },
 
   typogrLabel: {
-    
-
     [theme.breakpoints.between("xs", "sm")]: {
       //  fontSize: theme.typography.fontSize*0.3,
-
     },
   },
 }));
 
 const EndUserProfile = (props) => {
   const classes = useStyles();
-
+  const { userId } = useParams();
+  const { data, error, loading } = useQuery(PROFILE_GQL, {
+    variables: {
+      id: userId,
+    },
+  });
+  if (error) return <Redirect to="404" />;
+  if (loading) return <CircularProgress />;
   return (
     <div className={classes.root}>
       <Grid
@@ -231,11 +239,11 @@ const EndUserProfile = (props) => {
         alignItems="flex-start"
         spacing={1}
       >
-        <Grid item >
+        <Grid item>
           <Paper className={classes.paper1} elevation={2}>
             <UserInfo
               img={userInfo.img}
-              name={userInfo.name}
+              name={data.findUser.name}
               bio={userInfo.bio}
             />
           </Paper>
@@ -243,7 +251,12 @@ const EndUserProfile = (props) => {
 
         <Grid item xs sm md lg={8}>
           <Paper className={classes.paper2} elevation={2}>
-            <UserProfileDetails />
+            <UserProfileDetails
+              followers={data.findUser.followers}
+              following={data.findUser.following}
+              comments={data.getComments}
+              articles={data.getArticles}
+            />
           </Paper>
         </Grid>
       </Grid>
@@ -268,12 +281,20 @@ export function UserProfileDetails(props) {
 
   const Followers = (FollowersDocs) =>
     FollowersDocs.map((v) => (
-      <FollowerFollowingForm name={v.name} bio={v.bio} avatar={v.avatar} />
+      <FollowerFollowingForm
+        name={v.name}
+        bio={v.bio ? v.bio : "Default Bio"}
+        avatar={v.avatar}
+      />
     ));
 
   const Following = (FollowersDocs) =>
     FollowersDocs.map((v) => (
-      <FollowerFollowingForm name={v.name} bio={v.bio} avatar={v.avatar} />
+      <FollowerFollowingForm
+        name={v.name}
+        bio={v.bio ? v.bio : "Default Bio"}
+        avatar={v.avatar}
+      />
     ));
 
   return (
@@ -284,7 +305,7 @@ export function UserProfileDetails(props) {
       alignItems="flex-start"
     >
       {/* // UserBio  */}
-      <Grid item  >
+      <Grid item>
         <Typography className={classes.typogrAboutMe} variant="body1">
           ABOUT ME
         </Typography>
@@ -328,13 +349,12 @@ export function UserProfileDetails(props) {
       </Grid>
 
       {/* // UserProfileTabs  */}
-      <Grid item xs >
+      <Grid item xs>
         <Tabs
           value={value}
           onChange={handleChange}
           indicatorColor="primary"
           textColor="inherit"
-          
           variant="scrollable"
           scrollButtons="auto"
         >
@@ -429,19 +449,19 @@ export function UserProfileDetails(props) {
 
         {value === 0 && (
           <Container>
-            {<HomeCard dataLimit={4} data={contentdummyData2} btnText="More" />}
+            {<HomeCard dataLimit={4} data={props.comments} btnText="More" />}
           </Container>
         )}
-        {value === 1 && <Container>{Followers(FollowersDocs)}</Container>}
-        {value === 2 && <Container>{Following(FollowersDocs)}</Container>}
+        {value === 1 && <Container>{Followers(props.following)}</Container>}
+        {value === 2 && <Container>{Following(props.followers)}</Container>}
         {value === 3 && (
           <Container>
-            {<HomeCard dataLimit={4} data={contentdummyData1} btnText="More" />}
+            {<HomeCard dataLimit={4} data={props.articles} btnText="More" />}
           </Container>
         )}
         {value === 4 && (
           <Container>
-            {<HomeCard dataLimit={4} data={contentdummyData1} btnText="More" />}
+            {<HomeCard dataLimit={4} data={props.articles} btnText="More" />}
           </Container>
         )}
       </Grid>
