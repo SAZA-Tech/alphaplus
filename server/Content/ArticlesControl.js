@@ -341,6 +341,13 @@ const getArticle = async (_, { articleId }, context) => {
   } else {
     throw new Error(`Article is not found`);
   }
+  if (!article.articleAuthorId._id) {
+    article.articleAuthorId._id = "defalut";
+    article.articleAuthorId.name = "jhon doe";
+    article.articleAuthorId.username = "jhonDoe";
+    article.articleAuthorId.email = "jhon@doe.doe";
+    article.articleAuthorId.createdAt = "2000-18";
+  }
   return {
     articleComments: articleComments.values(),
     id: article._id,

@@ -29,7 +29,7 @@ export const GET_ARTICLES = gql`
 `;
 
 export const GET_ARTICLE = gql`
-  query getArticleAndComments($articleId: ID = "") {
+  query getArticleAndComments($articleId: ID = "6039147851427f2954d5fc4d") {
     getArticle(articleId: $articleId) {
       articleAuthor {
         name
@@ -47,9 +47,8 @@ export const GET_ARTICLE = gql`
       likeCount
       likes {
         createdAt
-        user {
-          username
-        }
+        username
+
         id
       }
       updatedAt
