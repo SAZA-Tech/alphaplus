@@ -16,6 +16,7 @@ import {
 import CIcon from '@coreui/icons-react'
 import sectorsData from './SectorsData'
 import InputFormSector from './InputFormSector'
+import AddFormSector from './AddFormSector'
 import { gql, useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 
@@ -129,7 +130,7 @@ const Sectors = () => {
       fields={fields}
       columnFilter
       theadTopSlot={ <CButton>
-        <InputFormSector buttonName="Add Sector"/>
+        <AddFormSector buttonName="Add Sector"/>
     </CButton>}
       footer
       itemsPerPageSelect
@@ -171,9 +172,8 @@ const Sectors = () => {
                   <CButton>
                     <InputFormSector buttonName="Edit"
                     
-                    name={item.Secname}
-                    id={item.id}
-                    type={item.Secname}
+                    Secname={item.Secname}
+                    sectorID={item.id}
 
                     />
                   </CButton>

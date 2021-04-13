@@ -39,13 +39,13 @@ export class App extends Component {
                 }}
               >
                 <Route exact path="/" component={Home} />
-                <Route exact path="/company" component={Company} />
                 <Route path="/userProfile/:userId" component={EndUserProfile} />
                 <ProtectedRoute
                   exact
                   path="/accountSettings/"
                   component={ProfileSetting}
                 />
+                <Route path="/company/:companyId" component={Company} />
                 <Route path="/article/:articleId" component={Article} />
                 <Route path="/Portfolio" component={Portfolio} />
                 <ProtectedRoute path="/draft/:draftId" component={Draft} />

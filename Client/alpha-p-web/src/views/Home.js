@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { fade, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 import Typography from "@material-ui/core/Typography";
 
-import { Button, Container, Grid, Paper } from "@material-ui/core";
+import {
+  Button,
+  CircularProgress,
+  Container,
+  Grid,
+  Paper,
+} from "@material-ui/core";
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
 import {
   CompanyCardLine,
   MiniCompanyCardTable,
@@ -19,6 +22,8 @@ import {
   ContentCard,
   ContentCardPaper,
 } from "../components/Content/ContentCards";
+import { useQuery } from "@apollo/client";
+import { HOMEPAGE_GQL } from "../graphql/homeGql";
 
 const useStyles = makeStyles((theme) => ({
   rootCom: {
@@ -36,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(2),
 
     [theme.breakpoints.up("lg")]: {
-      width: "660px",
+      // width: "660px",
       paddingRight: theme.spacing(2),
       paddingBottom: theme.spacing(2),
     },
@@ -71,6 +76,9 @@ const useStyles = makeStyles((theme) => ({
   porto: {
     marginTop: theme.spacing(2),
     padding: theme.spacing(1),
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+
     marginBottom: theme.spacing(8),
     "& .MuiGrid-container": {
       alignItems: "center",
@@ -80,6 +88,10 @@ const useStyles = makeStyles((theme) => ({
 
 function Home() {
   const classes = useStyles();
+  const { data, error, loading } = useQuery(HOMEPAGE_GQL);
+  if (loading) return <CircularProgress />;
+  if (error) return <Redirect to="/404" />;
+
   return (
     <div className={classes.rootCom}>
       {/* Compnany line + 2 Content cards  */}
@@ -88,25 +100,25 @@ function Home() {
         <Grid container direction="column">
           {/* Company Line */}
 
-          <CompanyCardLine data={companydummyData} />
-          <Grid container direction="row" justify="space-around">
-            <Grid item>
+          <CompanyCardLine data={data.getCompanies} />
+          <Grid container direction="row" xs justify="space-between">
+            <Grid item sm xs md={5}>
               {/* Trending Card */}
               <HomeCard
                 cardTitle="Trending Analysis"
-                dataLimit={3}
-                data={contentdummyData}
+                dataLimit={5}
+                data={data.getArticles}
                 btnText="More"
                 auther
               />
             </Grid>
 
             {/* News */}
-            <Grid item>
+            <Grid item md={5}>
               {/* Trending Card */}
               <HomeCard
                 cardTitle="News"
-                dataLimit={3}
+                dataLimit={4}
                 data={contentdummyData}
                 btnText="More"
                 
@@ -117,24 +129,25 @@ function Home() {
       </Paper>
 
       {/* Editors Picks + Latest Articles */}
-      <Grid container direction="row" justify="space-between">
-        <Grid item>
+
+      <Grid container direction="row" xs justify="space-between">
+        <Grid item xs={12} lg={5}>
           <Paper>
             <HomeCard
               dataLimit={3}
               cardTitle="Editors Picks"
-              data={contentdummyData}
+              data={data.getArticles}
               btnText="Explore More"
               auther
             />
           </Paper>
         </Grid>
-        <Grid item>
+        <Grid item xs lg={5}>
           <Paper>
             <HomeCard
               dataLimit={3}
               cardTitle="Latest Articles"
-              data={contentdummyData}
+              data={data.getArticles}
               btnText="Explore More"
               auther
             />
@@ -148,14 +161,14 @@ function Home() {
             My Portfolio
           </Typography>
         </div>
-        <Grid container direction="row" justify="space-around" >
+        <Grid container direction="row" justify="center" spacing={6} >
           {/* Company */}
-          <Grid item>
-            <MiniCompanyCardTable data={companydummyData} limit={3} />
+          <Grid item xs lg={5}>
+            <MiniCompanyCardTable data={data.getCompanies} limit={4} />
           </Grid>
           {/* Articles */}
-          <Grid item>
-            <ContentCardPaper data={contentdummyData} limit={3} auther />
+          <Grid item xs lg={6}>
+            <ContentCardPaper data={data.getArticles} limit={3} auther />
           </Grid>
         </Grid>
       </Paper>
