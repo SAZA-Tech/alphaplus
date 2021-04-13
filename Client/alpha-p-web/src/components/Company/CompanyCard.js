@@ -25,6 +25,7 @@ import {
 } from "recharts";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
+import { Link } from "react-router-dom";
 
 const userStyles = makeStyles((theme) => ({
   companySymbol: {
@@ -38,7 +39,7 @@ const userStyles = makeStyles((theme) => ({
   changePrice: {
     fontWeight: theme.typography.fontWeightBold,
     [theme.breakpoints.up("lg")]: {
-      fontSize: theme.typography.fontSize * 1.5,
+      fontSize: theme.typography.fontSize,
     },
   },
   negative: {
@@ -188,15 +189,19 @@ function CompanyCard(props) {
       <div className={classes.vertRoot}>
         <Grid Container className={classes.verticalCard} direction="row">
           <Grid item>
-            <Typography variant="subtitle2" className={classes.companySymbol}>
+            <Typography
+              component={Link}
+              to={`/company/${props.comId}`}
+              target="_blank"
+              variant="subtitle2"
+              className={classes.companySymbol}
+            >
               {props.Symbol}
             </Typography>
             <Typography variant="subtitle2" className={classes.price}>
               {props.price}
             </Typography>
-            <Typography variant="subtitle2" className={classes.changePrice}>
-              {props.change}
-            </Typography>
+            <ChangePriceValue changePrice={props.change} />
           </Grid>
           <Grid item>
             <Divider orientation="vertical" />
@@ -219,9 +224,7 @@ function CompanyCard(props) {
           </Typography>
         </TableCell>{" "}
         <TableCell align="right">
-          <Typography variant="subtitle2" className={classes.changePrice}>
-            {props.change}
-          </Typography>
+          <ChangePriceValue changePrice={props.change} />
         </TableCell>
       </TableRow>
     );
@@ -256,9 +259,10 @@ function CompanyCardLine(props) {
         {props.data.map((e) => (
           <CompanyCard
             vertical={true}
-            Symbol={e.Symbol}
-            price={e.price}
-            change={e.changePrice}
+            Symbol={e.symbol}
+            price={e.todayFinance ? e.todayFinance.close : e.price}
+            change={e.change}
+            comId={e.id}
           />
         ))}
       </div>
@@ -297,9 +301,9 @@ function MiniCompanyCardTable(props) {
         <TableBody>
           {props.data.slice(0, props.limit).map((e) => (
             <CompanyCard
-              Symbol={e.Symbol}
-              price={e.price}
-              change={e.changePrice}
+              Symbol={e.symbol ? e.symbol : e.Symbol}
+              price={e.todayFinance ? e.todayFinance.close : e.price}
+              change={e.change ? e.change : e.changePrice}
               horizontal
             />
           ))}
@@ -358,8 +362,9 @@ CompanyCardFollow.propTypes = {
 
 const ChangePriceValue = (props) => {
   const classes = userStyles();
+  const str = props.changePrice ? props.changePrice : "23(+4.1%)";
   var signReg = /(\+|\-)/g;
-  const sign = props.changePrice.split(signReg)[1];
+  const sign = str.split(signReg)[1];
   const signStyle = sign == "+" ? classes.positvie : classes.negative;
   return (
     <Typography
@@ -374,8 +379,9 @@ ChangePriceValue.propTypes = {
   changePrice: PropTypes.string.isRequired,
 };
 const cleaning = (data) => {
-  data.map((e) => (e.date = e.date.split("T")[0]));
-  return data;
+  var newArray = data.map((a) => ({ ...a }));
+  newArray.map((e) => (e.date = e.date.split("T")[0]));
+  return newArray;
 };
 function RenderCompanyChart(props) {
   const classes = userStyles();
@@ -414,7 +420,7 @@ function RenderCompanyChart(props) {
             <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
           </linearGradient> */}
           </defs>
-          <XAxis dataKey={props.dataKey} />
+          <XAxis dataKey={props.XAxis} />
           <YAxis />
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
@@ -454,7 +460,7 @@ function CompanyMiniDataTable(props) {
   const array = Object.entries(props.data);
   const half = array.length / 2;
   const bData = (key, value) =>
-    key == "date" ? null : (
+    (key == "date") | (key == "__typename") ? null : (
       <TableRow>
         <TableCell>
           <Typography variant="h6">{key}</Typography>
@@ -522,12 +528,17 @@ function CompanyProfile(props) {
             <Typography variant="body1">{props.companyInfo.bio}</Typography>
           </div>
         </Grid>
-        <Grid container direction="row" spacing={10} justify='flex-start'>
-          <Grid item>
+        <Grid
+          container
+          direction="row"
+          alignItems="flex-start"
+          justify="space-between"
+        >
+          <Grid item xs lg={5}>
             {label("Secotr", props.companyInfo.sector)}
             {label("Address", props.companyInfo.address)}
           </Grid>
-          <Grid item>
+          <Grid item xs lg={5}>
             {label("Industry", props.companyInfo.industry)}
             {label("Phone Number", props.companyInfo.phoneNumber)}
             {label("Website", props.companyInfo.website)}

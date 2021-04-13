@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import { Grid, Paper } from "@material-ui/core";
+import { CircularProgress, Grid, Paper } from "@material-ui/core";
 import {
   CompanyCardFollow,
   CompanyMiniDataTable,
@@ -11,6 +11,9 @@ import {
 } from "../../components/Company/CompanyCard";
 import { ContentCardPaper } from "../../components/Content/ContentCards";
 import { contentdummyData } from "../../util/dummyData";
+import { Redirect, useParams } from "react-router";
+import { useQuery } from "@apollo/client";
+import { COMPANY_GQL } from "../../graphql/Company/companyGql";
 const useStyles = makeStyles((theme) => ({
   paperLayout: {
     // width: "100%",
@@ -34,24 +37,38 @@ const useStyles = makeStyles((theme) => ({
 }));
 function Company(props) {
   const classes = useStyles();
-
+  let { companyId } = useParams();
+  console.log(companyId);
+  const { data, error, loading } = useQuery(COMPANY_GQL, {
+    variables: {
+      companyId: companyId,
+    },
+    onCompleted(data) {
+      console.log(data.getCompanies);
+    },
+  });
+  if (error) {
+    console.log(error);
+    return <Redirect to="/404" />;
+  }
+  if (loading) return <CircularProgress />;
   const CompanyHeader = () => {
     return (
       <Paper className={classes.paperLayout}>
         <Grid container direction="column">
           {/* Copmany Follow Card */}
           <CompanyCardFollow
-            Symbol={companydummyData.Symbol}
-            price={companydummyData.price}
-            changePrice={companydummyData.changePrice}
-            name={companydummyData.name}
+            Symbol={data.getCompany.symbol}
+            price={data.getCompany.todayFinance.close}
+            changePrice={data.getCompany.change}
+            name={data.getCompany.comname}
           />
           {/* Company Chart */}
           <Grid container direction="row" className={classes.chart_similar}>
             <Grid item>
               <div>
                 <RenderCompanyChart
-                  data={companyFinanceData}
+                  data={data.getCompany.financialData}
                   limit={7}
                   dataKey="close"
                   XAxis="date"
@@ -59,7 +76,10 @@ function Company(props) {
               </div>{" "}
             </Grid>{" "}
             <Grid item>
-              <MiniCompanyCardTable data={similarCompanydummyData} limit={4} />
+              <MiniCompanyCardTable
+                data={data.getCompany.similarCompanies}
+                limit={4}
+              />
             </Grid>
           </Grid>
           {/* Similar Companies minitable */}
@@ -77,16 +97,16 @@ function Company(props) {
           alignItems="center"
           justify="space-around"
         >
-          <Grid item lg={6}>
+          <Grid item xs lg={6}>
             <ContentCardPaper
               auther
-              data={contentdummyData}
+              data={data.getCompany.articles}
               limit={5}
               title="Rleated Articles"
             />
           </Grid>{" "}
           <Grid item xs md={4}>
-            <CompanyMiniDataTable data={companyFinanceData[1]} />
+            <CompanyMiniDataTable data={data.getCompany.todayFinance} />
           </Grid>
         </Grid>
         {/* Similar Companies minitable */}
@@ -106,7 +126,9 @@ function Company(props) {
       <Grid container direction="column">
         <Grid item>{CompanyHeader()}</Grid>
         <Grid item>{CompanyRelatedArticlesAndData()}</Grid>
-        <Grid item>{CompanyProfileCard()}</Grid>
+        <Grid item xs>
+          {CompanyProfileCard()}
+        </Grid>
       </Grid>
     </div>
   );
@@ -139,18 +161,23 @@ const companydummyData = {
   },
 };
 const similarCompanydummyData = [
-  { Symbol: "AAPL", price: 293, changePrice: +192 },
-  { Symbol: "GOOG", price: 351, changePrice: -122 },
-  { Symbol: "AMZN", price: 120, changePrice: +50 },
-  { Symbol: "EBSY", price: 963, changePrice: +124 },
-  { Symbol: "MOZA", price: 56, changePrice: -56 },
-  { Symbol: "NANI", price: 123, changePrice: +21 },
-  { Symbol: "AAPL", price: 293, changePrice: +192 },
-  { Symbol: "GOOG", price: 351, changePrice: -122 },
-  { Symbol: "AMZN", price: 120, changePrice: +50 },
-  { Symbol: "EBSY", price: 963, changePrice: +124 },
-  { Symbol: "MOZA", price: 56, changePrice: -56 },
-  { Symbol: "NANI", price: 123, changePrice: +21 },
+  { Symbol: "AAPL", price: 293, changePrice: "4.22(+2.32%)" },
+  { Symbol: "GOOG", price: 351, changePrice: "4.22(+2.32%)" },
+  { Symbol: "AMZN", price: 120, changePrice: "4.22(+2.32%)" },
+  { Symbol: "EBSY", price: 963, changePrice: "4.22(+2.32%)" },
+  { Symbol: "MOZA", price: 56, changePrice: "4.22(+2.32%)" },
+  { Symbol: "AAPL", price: 293, changePrice: "4.22(+2.32%)" },
+  { Symbol: "GOOG", price: 351, changePrice: "4.22(+2.32%)" },
+  { Symbol: "AMZN", price: 120, changePrice: "4.22(+2.32%)" },
+  { Symbol: "EBSY", price: 963, changePrice: "4.22(+2.32%)" },
+  { Symbol: "MOZA", price: 56, changePrice: "4.22(+2.32%)" },
+  // { Symbol: "NANI", price: 123, changePrice: +21 },
+  // { Symbol: "AAPL", price: 293, changePrice: +192 },
+  // { Symbol: "GOOG", price: 351, changePrice: -122 },
+  // { Symbol: "AMZN", price: 120, changePrice: +50 },
+  // { Symbol: "EBSY", price: 963, changePrice: +124 },
+  // { Symbol: "MOZA", price: 56, changePrice: -56 },
+  // { Symbol: "NANI", price: 123, changePrice: +21 },
 ];
 const companyFinanceData = [
   {

@@ -4,6 +4,13 @@ const companySchema = gql`
   input SectorInput {
     SecnameInput: String!
   }
+  input CompanyFilter {
+    Symbol: String
+    Comname: String
+    SectorID: String
+    Market: String
+    CompanyID: String
+  }
   input CompanyInput {
     Symbol: String
     Comname: String
@@ -30,7 +37,7 @@ const companySchema = gql`
     volume: Float
     date: String
   }
-  type info{
+  type info {
     intro: String
     address: String
     website: String
@@ -45,7 +52,7 @@ const companySchema = gql`
     comname: String
     symbol: String
     todayFinance: finance
-    change: Float
+    change: String
     info: info
     # exchange: String
     # Open: Float
@@ -56,10 +63,12 @@ const companySchema = gql`
     # date: String
     financialData: [finance]
     articles: [Article]!
+    similarCompanies: [Company]!
   }
   extend type Query {
     validateTags(tags: [String]): [Company]
-    getCompanies(CompanyInput: CompanyInput!): [Company]!
+    getCompanies(companyFilter: CompanyFilter!): [Company]!
+    getCompany(companyId: ID!): Company!
     getSectors: [Sector!]
     getPortfolio(portoId: ID!): Portfolio
   }

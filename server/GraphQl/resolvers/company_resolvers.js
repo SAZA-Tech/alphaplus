@@ -5,6 +5,7 @@ module.exports = {
   Query: {
     getSectors: Company.SectorControl.getSectors,
     getCompanies: Company.CompanyControl.getCompanies,
+    getCompany: Company.CompanyControl.getCompany,
     validateTags: Company.CompanyControl.validateTags,
     getPortfolio: Company.PortfolioControl.getPortfolio,
   },

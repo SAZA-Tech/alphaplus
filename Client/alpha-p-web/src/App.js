@@ -36,7 +36,7 @@ export class App extends Component {
                 }}
               >
                 <Route exact path="/" component={Home} />
-                <Route exact path="/company" component={Company} />
+                <Route path="/company/:companyId" component={Company} />
                 <Route path="/article/:articleId" component={Article} />
                 <ProtectedRoute path="/draft/:draftId" component={Draft} />
                 <ProtectedRoute
