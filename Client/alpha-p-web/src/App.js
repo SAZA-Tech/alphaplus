@@ -47,7 +47,7 @@ export class App extends Component {
                 />
                 <Route path="/company/:companyId" component={Company} />
                 <Route path="/article/:articleId" component={Article} />
-                <Route path="/Portfolio" component={Portfolio} />
+                <Route exact path="/Portfolio" component={Portfolio} />
                 <ProtectedRoute path="/draft/:draftId" component={Draft} />
                 <ProtectedRoute
                   exact

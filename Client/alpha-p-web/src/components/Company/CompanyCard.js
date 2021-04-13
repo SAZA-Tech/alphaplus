@@ -454,7 +454,7 @@ CompanyCardFollow.propTypes = {
 
 const ChangePriceValue = (props) => {
   const classes = userStyles();
-  const str = props.changePrice ? props.changePrice : "23(+4.1%)";
+  const str = props.changePrice ? props.changePrice.toString() : "23(+4.1%)";
   var signReg = /(\+|\-)/g;
   const sign = str.split(signReg)[1];
   const signStyle = sign == "+" ? classes.positvie : classes.negative;
