@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { fade, makeStyles } from "@material-ui/core/styles";
-import AddIcon from '@material-ui/icons/Add';
-import CreateIcon from '@material-ui/icons/Create';
+import AddIcon from "@material-ui/icons/Add";
+import CreateIcon from "@material-ui/icons/Create";
 
 import Typography from "@material-ui/core/Typography";
 import { HomeCard } from "./Home";
-import {
-  Button,
-  Grid,
-  Paper,
-  Avatar,
-  Divider
-} from "@material-ui/core";
+import { Button, Grid, Paper, Avatar, Divider } from "@material-ui/core";
 
 import { Link as RouterLink } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -26,12 +20,10 @@ import {
 } from "../components/Company/CompanyCard";
 import { Height } from "@material-ui/icons";
 
-
 // import {
 //   ContentCard,
 //   ContentCardPaper,
 // } from "../components/Content/ContentCards";
-
 
 const useStyles = makeStyles((theme) => ({
   rootCom: {
@@ -53,7 +45,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("lg")]: {
       paddingLeft: theme.spacing(6.5),
       paddingRight: theme.spacing(2),
-
     },
   },
 
@@ -65,29 +56,19 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("lg")]: {
       paddingLeft: theme.spacing(6.5),
       paddingRight: theme.spacing(2),
-
     },
   },
 
-
-
   AddEditBtn: {
-
-
     marginTop: theme.spacing(2.5),
   },
 
   compCardLine: {
     marginBottom: theme.spacing(6.3),
-
   },
 
   BtnsTypo: {
-
-    fontWeight: theme.typography.fontWeightBold
-
-
-
+    fontWeight: theme.typography.fontWeightBold,
   },
   avatar2: {
     width: theme.spacing(9.3),
@@ -100,99 +81,78 @@ const useStyles = makeStyles((theme) => ({
   },
 
   titleTypo: {
-
-    fontSize: '24px'
+    fontSize: "24px",
   },
 
   numberOfCommTypo: {
-    fontSize: '16px',
-    color: 'grey'
-
+    fontSize: "16px",
+    color: "grey",
   },
 
   labelTypo: {
-
     fontSize: "34px",
-    color: 'grey'
-
+    color: "grey",
   },
 
-  divForm:{
-
-   marginBottom:theme.spacing(2),
-
-
-  }
-
-
-
+  divForm: {
+    marginBottom: theme.spacing(2),
+  },
 }));
-
 
 const img = "avatars/7.jpg";
 
 const FollowersDocs = [
   {
-
     avatar: img,
     title:
       "Amazon And Disney Move Sports Streaming Down The Field As NFL Finalizes New Deals",
     editors: "Editors' PickScott Galloway",
-    numberOfComm: "18 Comments"
+    numberOfComm: "18 Comments",
   },
   {
     avatar: img,
     title:
       "Amazon And Disney Move Sports Streaming Down The Field As NFL Finalizes New Deals",
     editors: "Editors' PickScott Galloway",
-    numberOfComm: "18 Comments"
+    numberOfComm: "18 Comments",
   },
   {
     avatar: img,
     title:
       "Amazon And Disney Move Sports Streaming Down The Field As NFL Finalizes New Deals",
     editors: "Editors' PickScott Galloway",
-    numberOfComm: "18 Comments"
+    numberOfComm: "18 Comments",
   },
   {
     avatar: img,
     title:
       "Amazon And Disney Move Sports Streaming Down The Field As NFL Finalizes New Deals",
     editors: "Editors' PickScott Galloway",
-    numberOfComm: "18 Comments"
+    numberOfComm: "18 Comments",
   },
   {
     avatar: img,
     title:
       "Amazon And Disney Move Sports Streaming Down The Field As NFL Finalizes New Deals",
     editors: "Editors' PickScott Galloway",
-    numberOfComm: "18 Comments"
+    numberOfComm: "18 Comments",
   },
 ];
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function Portfolio() {
   const classes = useStyles();
 
   const Followers = (FollowersDocs) =>
     FollowersDocs.map((v) => (
-      <FollowerFollowingForm editors={v.editors} numberOfComm={v.numberOfComm} title={v.title} avatar={v.avatar} />
+      <FollowerFollowingForm
+        editors={v.editors}
+        numberOfComm={v.numberOfComm}
+        title={v.title}
+        avatar={v.avatar}
+      />
     ));
 
   return (
-
     <div className={classes.rootCom}>
       {/* Compnany line + 2 Content cards  */}
 
@@ -202,20 +162,25 @@ function Portfolio() {
 
           <CompanyCardLine data={companydummyData} />
 
-          <Grid item>
-            <BigMiniCompanyCardTable data={BigsimilarCompanydummyData} limit={4} />
+          <Grid item xs>
+            <BigMiniCompanyCardTable
+              data={BigsimilarCompanydummyData}
+              limit={4}
+              minWidth={400}
+            />
           </Grid>
-          <Grid item
+          <Grid
+            item
             container
             direction="row"
             alignItems
-            justify='flex-end'
-            spacing='1'
+            justify="flex-end"
+            spacing="1"
           >
             <Grid item>
               <Button
                 variant="contained"
-                color='secondary'
+                color="secondary"
                 // style={{color:""}}
                 className={classes.AddEditBtn}
                 startIcon={<CreateIcon />}
@@ -227,162 +192,263 @@ function Portfolio() {
             <Grid item>
               <Button
                 variant="contained"
-                color='primary'
-
+                color="primary"
                 className={classes.AddEditBtn}
                 startIcon={<AddIcon />}
               >
                 Add Company
               </Button>
             </Grid>
-
-
-
-
           </Grid>
         </Grid>
       </Paper>
 
       <Paper className={classes.paper2}>
-
         <Grid
           container
           direction="column"
           // alignItems
           // justify='flex-end'
-          spacing='2'
+      
         >
-
-
-          <Grid item
+          <Grid
+            item
             container
             direction="row"
             // alignItems
             // justify='flex-end'
-            spacing='4'
+            xs
           >
-            <Grid item> <Button variant="contained" ><Typography className={classes.BtnsTypo}>Latest</Typography></Button></Grid>
-            <Grid item> <Button variant="contained" ><Typography className={classes.BtnsTypo}>Articles</Typography></Button></Grid>
+            <Grid item>
+              {" "}
+              <Button variant="contained">
+                <Typography className={classes.BtnsTypo}>Latest</Typography>
+              </Button>
+            </Grid>
+            <Grid item>
+              {" "}
+              <Button variant="contained">
+                <Typography className={classes.BtnsTypo}>Articles</Typography>
+              </Button>
+            </Grid>
 
-            <Grid item> <Button variant="contained" ><Typography className={classes.BtnsTypo}>News</Typography></Button></Grid>
-            <Grid item> <Button variant="contained" ><Typography className={classes.BtnsTypo}>Analyst</Typography></Button></Grid>
-
+            <Grid item>
+              {" "}
+              <Button variant="contained">
+                <Typography className={classes.BtnsTypo}>News</Typography>
+              </Button>
+            </Grid>
+            <Grid item>
+              {" "}
+              <Button variant="contained">
+                <Typography className={classes.BtnsTypo}>Analyst</Typography>
+              </Button>
+            </Grid>
           </Grid>
 
           <Grid item>
-
             <Typography className={classes.labelTypo}>Articles</Typography>
-
-
-
           </Grid>
 
-
-
-
-          <Grid item>
-
-            {Followers(FollowersDocs)}
-
-
-
-          </Grid>
-
-
+          <Grid item>{Followers(FollowersDocs)}</Grid>
         </Grid>
-
-
-
-
-
-
       </Paper>
     </div>
-
-
-  )
+  );
 }
 
 export default Portfolio;
 
-
-
-
-
-
 export function FollowerFollowingForm(props) {
   const classes = useStyles();
   return (
-      <div className={classes.divForm}>
-    <Grid
-      spacing={3}
-      container
-      direction="row"
-      justify='flex-start'
-      alignItems='center'
-    >
-      {/* // User Avatar  */}
-      <Grid item  >
-        <Avatar className={classes.avatar2} alt={props.name} src={props.avatar} />
-      </Grid>
-
-      {/* // User info  */}
-      <Grid item xs='8' container alignItems='flex-start' justify='flex-start' direction="column" spacing={0}>
-
-        <Grid item> <Typography className={classes.titleTypo} variant="subtitle1">
-          {props.title}
-        </Typography>
+    <div className={classes.divForm}>
+      <Grid
+        container
+        direction="row"
+        justify="flex-start"
+        alignItems="center"
+      >
+        {/* // User Avatar  */}
+        <Grid item>
+          <Avatar
+            className={classes.avatar2}
+            alt={props.name}
+            src={props.avatar}
+          />
         </Grid>
 
-        <Grid item container alignItems='flex-start' justify='flex-start' direction="row" spacing={2}>
-
+        {/* // User info  */}
+        <Grid
+          item
+          xs="8"
+          container
+          alignItems="flex-start"
+          justify="flex-start"
+          direction="column"
+          spacing={0}
+        >
           <Grid item>
-            <Typography className={classes.numberOfCommTypo} variant="subtitle2">
-              {props.editors}
+            {" "}
+            <Typography className={classes.titleTypo} variant="subtitle1">
+              {props.title}
             </Typography>
-
           </Grid>
 
-          <Grid item>
-            <Typography className={classes.numberOfCommTypo} variant="subtitle2">
-              {props.numberOfComm}
-            </Typography>
+          <Grid
+            item
+            container
+            alignItems="flex-start"
+            justify="flex-start"
+            direction="row"
+            spacing={2}
+          >
+            <Grid item>
+              <Typography
+                className={classes.numberOfCommTypo}
+                variant="subtitle2"
+              >
+                {props.editors}
+              </Typography>
+            </Grid>
 
+            <Grid item>
+              <Typography
+                className={classes.numberOfCommTypo}
+                variant="subtitle2"
+              >
+                {props.numberOfComm}
+              </Typography>
+            </Grid>
           </Grid>
-
-
-
-
         </Grid>
-        
-
       </Grid>
-
-
-
-    </Grid>
-    <Divider variant="middle" />
+      <Divider variant="middle" />
     </div>
-
   );
 }
 
-
-
-
 const BigsimilarCompanydummyData = [
-  { Symbol: "AAPL", price: 293, change: +192, changePerce: ' 20%', volume: '10M', avgVolume: '10.10M', prevClose: 44, open: 121 },
-  { Symbol: "GOOG", price: 351, change: -122, changePerce: ' 20%', volume: '10M', avgVolume: '10.10M', prevClose: 44, open: 121 },
-  { Symbol: "AMZN", price: 120, change: +50, changePerce: ' 20%', volume: '10M', avgVolume: '10.10M', prevClose: 44, open: 121 },
-  { Symbol: "EBSY", price: 963, change: +124, changePerce: ' 20%', volume: '10M', avgVolume: '10.10M', prevClose: 44, open: 121 },
-  { Symbol: "MOZA", price: 56, change: -56, changePerce: ' 20%', volume: '10M', avgVolume: '10.10M', prevClose: 44, open: 121 },
-  { Symbol: "NANI", price: 123, change: +21, changePerce: ' 20%', volume: '10M', avgVolume: '10.10M', prevClose: 44, open: 121 },
-  { Symbol: "AAPL", price: 293, change: +192, changePerce: ' 20%', volume: '10M', avgVolume: '10.10M', prevClose: 44, open: 121 },
-  { Symbol: "GOOG", price: 351, change: -122, changePerce: ' 20%', volume: '10M', avgVolume: '10.10M', prevClose: 44, open: 121 },
-  { Symbol: "AMZN", price: 120, change: +50, changePerce: ' 20%', volume: '10M', avgVolume: '10.10M', prevClose: 44, open: 121 },
-  { Symbol: "EBSY", price: 963, change: +124, changePerce: ' 20%', volume: '10M', avgVolume: '10.10M', prevClose: 44, open: 121 },
-  { Symbol: "MOZA", price: 56, change: -56, changePerce: ' 20%', volume: '10M', avgVolume: '10.10M', prevClose: 44, open: 121 },
-  { Symbol: "NANI", price: 123, change: +21, changePerce: ' 20%', volume: '10M', avgVolume: '10.10M', prevClose: 44, open: 121 },
+  {
+    Symbol: "AAPL",
+    price: 293,
+    change: +192,
+    changePerce: " 20%",
+    volume: "10M",
+    avgVolume: "10.10M",
+    prevClose: 44,
+    open: 121,
+  },
+  {
+    Symbol: "GOOG",
+    price: 351,
+    change: -122,
+    changePerce: " 20%",
+    volume: "10M",
+    avgVolume: "10.10M",
+    prevClose: 44,
+    open: 121,
+  },
+  {
+    Symbol: "AMZN",
+    price: 120,
+    change: +50,
+    changePerce: " 20%",
+    volume: "10M",
+    avgVolume: "10.10M",
+    prevClose: 44,
+    open: 121,
+  },
+  {
+    Symbol: "EBSY",
+    price: 963,
+    change: +124,
+    changePerce: " 20%",
+    volume: "10M",
+    avgVolume: "10.10M",
+    prevClose: 44,
+    open: 121,
+  },
+  {
+    Symbol: "MOZA",
+    price: 56,
+    change: -56,
+    changePerce: " 20%",
+    volume: "10M",
+    avgVolume: "10.10M",
+    prevClose: 44,
+    open: 121,
+  },
+  {
+    Symbol: "NANI",
+    price: 123,
+    change: +21,
+    changePerce: " 20%",
+    volume: "10M",
+    avgVolume: "10.10M",
+    prevClose: 44,
+    open: 121,
+  },
+  {
+    Symbol: "AAPL",
+    price: 293,
+    change: +192,
+    changePerce: " 20%",
+    volume: "10M",
+    avgVolume: "10.10M",
+    prevClose: 44,
+    open: 121,
+  },
+  {
+    Symbol: "GOOG",
+    price: 351,
+    change: -122,
+    changePerce: " 20%",
+    volume: "10M",
+    avgVolume: "10.10M",
+    prevClose: 44,
+    open: 121,
+  },
+  {
+    Symbol: "AMZN",
+    price: 120,
+    change: +50,
+    changePerce: " 20%",
+    volume: "10M",
+    avgVolume: "10.10M",
+    prevClose: 44,
+    open: 121,
+  },
+  {
+    Symbol: "EBSY",
+    price: 963,
+    change: +124,
+    changePerce: " 20%",
+    volume: "10M",
+    avgVolume: "10.10M",
+    prevClose: 44,
+    open: 121,
+  },
+  {
+    Symbol: "MOZA",
+    price: 56,
+    change: -56,
+    changePerce: " 20%",
+    volume: "10M",
+    avgVolume: "10.10M",
+    prevClose: 44,
+    open: 121,
+  },
+  {
+    Symbol: "NANI",
+    price: 123,
+    change: +21,
+    changePerce: " 20%",
+    volume: "10M",
+    avgVolume: "10.10M",
+    prevClose: 44,
+    open: 121,
+  },
 ];
 
 const companydummyData = [

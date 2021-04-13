@@ -46,14 +46,11 @@ const userStyles = makeStyles((theme) => ({
   },
 
   tableContent: {
-    fontWeight:'400px',
+    fontWeight: "400px",
     [theme.breakpoints.up("lg")]: {
-      fontSize: '24px',
+      fontSize: "24px",
     },
   },
-
-
-
 
   negative: {
     color: theme.palette.error.dark,
@@ -190,8 +187,6 @@ const userStyles = makeStyles((theme) => ({
       paddingLeft: theme.spacing(12),
     },
   },
-
-  
 }));
 
 // Variant , Size
@@ -213,9 +208,6 @@ function CompanyCard(props) {
             <Typography variant="subtitle2" className={classes.changePrice}>
               {props.change}
             </Typography>
-            
-
-            
           </Grid>
           <Grid item>
             <Divider orientation="vertical" />
@@ -227,42 +219,42 @@ function CompanyCard(props) {
   const horizontalCard = () => {
     return (
       <TableRow>
-        <TableCell >
+        <TableCell>
           <Typography variant="subtitle2" className={classes.companySymbol}>
             {props.Symbol}
           </Typography>
         </TableCell>
-        <TableCell >
+        <TableCell>
           <Typography variant="subtitle2" className={classes.tableContent}>
             {props.price}
           </Typography>
         </TableCell>{" "}
-        <TableCell >
+        <TableCell>
           <Typography variant="subtitle2" className={classes.tableContent}>
             {props.change}
           </Typography>
         </TableCell>
-        <TableCell >
+        <TableCell>
           <Typography variant="subtitle2" className={classes.tableContent}>
             {props.changePerce}
           </Typography>
         </TableCell>
-        <TableCell >
+        <TableCell>
           <Typography variant="subtitle2" className={classes.tableContent}>
             {props.volume}
           </Typography>
         </TableCell>
-        <TableCell >
+        <TableCell>
           <Typography variant="subtitle2" className={classes.tableContent}>
             {props.avgVolume}
           </Typography>
         </TableCell>
-        <TableCell >
+        <TableCell>
           <Typography variant="subtitle2" className={classes.tableContent}>
             {props.prevClose}
           </Typography>
         </TableCell>
-        <TableCell >
+        <TableCell>
           <Typography variant="subtitle2" className={classes.tableContent}>
             {props.open}
           </Typography>
@@ -289,7 +281,6 @@ CompanyCard.propTypes = {
   avgVolume: PropTypes.number.isRequired,
   prevClose: PropTypes.number.isRequired,
   open: PropTypes.number.isRequired,
-
 };
 
 function CompanyCardLine(props) {
@@ -368,12 +359,6 @@ MiniCompanyCardTable.defaultProps = {
   minWidth: 0,
 };
 
-
-
-
-
-
-
 export function BigMiniCompanyCardTable(props) {
   const classes = userStyles();
 
@@ -385,14 +370,14 @@ export function BigMiniCompanyCardTable(props) {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell style={{fontSize:'24px', fontWeight:'400'}}>Company</TableCell>
-            <TableCell style={{fontSize:'24px', fontWeight:'400'}} >Price</TableCell>
-            <TableCell style={{fontSize:'24px', fontWeight:'400'}}>Change</TableCell>
-            <TableCell style={{fontSize:'24px', fontWeight:'400'}}>Change%</TableCell>
-            <TableCell style={{fontSize:'24px', fontWeight:'400'}}>Volume</TableCell>
-            <TableCell style={{fontSize:'24px', fontWeight:'400'}}>Avg.Volume</TableCell>
-            <TableCell style={{fontSize:'24px', fontWeight:'400'}}>Prev.close</TableCell>
-            <TableCell style={{fontSize:'24px', fontWeight:'400'}} >Open</TableCell>
+            <TableCell style={{ fontWeight: "400" }}>Company</TableCell>
+            <TableCell style={{ fontWeight: "400" }}>Price</TableCell>
+            <TableCell style={{ fontWeight: "400" }}>Change</TableCell>
+            <TableCell style={{ fontWeight: "400" }}>Change%</TableCell>
+            <TableCell style={{ fontWeight: "400" }}>Volume</TableCell>
+            <TableCell style={{ fontWeight: "400" }}>Avg.Volume</TableCell>
+            <TableCell style={{ fontWeight: "400" }}>Prev.close</TableCell>
+            <TableCell style={{ fontWeight: "400" }}>Open</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -406,8 +391,6 @@ export function BigMiniCompanyCardTable(props) {
               avgVolume={e.avgVolume}
               prevClose={e.prevClose}
               open={e.open}
-              
-
               horizontal
             />
           ))}
@@ -425,12 +408,6 @@ MiniCompanyCardTable.defaultProps = {
   limit: 0,
   minWidth: 0,
 };
-
-
-
-
-
-
 
 /**
  * Company Card With Follow Button
@@ -637,7 +614,7 @@ function CompanyProfile(props) {
             <Typography variant="body1">{props.companyInfo.bio}</Typography>
           </div>
         </Grid>
-        <Grid container direction="row" spacing={10} justify='flex-start'>
+        <Grid container direction="row" spacing={10} justify="flex-start">
           <Grid item>
             {label("Secotr", props.companyInfo.sector)}
             {label("Address", props.companyInfo.address)}
