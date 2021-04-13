@@ -19,16 +19,20 @@ import { gql, useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import { useForm } from "../../../../alpha-p-admin/src/util/hooks";
 
-const EDIT_COMPANY = gql`
+const CREATE_COMPANY = gql`
 
-mutation editCompany($CompanyInput: CompanyInput!) {
-  editCompany(CompanyInput:$CompanyInput){
-  
-    market
-    id
+  mutation createCompany($CompanyInput: CompanyInput! ) {
+    createCompany(CompanyInput:$CompanyInput) {
+    
+      market
+      sectorId
+      id
+      comname
+      symbol
+    }
   }
-}
 `;
+
 const GET_SECTORS = gql`
 
   query getSectors{
@@ -41,22 +45,22 @@ const GET_SECTORS = gql`
   }
 `;
 
-
-const InputFormCompany = (props) => {
+const AddFormCompany = (props) => {
   const [modal, setModal] = useState(false);
   const toggle = () => {
     setModal(!modal);
     console.log(values);
   };
+
   const { data: SectosData, loading: FetchSectors } = useQuery(GET_SECTORS)
   const { onChange, onSubmit, values } = useForm(CreateCompanyInfoCallBack, {
     CompanyID: props.CompanyID,
     Comname: props.Comname,
-    SectorID: props.SectorID,
-    Market: props.Market,
-    Symbol: null
+    SectorID: "",
+    Market: "",
+    Symbol: props.Symbol
   });
-  const [CreateCompanyInfo, { loading }] = useMutation(EDIT_COMPANY, {
+  const [CreateCompanyInfo, { loading }] = useMutation(CREATE_COMPANY, {
     onError(error) {
       console.log(`Error Happend Updating user info ${error}`);
     },
@@ -95,14 +99,14 @@ const InputFormCompany = (props) => {
                       Comname: values.Comname,
                       SectorID: values.SectorID,
                       Market: values.Market,
-                      Symbol: null
+                      Symbol: values.Symbol
 
                     };
                     CreateCompanyInfo({ variables: { CompanyInput } });
                   }}>
 
                     <CFormGroup>
-                      <CLabel htmlFor="Comname">old company name:  {values.Comname}	</CLabel>
+                      <CLabel htmlFor="Comname">company name {values.Comname}</CLabel>
                       <CInput
                         id="Comname"
                         name="Comname"
@@ -114,7 +118,7 @@ const InputFormCompany = (props) => {
                     </CFormGroup>
 
                     <CFormGroup>
-                      <CLabel htmlFor="Market">old market:  {values.Market}	</CLabel>
+                      <CLabel htmlFor="Market">market</CLabel>
                       <CInput
                         name="Market"
                         id="Market"
@@ -124,28 +128,28 @@ const InputFormCompany = (props) => {
                       />
                     </CFormGroup>
 
-                    {
-            /* <CFormGroup>
-              <CLabel htmlFor="symbol	">Company symbol	</CLabel>
-              <CInput
-                 name="symbol"
-                placeholder="Enter User symbol"
-                autoComplete="symbol"
-                onChange={onChange}
-              />
-            </CFormGroup> */}
-                    {/* <CFormGroup>
-                      <CLabel htmlFor="SectorID">old sector:  {values.SectorID}</CLabel>
-                      <CInput
-                        id="SectorID"
-                        name="SectorID"
-                        placeholder="Enter SectorID"
-                        autoComplete="SectorID"
-                        onChange={onChange}
 
+                    <CFormGroup>
+                      <CLabel htmlFor="Symbol">Company symbol</CLabel>
+                      <CInput
+                        name="Symbol"
+                        id="Symbol"
+                        placeholder="Enter User symbol"
+                        autoComplete="Symbol"
+                        onChange={onChange}
                       />
                     </CFormGroup>
-                     */}
+                    {/* <CFormGroup>
+              <CLabel htmlFor="SectorID">sector</CLabel>
+              <CInput
+                id="SectorID"
+                name="SectorID"
+                placeholder="Enter SectorID"
+                autoComplete="SectorID"
+                onChange={onChange}
+                
+              />
+            </CFormGroup> */}
 
                     <CFormGroup>
                       <CLabel htmlFor="SectorID">Role</CLabel>
@@ -169,8 +173,6 @@ const InputFormCompany = (props) => {
                     <CButton color="secondary" onClick={toggle}>
                       Cancel
                     </CButton>
-
-
                   </CForm>
                 </CCol>
               </CRow>
@@ -187,4 +189,4 @@ const InputFormCompany = (props) => {
 
 }
 
-export default InputFormCompany
+export default AddFormCompany

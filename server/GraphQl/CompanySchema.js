@@ -3,6 +3,8 @@ const { gql } = require("apollo-server-express");
 const companySchema = gql`
   input SectorInput {
     SecnameInput: String!
+    SectorID: String
+
   }
   input CompanyFilter {
     Symbol: String
@@ -76,8 +78,8 @@ const companySchema = gql`
     createSector(SectorInput: SectorInput!): Sector!
     deleteSector(sectorID: ID!): String!
     createCompany(CompanyInput: CompanyInput!): Company #require api
-    deleteCompany(companyId: ID!): String!
-    editSector(sectorID: ID!, SectorInput: SectorInput!): Sector!
+    deleteCompany(id: ID!,companyId: ID!): String!
+    editSector(SectorInput: SectorInput!): Sector!
     editCompany(CompanyInput: CompanyInput!): Company!
     createPortfolio(name: String, tags: [String!]): Portfolio!
     editPortfolio(portoId: ID!, name: String!, tags: [String!]): Portfolio!

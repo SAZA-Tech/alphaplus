@@ -17,6 +17,7 @@ import {
 
 import companiesData from './CompaniesData'
 import InputFormCompany from './InputFormCompany'
+import AddFormCompany from './AddFormCompany'
 import { gql, useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 
@@ -52,13 +53,14 @@ const GET_COMPANIES = gql`
 `;
 
 const DELETE_COMPANY = gql`
-  mutation deleteCompany($companyId: ID!) {
-    deleteCompany(companyId: $companyId)
+  mutation deleteCompany($id:ID! , $companyId: ID!) {
+    deleteCompany(companyId: $companyId , id: $id )
   }
 `;
 
 
 const Companies = () => {
+
 
   const [details, setDetails] = useState([])
    const [items, setItems] = useState([])
@@ -70,7 +72,7 @@ const Companies = () => {
     },
   });
   const [delteCompany, { loading: deleteLoading }] = useMutation(DELETE_COMPANY); 
-
+  const history = useHistory();
 
   const toggleDetails = (index) => {
     const position = details.indexOf(index)
@@ -133,13 +135,15 @@ const Companies = () => {
           {deleteLoading ? (
             <CSpinner />
           ) : (
-            <CModalBody>Are you sure you want to delete this Company ?</CModalBody>
+            <CModalBody>Are you sure you want to delete this Company ?  </CModalBody>
           )}{" "}
           <CModalFooter>
             <CButton
               color="danger"
               onClick={() => {
-                delteCompany({ variables: { companyId } });
+                const id="604cb03f70aeaa09fc60fff7";//temp
+                delteCompany({ variables:{companyId,id}  });
+                
                 if (!deleteLoading) setWarning(!warning);
               }}
             >
@@ -163,9 +167,13 @@ const Companies = () => {
       items={items}
       fields={fields}
       columnFilter
-      theadTopSlot={ <CButton>
-        <InputFormCompany buttonName="Add Company"/>
-    </CButton>}
+      theadTopSlot={
+        
+         <CButton>
+        <AddFormCompany buttonName="Add Company"
+        />
+    </CButton>
+         }
       footer
       itemsPerPageSelect
       itemsPerPage={5}
@@ -203,11 +211,10 @@ const Companies = () => {
                   </h4>
                   <CButton>
                     <InputFormCompany buttonName="Edit"
-
-                    name={item.comname}
-                    id={item.id}
-                    type={item.symbol}
-
+                      Comname={item.comname}
+                      Market={item.market}
+                      CompanyID={item.id}
+                      SectorID={item.sectorId}
                     />
                   </CButton>
                   {deleteCompanyAction(item.id)}
@@ -215,7 +222,8 @@ const Companies = () => {
               </CCollapse>
             )
           }
-      }}
+      }
+    }
     />
 
   );
