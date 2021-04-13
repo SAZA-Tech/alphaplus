@@ -22,3 +22,32 @@ export const SIGNUP_USER = gql`
     }
   }
 `;
+
+export const PROFILE_GQL = gql`
+  query ProfilData($id: ID = "") {
+    findUser(id: $id) {
+      id
+      name
+      email
+      type
+      followers {
+        id
+        name
+      }
+      following {
+        id
+        name
+      }
+    }
+    getArticles(
+      filter: { userId: $id, articleId: null, companyId: null, tags: null }
+    ) {
+      id
+      articleTitle
+    }
+    getComments(filter: { userId: $id }) {
+      commentBody
+      id
+    }
+  }
+`;

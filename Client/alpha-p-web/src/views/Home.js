@@ -121,6 +121,7 @@ function Home() {
                 dataLimit={4}
                 data={contentdummyData}
                 btnText="More"
+                
               />
             </Grid>
           </Grid>
@@ -177,7 +178,7 @@ function Home() {
   );
 }
 
-function HomeCard(props) {
+export function HomeCard(props) {
   const classes = useStyles();
 
   const [state, setState] = useState({

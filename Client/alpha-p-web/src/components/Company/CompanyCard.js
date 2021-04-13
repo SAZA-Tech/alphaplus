@@ -31,6 +31,9 @@ const userStyles = makeStyles((theme) => ({
   companySymbol: {
     color: theme.palette.primary.light,
     fontWeight: theme.typography.fontWeightBold,
+    [theme.breakpoints.up("lg")]: {
+      fontSize: theme.typography.fontSize * 1.5,
+    },
   },
   price: {
     color: theme.palette.common.black,
@@ -42,6 +45,14 @@ const userStyles = makeStyles((theme) => ({
       fontSize: theme.typography.fontSize,
     },
   },
+
+  tableContent: {
+    fontWeight: "400px",
+    [theme.breakpoints.up("lg")]: {
+      fontSize: "24px",
+    },
+  },
+
   negative: {
     color: theme.palette.error.dark,
   },
@@ -213,18 +224,43 @@ function CompanyCard(props) {
   const horizontalCard = () => {
     return (
       <TableRow>
-        <TableCell align="left">
+        <TableCell>
           <Typography variant="subtitle2" className={classes.companySymbol}>
             {props.Symbol}
           </Typography>
         </TableCell>
-        <TableCell align="center">
-          <Typography variant="subtitle2" className={classes.price}>
+        <TableCell>
+          <Typography variant="subtitle2" className={classes.tableContent}>
             {props.price}
           </Typography>
         </TableCell>{" "}
         <TableCell align="right">
           <ChangePriceValue changePrice={props.change} />
+        </TableCell>
+        <TableCell>
+          <Typography variant="subtitle2" className={classes.tableContent}>
+            {props.changePerce}
+          </Typography>
+        </TableCell>
+        <TableCell>
+          <Typography variant="subtitle2" className={classes.tableContent}>
+            {props.volume}
+          </Typography>
+        </TableCell>
+        <TableCell>
+          <Typography variant="subtitle2" className={classes.tableContent}>
+            {props.avgVolume}
+          </Typography>
+        </TableCell>
+        <TableCell>
+          <Typography variant="subtitle2" className={classes.tableContent}>
+            {props.prevClose}
+          </Typography>
+        </TableCell>
+        <TableCell>
+          <Typography variant="subtitle2" className={classes.tableContent}>
+            {props.open}
+          </Typography>
         </TableCell>
       </TableRow>
     );
@@ -243,6 +279,11 @@ CompanyCard.propTypes = {
   Symbol: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   change: PropTypes.number.isRequired,
+  changePerce: PropTypes.number.isRequired,
+  volume: PropTypes.number.isRequired,
+  avgVolume: PropTypes.number.isRequired,
+  prevClose: PropTypes.number.isRequired,
+  open: PropTypes.number.isRequired,
 };
 
 function CompanyCardLine(props) {
@@ -321,6 +362,57 @@ MiniCompanyCardTable.defaultProps = {
   limit: 0,
   minWidth: 0,
 };
+
+export function BigMiniCompanyCardTable(props) {
+  const classes = userStyles();
+
+  return (
+    <TableContainer
+      className={classes.minitable}
+      style={{ minWidth: props.minWidth == 0 ? "inherent" : props.minWidth }}
+    >
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell style={{ fontWeight: "400" }}>Company</TableCell>
+            <TableCell style={{ fontWeight: "400" }}>Price</TableCell>
+            <TableCell style={{ fontWeight: "400" }}>Change</TableCell>
+            <TableCell style={{ fontWeight: "400" }}>Change%</TableCell>
+            <TableCell style={{ fontWeight: "400" }}>Volume</TableCell>
+            <TableCell style={{ fontWeight: "400" }}>Avg.Volume</TableCell>
+            <TableCell style={{ fontWeight: "400" }}>Prev.close</TableCell>
+            <TableCell style={{ fontWeight: "400" }}>Open</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {props.data.slice(0, props.limit).map((e) => (
+            <CompanyCard
+              Symbol={e.Symbol}
+              price={e.price}
+              change={e.change}
+              changePerce={e.changePerce}
+              volume={e.volume}
+              avgVolume={e.avgVolume}
+              prevClose={e.prevClose}
+              open={e.open}
+              horizontal
+            />
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}
+MiniCompanyCardTable.propTypes = {
+  data: PropTypes.array.isRequired,
+  limit: PropTypes.number,
+  minWidth: PropTypes.number,
+};
+MiniCompanyCardTable.defaultProps = {
+  limit: 0,
+  minWidth: 0,
+};
+
 /**
  * Company Card With Follow Button
  * @param {*} props
