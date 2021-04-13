@@ -9,42 +9,60 @@ import { AuthProvider } from "./context/auth";
 import "./scss/style.scss";
 import Login from "./views/Login";
 import SignUp from "./views/Sign-up";
-import {AuthRoute} from "./components/AuthRoute";
+import { AuthRoute, ProtectedRoute } from "./components/AuthRoute";
 import Home from "./views/Home";
-import Navbar from "./components/Navbar";
 import EndUserProfile from "./views/EndUserProfile";
-import ProfileSetting from "./views/profileSetting/ProfileSetting";
-import AccountSecurty from "./views/profileSetting/AccountSecurty";
 
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 import Article from "./views/Content/Article";
 import Draft from "./views/Content/Draft";
+import Portfolio from "./views/Portfolio";
+
+
 import { MyAuthors } from "./views/Content/MyAuthors";
 import { theme } from "./Theme";
 import { ThemeProvider } from "@material-ui/styles";
-import { Container } from "@material-ui/core";
+import { CircularProgress, Container } from "@material-ui/core";
+import Company from "./views/Company/Company";
+// const Company = React.lazy(() => import("./views/Company/Company"));
 export class App extends Component {
   render() {
     return (
       <ThemeProvider theme={theme}>
         <AuthProvider>
           <Router>
-            <Navbar />
-            <div>
-              <Route exact path="/" component={Home} />
-              <Route exact path="/EndUserProfile" component={EndUserProfile} />
-              <Route exact path="/ProfileSetting" component={ProfileSetting} />
-              <Route exact path="/AccountSecurty" component={AccountSecurty} />
+            <React.Suspense fallback={CircularProgress}>
+              <Navbar />
+              <div
+                style={{
+                  backgroundColor: theme.palette.background.default,
+                  paddingBottom: theme.spacing(8),
+                }}
+              >
+                <Route exact path="/" component={Home} />
+                <Route exact path="/company" component={Company} />
+                <Route exact path="/EndUserProfile" component={EndUserProfile} />
 
+                
 
+                <Route path="/article/:articleId" component={Article} />
+                <Route path="/Portfolio" component={Portfolio} />
 
-              <Route exact path="/article" component={Article} />
-              <Route  path="/draft/:draftId" component={Draft} />
-              <Route exact path="/MyAuthers/:username/" component={MyAuthors} />
-              <AuthRoute exact path="/Signup" component={SignUp} />
+                
+                <ProtectedRoute path="/draft/:draftId" component={Draft} />
+                <ProtectedRoute
+                  exact
+                  path="/MyAuthers/:username/"
+                  component={MyAuthors}
+                />
+                <AuthRoute exact path="/Signup" component={SignUp} />
 
-              <AuthRoute exact path="/Login" component={Login} />
-            </div>
+                <AuthRoute exact path="/Login" component={Login} />
+              </div>
+              <Footer />
+            </React.Suspense>
           </Router>
         </AuthProvider>
       </ThemeProvider>
