@@ -6,13 +6,12 @@ import CreateIcon from '@material-ui/icons/Create';
 import Typography from "@material-ui/core/Typography";
 import { HomeCard } from "./Home";
 import {
-   Button, 
-  Container,
-   Grid, 
-   Paper,
-   Avatar,
-   Divider 
-  } from "@material-ui/core";
+  Button,
+  Grid,
+  Paper,
+  Avatar,
+  Divider
+} from "@material-ui/core";
 
 import { Link as RouterLink } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -46,63 +45,85 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 
-  paperLayout: {
+  paper1: {
     // width: "100%",
     paddingBottom: theme.spacing(2),
     marginTop: theme.spacing(1),
     paddingTop: theme.spacing(1),
     [theme.breakpoints.up("lg")]: {
-      paddingLeft: theme.spacing(1),
-      paddingRight: theme.spacing(1),
-     
+      paddingLeft: theme.spacing(6.5),
+      paddingRight: theme.spacing(2),
+
     },
   },
 
-  AddEditBtn:{
+  paper2: {
+    // width: "100%",
 
-    
-    marginTop:theme.spacing(2.5),
+    marginTop: theme.spacing(1),
+    paddingTop: theme.spacing(3),
+    [theme.breakpoints.up("lg")]: {
+      paddingLeft: theme.spacing(6.5),
+      paddingRight: theme.spacing(2),
+
+    },
   },
 
-  compCardLine:{
-    marginBottom:theme.spacing(6.3),
+
+
+  AddEditBtn: {
+
+
+    marginTop: theme.spacing(2.5),
+  },
+
+  compCardLine: {
+    marginBottom: theme.spacing(6.3),
 
   },
 
-  BtnsTypo:{
-  
-    fontWeight: theme.typography.fontWeightBold    
+  BtnsTypo: {
+
+    fontWeight: theme.typography.fontWeightBold
 
 
 
   },
   avatar2: {
-    // width: theme.spacing(4),
-    // height: theme.spacing(4),
+    width: theme.spacing(9.3),
+    height: theme.spacing(9.3),
 
-    [theme.breakpoints.between('sm', 'xl')]: {
-      // width: theme.spacing(5.75),
-      // height: theme.spacing(5.75),
-    },
+    // [theme.breakpoints.between('sm', 'xl')]: {
+    //    width: theme.spacing(5.75),
+    //    height: theme.spacing(5.75),
+    // },
   },
 
-  typogrFollowerFollwing: {
+  titleTypo: {
 
-    [theme.breakpoints.between('xs', 'sm')]: {
-      // fontSize: '1px'
-    },
+    fontSize: '24px'
   },
-  FollowBtn2: {
 
-    [theme.breakpoints.between('xs', 'sm')]: {
-      width: theme.spacing(1),
-      marginLeft: theme.spacing(-4),
-    },
-    [theme.breakpoints.between('sm', 'md')]: {
-      width: theme.spacing(9),
-      marginLeft: theme.spacing(1),
-    },
+  numberOfCommTypo: {
+    fontSize: '16px',
+    color: 'grey'
+
   },
+
+  labelTypo: {
+
+    fontSize: "34px",
+    color: 'grey'
+
+  },
+
+  divForm:{
+
+   marginBottom:theme.spacing(2),
+
+
+  }
+
 
 
 }));
@@ -112,22 +133,40 @@ const img = "avatars/7.jpg";
 
 const FollowersDocs = [
   {
-    name: "Alex",
+
     avatar: img,
-    bio:
-      "Contributor long only, Growth, registered investment advisor, investment advisor",
+    title:
+      "Amazon And Disney Move Sports Streaming Down The Field As NFL Finalizes New Deals",
+    editors: "Editors' PickScott Galloway",
+    numberOfComm: "18 Comments"
   },
   {
-    name: "Ziad",
     avatar: img,
-    bio:
-      "Contributor long only, Growth, registered investment advisor, investment advisor",
+    title:
+      "Amazon And Disney Move Sports Streaming Down The Field As NFL Finalizes New Deals",
+    editors: "Editors' PickScott Galloway",
+    numberOfComm: "18 Comments"
   },
   {
-    name: "Mohammed",
     avatar: img,
-    bio:
-      "Contributor long only, Growth, registered investment advisor, investment advisor",
+    title:
+      "Amazon And Disney Move Sports Streaming Down The Field As NFL Finalizes New Deals",
+    editors: "Editors' PickScott Galloway",
+    numberOfComm: "18 Comments"
+  },
+  {
+    avatar: img,
+    title:
+      "Amazon And Disney Move Sports Streaming Down The Field As NFL Finalizes New Deals",
+    editors: "Editors' PickScott Galloway",
+    numberOfComm: "18 Comments"
+  },
+  {
+    avatar: img,
+    title:
+      "Amazon And Disney Move Sports Streaming Down The Field As NFL Finalizes New Deals",
+    editors: "Editors' PickScott Galloway",
+    numberOfComm: "18 Comments"
   },
 ];
 
@@ -149,7 +188,7 @@ function Portfolio() {
 
   const Followers = (FollowersDocs) =>
     FollowersDocs.map((v) => (
-      <FollowerFollowingForm name={v.name} bio={v.bio} avatar={v.avatar} />
+      <FollowerFollowingForm editors={v.editors} numberOfComm={v.numberOfComm} title={v.title} avatar={v.avatar} />
     ));
 
   return (
@@ -157,10 +196,10 @@ function Portfolio() {
     <div className={classes.rootCom}>
       {/* Compnany line + 2 Content cards  */}
 
-      <Paper className={classes.paperLayout}>
+      <Paper className={classes.paper1}>
         <Grid container direction="column">
           {/* Company Line */}
-         
+
           <CompanyCardLine data={companydummyData} />
 
           <Grid item>
@@ -189,7 +228,7 @@ function Portfolio() {
               <Button
                 variant="contained"
                 color='primary'
-                
+
                 className={classes.AddEditBtn}
                 startIcon={<AddIcon />}
               >
@@ -204,35 +243,50 @@ function Portfolio() {
         </Grid>
       </Paper>
 
-      <Paper className={classes.paperLayout}>
+      <Paper className={classes.paper2}>
 
-      <Grid
-            container
-            direction="column"
-            // alignItems
-            // justify='flex-end'
-            spacing='1'
-          >
+        <Grid
+          container
+          direction="column"
+          // alignItems
+          // justify='flex-end'
+          spacing='2'
+        >
 
 
-         <Grid item
+          <Grid item
             container
             direction="row"
             // alignItems
             // justify='flex-end'
             spacing='4'
           >
-          <Grid item> <Button variant="contained" ><Typography className={classes.BtnsTypo}>Latest</Typography></Button></Grid>
-          <Grid item> <Button onClick={() => {Followers(FollowersDocs) }} variant="contained" ><Typography className={classes.BtnsTypo}>Articles</Typography></Button></Grid>
-          
-          <Grid item> <Button variant="contained" ><Typography className={classes.BtnsTypo}>News</Typography></Button></Grid>
-          <Grid item> <Button variant="contained" ><Typography className={classes.BtnsTypo}>Analyst</Typography></Button></Grid>
+            <Grid item> <Button variant="contained" ><Typography className={classes.BtnsTypo}>Latest</Typography></Button></Grid>
+            <Grid item> <Button variant="contained" ><Typography className={classes.BtnsTypo}>Articles</Typography></Button></Grid>
 
-                
-            </Grid>
+            <Grid item> <Button variant="contained" ><Typography className={classes.BtnsTypo}>News</Typography></Button></Grid>
+            <Grid item> <Button variant="contained" ><Typography className={classes.BtnsTypo}>Analyst</Typography></Button></Grid>
+
+          </Grid>
+
+          <Grid item>
+
+            <Typography className={classes.labelTypo}>Articles</Typography>
 
 
 
+          </Grid>
+
+
+
+
+          <Grid item>
+
+            {Followers(FollowersDocs)}
+
+
+
+          </Grid>
 
 
         </Grid>
@@ -259,7 +313,7 @@ export default Portfolio;
 export function FollowerFollowingForm(props) {
   const classes = useStyles();
   return (
-  
+      <div className={classes.divForm}>
     <Grid
       spacing={3}
       container
@@ -274,30 +328,42 @@ export function FollowerFollowingForm(props) {
 
       {/* // User info  */}
       <Grid item xs='8' container alignItems='flex-start' justify='flex-start' direction="column" spacing={0}>
-        <Typography className={classes.typogrFollowerFollwing} variant="subtitle1">
-          {props.name}
-        </Typography>
-        <Typography className={classes.typogrFollowerFollwing} variant="subtitle2">
-          {props.bio}
-        </Typography>
 
-        <Container>
-          <Divider variant="middle" />
-        </Container>
+        <Grid item> <Typography className={classes.titleTypo} variant="subtitle1">
+          {props.title}
+        </Typography>
+        </Grid>
+
+        <Grid item container alignItems='flex-start' justify='flex-start' direction="row" spacing={2}>
+
+          <Grid item>
+            <Typography className={classes.numberOfCommTypo} variant="subtitle2">
+              {props.editors}
+            </Typography>
+
+          </Grid>
+
+          <Grid item>
+            <Typography className={classes.numberOfCommTypo} variant="subtitle2">
+              {props.numberOfComm}
+            </Typography>
+
+          </Grid>
+
+
+
+
+        </Grid>
+        
+
       </Grid>
 
-      {/* //User Follow Button */}
-      <Grid item  >
-        <Button
-          className={classes.FollowBtn2}
-          variant="outlined"
-          color="black"
-        >
-          Follow
-              </Button>
-      </Grid>
+
+
     </Grid>
-    
+    <Divider variant="middle" />
+    </div>
+
   );
 }
 
