@@ -2,10 +2,10 @@ const Sector = require("./Models/SectorModel");
 const { UserInputError } = require("apollo-server");
 const { validateSectorInput } = require("../Auth/validators");
 const {CompanyControl} = require("./companyControl");
-module.exports.SectorControl = {
+
 
 // create Sector
-createSector:async (
+const createSector=async (
     _,
     {
     SectorInput:{
@@ -36,10 +36,10 @@ createSector:async (
 
 
 
-  },
+  };
 
 //Delete Sector
-deleteSector: async (_, { sectorID }) => {
+const deleteSector= async (_, { sectorID }) => {
   
     try {
         const deleteSector = await Sector.findById(sectorID);
@@ -54,8 +54,8 @@ deleteSector: async (_, { sectorID }) => {
     }
  
 
-},
-getSectors:async(_,) => {
+};
+const getSectors=async(_,) => {
 
   try {
     const sectorsdoc = await Sector.find().exec();
@@ -84,8 +84,8 @@ getSectors:async(_,) => {
     throw new Error(err);
   }
 
-},
-editSector:async(_,{SectorInput:{SecnameInput ,SectorID}},) => {
+};
+const editSector=async(_,sectorID,{SectorInput:{SecnameInput}},) => {
   try {
     const sectordoc= await Sector.findById(SectorID).exec();
 
@@ -121,6 +121,13 @@ editSector:async(_,{SectorInput:{SecnameInput ,SectorID}},) => {
   }
 
 
-},
-
 };
+module.exports.SectorControl = {
+  editSector,
+  getSectors,
+  deleteSector,
+  createSector,
+
+
+}
+

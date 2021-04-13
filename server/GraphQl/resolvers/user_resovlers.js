@@ -6,6 +6,7 @@ const {
   getUsers,
   updateUserInfo,
   deleteUser,
+  followUser,
 } = require("../../Auth/AuthControl");
 
 module.exports = {
@@ -16,5 +17,6 @@ module.exports = {
     register,
     updateUserInfo,
     deleteUser,
+    followUser,
   },
 };

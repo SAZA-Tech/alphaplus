@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import PropTypes, { func } from "prop-types";
 import {
   Avatar,
   ButtonBase,
@@ -16,26 +16,39 @@ import { Link as RouterLink } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root: {
     marginLeft: 0,
-    paddingTop : theme.spacing(1),
+    paddingTop: theme.spacing(1),
     paddingLeft: theme.spacing(2),
-      "& hr": {
+    "& hr": {
       margin: theme.spacing(1),
       alignSelf: "stretch",
     },
+    alignItems: "center",
   },
   title: {
-    fontSize: theme.typography.fontSize,
     textDecoration: "none",
     "&:visited": {
       color: theme.palette.common.black,
     },
+    padding: theme.spacing(1),
+  },
+  cardLayout: {
+    marginTop: theme.spacing(2),
+    "& .MuiTypography-h5": {
+      paddingLeft: theme.spacing(2),
+      color: theme.palette.grey[700],
+      paddingTop: theme.spacing(2),
+    },
+    [theme.breakpoints.down("sm")]: {
+      fontSize: theme.typography.fontSize,
+      marginTop: theme.spacing(4),
+    },
   },
 }));
 
-function ContentCards(props) {
+function ContentCard(props) {
   const [state, setState] = useState({
     withAuther: false,
-    crudOtion: true,
+    crudOtion: false,
   });
   useEffect(() => {
     if (props.withAuther)
@@ -46,42 +59,43 @@ function ContentCards(props) {
       setState({
         crudOtion: props.crudOtion,
       });
-  });
+  }, []);
   const classes = useStyles();
   return (
     <div className={classes.root}>
       <Grid
-        spacing={2}
         container
         direction="row"
         justify="flex-start"
         alignItems="flex-start"
       >
-        <Grid item>
-          {state.withAuther ? (
+        {state.withAuther ? (
+          <Grid item>
             <Avatar alt={props.name} src={props.img} />
-          ) : null}
-        </Grid>
+          </Grid>
+        ) : (
+          <div></div>
+        )}
 
         {/* // Content info  */}
-        <Grid item  sm>
-          <Grid item container direction="column" >
+        <Grid item sm>
+          <Grid item container direction="column">
             <Grid item>
               <Typography
                 component={RouterLink}
                 to={props.link}
-                gutterBottom
                 variant="h6"
                 className={classes.title}
               >
                 {props.title}
               </Typography>
+              <Typography variant="subtitle1">{props.bio}</Typography>
             </Grid>
           </Grid>
         </Grid>
         {/* // Crud Buttons */}
         {state.crudOtion ? (
-          <Grid container item xs={2}>
+          <Grid container item>
             <Button variant="contained" color="primary">
               Edit
             </Button>
@@ -91,10 +105,55 @@ function ContentCards(props) {
           </Grid>
         ) : null}
       </Grid>
-      <Divider  variant='fullWidth'/>
-
+      <Divider variant="fullWidth" />
     </div>
   );
 }
+ContentCard.defaultProps = {
+  withAuther: false,
+  crudOtion: false,
+  link: "/",
+};
+ContentCard.propTypes = {
+  withAuther: PropTypes.bool,
+  crudOtion: PropTypes.bool,
+  name: PropTypes.string,
+  img: PropTypes.string,
+  bio: PropTypes.string,
+  title: PropTypes.string,
+  link: PropTypes.string,
+};
+function ContentCardPaper(props) {
+  const classes = useStyles();
 
-export { ContentCards };
+  const ContentCardsItems = () =>
+    props.data.slice(0, props.limit).map((e) => {
+      return (
+        <ContentCard
+          title={e.articleTitle ? e.articleTitle : e.title}
+          name={e.articleAuthor ? e.articleAuthor.name : e.name}
+          img={e.img}
+          bio={e.bio}
+          withAuther={props.auther}
+          link={`/article/${e.id}`}
+        />
+      );
+    });
+  return (
+    <div className={classes.cardLayout}>
+      <Typography variant="h5">{props.title}</Typography>
+      {ContentCardsItems()}
+    </div>
+  );
+}
+ContentCardPaper.defaultProps = {
+  auther: false,
+};
+ContentCardPaper.propTypes = {
+  limit: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  data: PropTypes.array.isRequired,
+  auther: PropTypes.bool.isRequired,
+};
+
+export { ContentCard, ContentCardPaper };
