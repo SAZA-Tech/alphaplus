@@ -20,10 +20,10 @@ import {
   import { useForm } from "../../../../alpha-p-admin/src/util/hooks";
 
 
-const EDIT_SECTOR = gql`
+const CREATE_SECTOR = gql`
 
-mutation editSector($SectorInput: SectorInput!) {
-  editSector(SectorInput:$SectorInput){
+mutation createSector($SectorInput: SectorInput!) {
+    createSector(SectorInput:$SectorInput){
   
     Secname
     
@@ -32,17 +32,17 @@ mutation editSector($SectorInput: SectorInput!) {
 `;
 
 
-  const InputFormSector = (props) => {
+  const AddFormSector = (props) => {
     const [modal, setModal] = useState(false);
     const toggle = () => {
       setModal(!modal);
       console.log(values);
     };
     const { onChange, onSubmit, values } = useForm(CreateSectorInfoCallBack, {
-      SectorID: props.sectorID,
-      SecnameInput:props.Secname,
+      SectorID: null,
+      SecnameInput:null,
     });
-    const [CreateSectorInfo, { loading }] = useMutation(EDIT_SECTOR, {
+    const [CreateSectorInfo, { loading }] = useMutation(CREATE_SECTOR, {
       onError(error) {
         console.log(`Error Happend Updating user info ${error}`);
       },
@@ -84,7 +84,7 @@ mutation editSector($SectorInput: SectorInput!) {
           }}>
 
             <CFormGroup>
-              <CLabel htmlFor="SecnameInput">Old Sector Name:  {values.SecnameInput}	</CLabel>
+              <CLabel htmlFor="SecnameInput">Sector Name</CLabel>
               <CInput
                 id="SecnameInput"
                 name="SecnameInput"
@@ -150,4 +150,4 @@ mutation editSector($SectorInput: SectorInput!) {
 
   } 
 
-  export default InputFormSector
+  export default AddFormSector

@@ -69,21 +69,21 @@ function ContentCard(props) {
         justify="flex-start"
         alignItems="flex-start"
       >
-        <Grid item>
-          {state.withAuther ? (
+        {state.withAuther ? (
+          <Grid item>
             <Avatar alt={props.name} src={props.img} />
-          ) : (
-            <Container />
-          )}
-        </Grid>
+          </Grid>
+        ) : (
+          <div></div>
+        )}
 
         {/* // Content info  */}
         <Grid item sm>
           <Grid item container direction="column">
             <Grid item>
               <Typography
-                // component={RouterLink}
-                // to={props.link == null ? null : props.link}
+                component={RouterLink}
+                to={props.link}
                 variant="h6"
                 className={classes.title}
               >
@@ -112,7 +112,7 @@ function ContentCard(props) {
 ContentCard.defaultProps = {
   withAuther: false,
   crudOtion: false,
-  link: null,
+  link: "/",
 };
 ContentCard.propTypes = {
   withAuther: PropTypes.bool,
@@ -130,11 +130,12 @@ function ContentCardPaper(props) {
     props.data.slice(0, props.limit).map((e) => {
       return (
         <ContentCard
-          title={e.title}
-          name={e.name}
+          title={e.articleTitle ? e.articleTitle : e.title}
+          name={e.articleAuthor ? e.articleAuthor.name : e.name}
           img={e.img}
           bio={e.bio}
           withAuther={props.auther}
+          link={`/article/${e.id}`}
         />
       );
     });

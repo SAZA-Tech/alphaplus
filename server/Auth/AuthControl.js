@@ -143,7 +143,9 @@ module.exports.register = async (
 // Find User
 module.exports.findUser = async (_, { id }) => {
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(id)
+      .populate("followers")
+      .populate("following");
     if (user) {
       return user;
     } else {
