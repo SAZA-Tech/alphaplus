@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(2),
     marginTop: theme.spacing(1),
     paddingTop: theme.spacing(1),
+    padding: theme.spacing(1),
     [theme.breakpoints.up("lg")]: {
       paddingLeft: theme.spacing(6.5),
       paddingRight: theme.spacing(2),
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
   paper2: {
     // width: "100%",
-
+    padding: theme.spacing(2),
     marginTop: theme.spacing(1),
     paddingTop: theme.spacing(3),
     [theme.breakpoints.up("lg")]: {
@@ -168,7 +169,7 @@ function Portfolio() {
             direction="row"
             alignItems
             justify="flex-end"
-            spacing="1"
+            spacing={2}
           >
             <Grid item>
               <Button
@@ -202,16 +203,8 @@ function Portfolio() {
           direction="column"
           // alignItems
           // justify='flex-end'
-      
         >
-          <Grid
-            item
-            container
-            direction="row"
-            // alignItems
-            // justify='flex-end'
-            xs
-          >
+          <Grid item container direction="row" spacing={2} xs>
             <Grid item>
               {" "}
               <Button variant="contained">
@@ -256,12 +249,7 @@ export function FollowerFollowingForm(props) {
   const classes = useStyles();
   return (
     <div className={classes.divForm}>
-      <Grid
-        container
-        direction="row"
-        justify="flex-start"
-        alignItems="center"
-      >
+      <Grid container direction="row" justify="flex-start" alignItems="center">
         {/* // User Avatar  */}
         <Grid item>
           <Avatar
@@ -279,7 +267,6 @@ export function FollowerFollowingForm(props) {
           alignItems="flex-start"
           justify="flex-start"
           direction="column"
-          spacing={0}
         >
           <Grid item>
             {" "}
@@ -294,7 +281,6 @@ export function FollowerFollowingForm(props) {
             alignItems="flex-start"
             justify="flex-start"
             direction="row"
-            spacing={2}
           >
             <Grid item>
               <Typography
@@ -325,7 +311,7 @@ const BigsimilarCompanydummyData = [
   {
     Symbol: "AAPL",
     price: 293,
-    change: +192,
+    change: "4.2(-8%)",
     changePerce: " 20%",
     volume: "10M",
     avgVolume: "10.10M",
@@ -335,7 +321,7 @@ const BigsimilarCompanydummyData = [
   {
     Symbol: "GOOG",
     price: 351,
-    change: -122,
+    change: "4.2(-8%)",
     changePerce: " 20%",
     volume: "10M",
     avgVolume: "10.10M",
@@ -345,7 +331,7 @@ const BigsimilarCompanydummyData = [
   {
     Symbol: "AMZN",
     price: 120,
-    change: +50,
+    change: "4.2(-8%)",
     changePerce: " 20%",
     volume: "10M",
     avgVolume: "10.10M",
@@ -355,7 +341,7 @@ const BigsimilarCompanydummyData = [
   {
     Symbol: "EBSY",
     price: 963,
-    change: +124,
+    change: "4.2(-8%)",
     changePerce: " 20%",
     volume: "10M",
     avgVolume: "10.10M",
@@ -365,7 +351,7 @@ const BigsimilarCompanydummyData = [
   {
     Symbol: "MOZA",
     price: 56,
-    change: -56,
+    change: "4.2(-8%)",
     changePerce: " 20%",
     volume: "10M",
     avgVolume: "10.10M",
@@ -375,7 +361,7 @@ const BigsimilarCompanydummyData = [
   {
     Symbol: "NANI",
     price: 123,
-    change: +21,
+    change: "4.2(-8%)",
     changePerce: " 20%",
     volume: "10M",
     avgVolume: "10.10M",
@@ -385,7 +371,7 @@ const BigsimilarCompanydummyData = [
   {
     Symbol: "AAPL",
     price: 293,
-    change: +192,
+    change: "4.2(-8%)",
     changePerce: " 20%",
     volume: "10M",
     avgVolume: "10.10M",
@@ -395,7 +381,7 @@ const BigsimilarCompanydummyData = [
   {
     Symbol: "GOOG",
     price: 351,
-    change: -122,
+    change: "4.2(-8%)",
     changePerce: " 20%",
     volume: "10M",
     avgVolume: "10.10M",
@@ -405,7 +391,7 @@ const BigsimilarCompanydummyData = [
   {
     Symbol: "AMZN",
     price: 120,
-    change: +50,
+    change: "4.2(-8%)",
     changePerce: " 20%",
     volume: "10M",
     avgVolume: "10.10M",
@@ -415,7 +401,7 @@ const BigsimilarCompanydummyData = [
   {
     Symbol: "EBSY",
     price: 963,
-    change: +124,
+    change: "4.2(-8%)",
     changePerce: " 20%",
     volume: "10M",
     avgVolume: "10.10M",
@@ -425,7 +411,7 @@ const BigsimilarCompanydummyData = [
   {
     Symbol: "MOZA",
     price: 56,
-    change: -56,
+    change: "4.2(-8%)",
     changePerce: " 20%",
     volume: "10M",
     avgVolume: "10.10M",
@@ -435,7 +421,7 @@ const BigsimilarCompanydummyData = [
   {
     Symbol: "NANI",
     price: 123,
-    change: +21,
+    change: "4.2(-8%)",
     changePerce: " 20%",
     volume: "10M",
     avgVolume: "10.10M",
@@ -445,20 +431,19 @@ const BigsimilarCompanydummyData = [
 ];
 
 const companydummyData = [
-  { Symbol: "AAPL", price: 293, changePrice: +192 },
-  { Symbol: "GOOG", price: 351, changePrice: -122 },
-  { Symbol: "AMZN", price: 120, changePrice: +50 },
-  { Symbol: "EBSY", price: 963, changePrice: +124 },
-  { Symbol: "MOZA", price: 56, changePrice: -56 },
-  { Symbol: "NANI", price: 123, changePrice: +21 },
-  { Symbol: "AAPL", price: 293, changePrice: +192 },
-  { Symbol: "GOOG", price: 351, changePrice: -122 },
-  { Symbol: "AMZN", price: 120, changePrice: +50 },
-  { Symbol: "EBSY", price: 963, changePrice: +124 },
-  { Symbol: "MOZA", price: 56, changePrice: -56 },
-  { Symbol: "NANI", price: 123, changePrice: +21 },
+  { Symbol: "AAPL", price: 293, changePrice: "4.2(-8%)" },
+  { Symbol: "GOOG", price: 351, changePrice: "4.2(+8%)" },
+  { Symbol: "AMZN", price: 120, changePrice: "4.2(-8%)" },
+  { Symbol: "EBSY", price: 963, changePrice: "4.2(-8%)" },
+  { Symbol: "MOZA", price: 56, changePrice: "4.2(+3%)" },
+  { Symbol: "NANI", price: 123, changePrice: "4.2(-8%)" },
+  { Symbol: "AAPL", price: 293, changePrice: "4.2(-8%)" },
+  { Symbol: "GOOG", price: 351, changePrice: "4.2(+9%)" },
+  { Symbol: "AMZN", price: 120, changePrice: "4.2(-8%)" },
+  { Symbol: "EBSY", price: 963, changePrice: "4.2(-8%)" },
+  { Symbol: "MOZA", price: 56, changePrice: "4.2(-8%)" },
+  { Symbol: "NANI", price: 123, changePrice: "4.2(-8%)" },
 ];
-
 const contentdummyData = [
   {
     name: "jhon Doe",

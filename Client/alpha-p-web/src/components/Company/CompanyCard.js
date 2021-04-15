@@ -300,9 +300,9 @@ function CompanyCardLine(props) {
         {props.data.map((e) => (
           <CompanyCard
             vertical={true}
-            Symbol={e.symbol}
+            Symbol={e.symbol ? e.symbol : e.Symbol}
             price={e.todayFinance ? e.todayFinance.close : e.price}
-            change={e.change}
+            change={e.change ? e.change : e.changePrice}
             comId={e.id}
           />
         ))}
