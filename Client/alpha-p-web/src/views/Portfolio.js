@@ -94,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
 
 const img = "avatars/7.jpg";
 
-const FollowersDocs = [
+const ArticlesDocs = [
   {
     avatar: img,
     title:
@@ -135,9 +135,9 @@ const FollowersDocs = [
 function Portfolio() {
   const classes = useStyles();
 
-  const Followers = (FollowersDocs) =>
-    FollowersDocs.map((v) => (
-      <FollowerFollowingForm
+  const Articles = (ArticlesDocs) =>
+  ArticlesDocs.map((v) => (
+      <ArticlesForm
         editors={v.editors}
         numberOfComm={v.numberOfComm}
         title={v.title}
@@ -231,19 +231,14 @@ function Portfolio() {
                 <Typography className={classes.BtnsTypo}>News</Typography>
               </Button>
             </Grid>
-            <Grid item>
-              {" "}
-              <Button variant="contained">
-                <Typography className={classes.BtnsTypo}>Analyst</Typography>
-              </Button>
-            </Grid>
+            
           </Grid>
 
           <Grid item>
             <Typography className={classes.labelTypo}>Articles</Typography>
           </Grid>
 
-          <Grid item>{Followers(FollowersDocs)}</Grid>
+          <Grid item>{Articles(ArticlesDocs)}</Grid>
         </Grid>
       </Paper>
     </div>
@@ -252,7 +247,7 @@ function Portfolio() {
 
 export default Portfolio;
 
-export function FollowerFollowingForm(props) {
+export function ArticlesForm(props) {
   const classes = useStyles();
   return (
     <div className={classes.divForm}>
