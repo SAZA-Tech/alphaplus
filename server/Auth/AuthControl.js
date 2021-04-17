@@ -8,6 +8,7 @@ const { validateRegisterInput, validateLoginInput } = require("./validators");
 const { SECRET_KEY } = require("../config");
 const User = require("./UserModel");
 const checkAuth = require("./check-auth");
+const { PortfolioControl } = require("../Company/portfolioControl");
 
 //Generate Auth Token
 function generateToken(user) {
@@ -146,8 +147,22 @@ module.exports.findUser = async (_, { id }) => {
     const user = await User.findById(id)
       .populate("followers")
       .populate("following");
+      var arr = user.portfolios;
+      if(arr==null || arr.length<1){
+        if (user) {
+          return user;
+        } else {
+          throw new Error("User Not Found");
+        }
+      }
+      var portfolios=await PortfolioControl.getPortfolio(_, { portoId: arr[0] });
+      var test =[];
+      test.push(portfolios);
     if (user) {
-      return user;
+      return {
+        portofolio:test,
+        ...user._doc
+      };
     } else {
       throw new Error("User Not Found");
     }

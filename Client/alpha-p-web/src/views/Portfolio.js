@@ -1,11 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import CreateIcon from "@material-ui/icons/Create";
-
-import Typography from "@material-ui/core/Typography";
 import { HomeCard } from "./Home";
-import { Button, Grid, Paper, Avatar, Divider } from "@material-ui/core";
+import { AuthContext } from "../context/auth";
+import {
+  Button,
+  Grid,
+  Paper,
+  Avatar,
+  Divider,
+  CircularProgress,
+} from "@material-ui/core";
+import {
+  CButton,
+} from "@coreui/react";
+import { Link as RouterLink, Redirect } from "react-router-dom";
+import Typography from "@material-ui/core/Typography";
+import { useQuery } from "@apollo/client";
+import { PORTFOLIO_GQL } from "../graphql/Content/portfolioGql";
+import { NetworkStatus } from '@apollo/client';
+import InputFormPort from "../components/Company/inputformport"
+
 
 import {
   CompanyCardLine,
@@ -133,115 +149,169 @@ const FollowersDocs = [
   },
 ];
 
-function Portfolio() {
-  const classes = useStyles();
+function Portfolio(props) {
 
+  const user = useContext(AuthContext);
+  // check if he has porfolio 
+  const classes = useStyles();
+  const [Companies, setCompanies] = useState([]);
+
+
+  const { data, error, loading, refetch, networkStatus } = useQuery(PORTFOLIO_GQL, {
+
+    variables: {
+      id: user.user.id,
+    },
+    onCompleted(data) {
+      setCompanies(data.getCompanies);
+      console.log(data.findUser.username);
+    },
+
+
+  });
+  if (networkStatus === NetworkStatus.refetch) return 'Refetching!';
+  if (loading) return <CircularProgress />;
+  if (error) return <Redirect to="/404" />;
+
+
+  const img = "avatars/7.jpg";
   const Followers = (FollowersDocs) =>
     FollowersDocs.map((v) => (
       <FollowerFollowingForm
-        editors={v.editors}
-        numberOfComm={v.numberOfComm}
-        title={v.title}
-        avatar={v.avatar}
+        editors={v.articleAuthor.name+" ,  "}
+        numberOfComm={"   number of comments    "+v.commentCount}
+        title={v.articleTitle}
+        avatar={img}
       />
     ));
 
-  return (
-    <div className={classes.rootCom}>
-      {/* Compnany line + 2 Content cards  */}
 
-      <Paper className={classes.paper1}>
-        <Grid container direction="column">
-          {/* Company Line */}
+  const CompanyHeader = () => {
+    return (
+      <div className={classes.rootCom}>
+        {/* Compnany line + 2 Content cards  */}
 
-          <CompanyCardLine data={companydummyData} />
+        <Paper className={classes.paper1}>
+          <Grid container direction="column">
+            {/* Company Line */}
 
-          <Grid item xs>
-            <BigMiniCompanyCardTable
-              data={BigsimilarCompanydummyData}
-              limit={4}
-              minWidth={400}
-            />
+            <CompanyCardLine data={data.getCompanies} />
+
+            <Grid item xs>
+              <BigMiniCompanyCardTable
+                data={data.findUser.portofolio[0].followedCompanies}
+                limit={4}
+                minWidth={400}
+              />
+            </Grid>
+            <Grid
+              item
+              container
+              direction="row"
+              alignItems
+              justify="flex-end"
+              spacing={2}
+            >
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  // style={{color:""}}
+                  className={classes.AddEditBtn}
+                  startIcon={<CreateIcon />}
+                >
+                  EDIT
+                </Button>
+              </Grid>
+
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.AddEditBtn}
+                  startIcon={<AddIcon />}
+                >
+                  Add Company
+              </Button>
+              </Grid>
+            </Grid>
           </Grid>
+        </Paper>
+
+        <Paper className={classes.paper2}>
           <Grid
-            item
             container
-            direction="row"
-            alignItems
-            justify="flex-end"
-            spacing={2}
-          >
-            <Grid item>
-              <Button
-                variant="contained"
-                color="secondary"
-                // style={{color:""}}
-                className={classes.AddEditBtn}
-                startIcon={<CreateIcon />}
-              >
-                Edit Portfolio
-              </Button>
-            </Grid>
-
-            <Grid item>
-              <Button
-                variant="contained"
-                color="primary"
-                className={classes.AddEditBtn}
-                startIcon={<AddIcon />}
-              >
-                Add Company
-              </Button>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Paper>
-
-      <Paper className={classes.paper2}>
-        <Grid
-          container
-          direction="column"
+            direction="column"
           // alignItems
           // justify='flex-end'
-        >
-          <Grid item container direction="row" spacing={2} xs>
-            <Grid item>
-              {" "}
-              <Button variant="contained">
-                <Typography className={classes.BtnsTypo}>Latest</Typography>
-              </Button>
-            </Grid>
-            <Grid item>
-              {" "}
-              <Button variant="contained">
-                <Typography className={classes.BtnsTypo}>Articles</Typography>
-              </Button>
+          >
+            <Grid item container direction="row" spacing={2} xs>
+              <Grid item>
+                {" "}
+                <Button variant="contained">
+                  <Typography className={classes.BtnsTypo}>Latest</Typography>
+                </Button>
+              </Grid>
+              <Grid item>
+                {" "}
+                <Button variant="contained">
+                  <Typography className={classes.BtnsTypo}>Articles</Typography>
+                </Button>
+              </Grid>
+
+              <Grid item>
+                {" "}
+                <Button variant="contained">
+                  <Typography className={classes.BtnsTypo}>News</Typography>
+                </Button>
+              </Grid>
+              <Grid item>
+                {" "}
+                <Button variant="contained">
+                  <Typography className={classes.BtnsTypo}>Analyst</Typography>
+                </Button>
+              </Grid>
             </Grid>
 
             <Grid item>
-              {" "}
-              <Button variant="contained">
-                <Typography className={classes.BtnsTypo}>News</Typography>
-              </Button>
+              <Typography className={classes.labelTypo}>Articles</Typography>
             </Grid>
-            <Grid item>
-              {" "}
-              <Button variant="contained">
-                <Typography className={classes.BtnsTypo}>Analyst</Typography>
-              </Button>
-            </Grid>
+
+            <Grid item>{Followers(data.findUser.portofolio[0].relatedArticles)}</Grid>
           </Grid>
+        </Paper>
+      </div>
+    );
+  }
 
-          <Grid item>
-            <Typography className={classes.labelTypo}>Articles</Typography>
-          </Grid>
 
-          <Grid item>{Followers(FollowersDocs)}</Grid>
-        </Grid>
-      </Paper>
-    </div>
-  );
+
+  if (data.findUser.portofolio == null || data.findUser.portofolio.length < 1) {
+    return (
+      <div>
+      <Grid item>
+        <p>please create portfolio</p>
+        <CButton >
+
+          <InputFormPort buttonName="Edit"
+          />
+        </CButton>
+      </Grid>
+      </div>
+    );
+
+  } else {
+
+    return (
+      <div>
+
+        <Grid item>{CompanyHeader()}</Grid>
+      </div>
+    );
+  }
 }
+
+
 
 export default Portfolio;
 

@@ -387,14 +387,14 @@ export function BigMiniCompanyCardTable(props) {
         <TableBody>
           {props.data.slice(0, props.limit).map((e) => (
             <CompanyCard
-              Symbol={e.Symbol}
-              price={e.price}
+              Symbol={e.symbol}
+              price={e.todayFinance.close}
               change={e.change}
-              changePerce={e.changePerce}
-              volume={e.volume}
-              avgVolume={e.avgVolume}
-              prevClose={e.prevClose}
-              open={e.open}
+              changePerce={0}
+              volume={e.todayFinance.volume}
+              avgVolume={0}
+              prevClose={0}
+              open={e.todayFinance.Open}
               horizontal
             />
           ))}

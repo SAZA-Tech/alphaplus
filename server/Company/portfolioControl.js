@@ -1,5 +1,6 @@
 const { UserInputError } = require("apollo-server-errors");
 const { findUser } = require("../Auth/AuthControl");
+const yes = require("../Auth/UserModel");
 const checkAuth = require("../Auth/check-auth");
 const { validateSymbols } = require("../Auth/validators");
 const { CompanyControl } = require("./companyControl");
@@ -16,16 +17,18 @@ const getArticleWithTags = require("../Content/getArticlesTags");
  * @param {*} context checkAuth
  * @returns {object} portfolio
  */
-const createPortfolio = async (_, { name, tags }, context) => {
+const createPortfolio = async (_, { name, tags },context) => {
   const auth = checkAuth(context);
   const { errors, valid } = validateSymbols({ tags });
   if (!valid) {
     throw new UserInputError(`Error in tags ${errors}`);
   }
 
-  const user = await findUser(_, { id: auth.id });
+  // const user = await findUser(_, { id:"60747c3595129a3bdc7678db"});
+  const user= await yes.findById(auth.id).exec();
+  // console.log(user);
 
-  if (companies) {
+  if (valid) {
     const newPorto = new Portfolio({
       name: name,
       follwedTags: tags,
