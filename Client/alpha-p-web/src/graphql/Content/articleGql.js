@@ -37,6 +37,7 @@ export const GET_ARTICLE = gql`
         createdAt
         email
         id
+        isFollowed @client
       }
       articleBody
       articleTags

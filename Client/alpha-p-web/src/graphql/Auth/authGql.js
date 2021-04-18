@@ -36,10 +36,12 @@ export const PROFILE_GQL = gql`
       followers {
         id
         name
+        isFollowed @client
       }
       following {
         id
         name
+        isFollowed @client
       }
       isFollowed @client
     }

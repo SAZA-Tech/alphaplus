@@ -234,10 +234,9 @@ function CompanyCard(props) {
             {props.price}
           </Typography>
         </TableCell>{" "}
-        <TableCell >
+        <TableCell>
           <ChangePriceValue changePrice={props.change} />
         </TableCell>
-        
         <TableCell>
           <Typography variant="subtitle2" className={classes.tableContent}>
             {props.volume}
@@ -373,7 +372,7 @@ export function BigMiniCompanyCardTable(props) {
             <TableCell style={{ fontWeight: "400" }}>Company</TableCell>
             <TableCell style={{ fontWeight: "400" }}>Price</TableCell>
             <TableCell style={{ fontWeight: "400" }}>Change</TableCell>
-            
+
             <TableCell style={{ fontWeight: "400" }}>Volume</TableCell>
             <TableCell style={{ fontWeight: "400" }}>Avg.Volume</TableCell>
             <TableCell style={{ fontWeight: "400" }}>Prev.close</TableCell>

@@ -113,15 +113,7 @@ export function UserInfo(props) {
   const history = useHistory();
   const classes = useStyles();
   const { user } = useContext(AuthContext);
-  // const [followed, setFollowed] = useState(props.isFollowed);
   const { followed, toggleFollow } = useFollow(props.id, props.isFollowed);
-  // const handleFollow = () => {
-  //   if (!loggedInUser) history.push("/login");
-  //   else {
-  //     useFollow(props.id);
-  //     setFollowed(!followed);
-  //   }
-  // };
 
   return (
     <Grid container direction="column" justify="flex-start" alignItems="center">
@@ -179,9 +171,10 @@ UserInfo.propTypes = {
 }
 export function FollowerFollowingForm(props) {
   const classes = useStyles();
+  const { followed, toggleFollow } = useFollow(props.userId, props.isFollowed);
   return (
     <Grid
-      spacing={3}
+      spacing={2}
       container
       direction="row"
       justify="flex-start"
@@ -199,12 +192,11 @@ export function FollowerFollowingForm(props) {
       {/* // User info  */}
       <Grid
         item
-        xs="8"
+        xs={8}
         container
         alignItems="flex-start"
         justify="flex-start"
         direction="column"
-        spacing={0}
       >
         <Typography
           className={classes.typogrFollowerFollwing}
@@ -229,10 +221,19 @@ export function FollowerFollowingForm(props) {
 
       {/* //User Follow Button */}
       <Grid item>
-        <Button className={classes.FollowBtn2} variant="outlined" color="black">
-          Follow
+        <Button
+          className={classes.FollowBtn2}
+          variant="outlined"
+          color="primary"
+          onClick={toggleFollow}
+        >
+          {followed ? "Unfollow" : "Follow"}
         </Button>
       </Grid>
     </Grid>
   );
 }
+FollowerFollowingForm.defaultProps = {};
+FollowerFollowingForm.propTypes = {
+  isFollowed: PropTypes.bool,
+};

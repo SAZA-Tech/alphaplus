@@ -132,16 +132,19 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(21),
     // height: theme.spacing(14),
     padding: theme.spacing(1),
+    marginBottom: theme.spacing(1),
 
     [theme.breakpoints.between("sm", "md")]: {
       width: theme.spacing(13.5),
       height: theme.spacing(21.5),
       padding: theme.spacing(0.5),
+      marginBottom: theme.spacing(1),
     },
     [theme.breakpoints.between("md", "xl")]: {
       width: theme.spacing(17),
       height: theme.spacing(29),
       padding: theme.spacing(1.5),
+      marginRight: theme.spacing(2),
     },
   },
 
@@ -234,13 +237,7 @@ const EndUserProfile = (props) => {
   if (!data) return <Redirect to="404" />;
   return (
     <div className={classes.root}>
-      <Grid
-        container
-        direction="row"
-        justify="center"
-        alignItems="flex-start"
-        spacing={1}
-      >
+      <Grid container direction="row" justify="center" alignItems="flex-start">
         <Grid item>
           <Paper className={classes.paper1} elevation={2}>
             <UserInfo
@@ -292,6 +289,7 @@ export function UserProfileDetails(props) {
         bio={v.bio ? v.bio : "Default Bio"}
         avatar={v.avatar}
         userId={v.id}
+        isFollowed={v.isFollowed}
       />
     ));
 
@@ -302,6 +300,7 @@ export function UserProfileDetails(props) {
         bio={v.bio ? v.bio : "Default Bio"}
         avatar={v.avatar}
         userId={v.id}
+        isFollowed={v.isFollowed}
       />
     ));
 

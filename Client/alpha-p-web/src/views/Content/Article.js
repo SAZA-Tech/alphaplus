@@ -176,6 +176,7 @@ const ArticleSection = (props) => {
           img={props.auther.img}
           name={props.auther.username}
           userId={props.auther.id}
+          isFollowed={props.auther.isFollowed}
         />
         {/* Title + Body Container */}
         <Container>
@@ -250,6 +251,8 @@ const ArticleSection = (props) => {
           name={props.auther.name}
           username={props.auther.username}
           bio={analystInfo.bio}
+          isFollowed={props.auther.isFollowed}
+          userId={props.auther.id}
         />
       </Paper>
     </Container>

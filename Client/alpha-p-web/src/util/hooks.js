@@ -1,5 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
 import { useContext, useState } from "react";
+import { useHistory } from "react-router";
 import { AuthContext } from "../context/auth";
 import { FOLLOW_USER_GQL } from "../graphql/Auth/authGql";
 import { currentFollwedUsers } from "../storage/cache";
@@ -25,10 +26,15 @@ export const useForm = (callback, initialState = {}) => {
 
 export const useFollow = (id, initialState = false) => {
   const [followed, setFollowed] = useState(initialState);
-
+  const { user } = useContext(AuthContext);
+  const history = useHistory();
   const toggleFollow = () => {
-    setFollowed(!followed);
-    callFollow();
+    if (user) {
+      setFollowed(!followed);
+      callFollow();
+    } else {
+      history.push("/login");
+    }
   };
   // const {user}=useContext(AuthContext);
   // follow mutaion ==> updates cache
