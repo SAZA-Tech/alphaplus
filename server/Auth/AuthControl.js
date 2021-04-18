@@ -28,7 +28,10 @@ module.exports.login = async (_, { email, password }) => {
     throw new UserInputError("Errors", { errors });
   }
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email })
+    .populate("followers")
+    .populate("following")
+    .populate("portfolios");
 
   if (!user) {
     errors.general = "User not found";

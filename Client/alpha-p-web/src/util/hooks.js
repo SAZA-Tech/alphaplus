@@ -1,13 +1,9 @@
 import { gql, useMutation } from "@apollo/client";
-import { useState } from "react";
-const s3SignMutation = gql`
-  mutation($filename: String!, $filetype: String!) {
-    signS3(filename: $filename, filetype: $filetype) {
-      url
-      signedRequest
-    }
-  }
-`;
+import { useContext, useState } from "react";
+import { AuthContext } from "../context/auth";
+import { FOLLOW_USER_GQL } from "../graphql/Auth/authGql";
+import { currentFollwedUsers } from "../storage/cache";
+
 export const useForm = (callback, initialState = {}) => {
   const [values, setValues] = useState(initialState);
 
@@ -27,13 +23,26 @@ export const useForm = (callback, initialState = {}) => {
   };
 };
 
-// export const useS3Url = (callback, initialState = {}) => {
-//   const [values, setValues] = useState(initialState);
+export const useFollow = (id, initialState = false) => {
+  const [followed, setFollowed] = useState(initialState);
 
-//   const onRequest = (event) => {
-//     const response = useMutation(s3SignMutation, {
-//       variables: values,
-      
-//     });
-//   };
-// };
+  const toggleFollow = () => {
+    setFollowed(!followed);
+    callFollow();
+  };
+  // const {user}=useContext(AuthContext);
+  // follow mutaion ==> updates cache
+  const [callFollow, { loading }] = useMutation(FOLLOW_USER_GQL, {
+    variables: {
+      userId: id,
+    },
+    update(_, { data: { followUser: currentUser } }) {
+      currentFollwedUsers(currentUser.following);
+      console.log(currentFollwedUsers());
+    },
+  });
+  return {
+    followed,
+    toggleFollow,
+  };
+};

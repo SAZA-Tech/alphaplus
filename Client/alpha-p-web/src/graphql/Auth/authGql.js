@@ -7,6 +7,9 @@ export const LOGIN_USER = gql`
       username
       createdAt
       token
+      following {
+        id
+      }
     }
   }
 `;
@@ -38,6 +41,7 @@ export const PROFILE_GQL = gql`
         id
         name
       }
+      isFollowed @client
     }
     getArticles(
       filter: { userId: $id, articleId: null, companyId: null, tags: null }
@@ -48,6 +52,17 @@ export const PROFILE_GQL = gql`
     getComments(filter: { userId: $id }) {
       commentBody
       id
+      createdAt
+    }
+  }
+`;
+export const FOLLOW_USER_GQL = gql`
+  mutation MyMutation($userId: ID = "") {
+    followUser(userId: $userId) {
+      id
+      following {
+        id
+      }
     }
   }
 `;

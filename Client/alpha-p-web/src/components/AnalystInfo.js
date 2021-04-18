@@ -9,6 +9,7 @@ import {
   Container,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { Link as RouterLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,7 +41,13 @@ export function ArticleAutherInfo(props) {
         <Grid item xs={4} sm spacing={0}>
           <Grid item xs container direction="column" spacing={0}>
             <Grid item xs>
-              <Typography gutterBottom variant="subtitle1">
+              <Typography
+                gutterBottom
+                variant="subtitle1"
+                component={RouterLink}
+                style={{ textDecoration: "none", color: "black" }}
+                to={`/userProfile/${props.userId}`}
+              >
                 {props.name}
               </Typography>
               <Typography variant="subtitle2" gutterBottom noWrap>
@@ -59,7 +66,9 @@ export function ArticleAutherInfo(props) {
     </Container>
   );
 }
-
+ArticleAutherInfo.defaultProps = {
+  userId: "04404246424",
+};
 ArticleAutherInfo.propTypes = {};
 
 export function ArticleAutherInfoExpanded(props) {
@@ -80,15 +89,13 @@ export function ArticleAutherInfoExpanded(props) {
         <Grid item xs={4} sm spacing={0}>
           <Grid item xs container direction="column" spacing={0}>
             <Grid item xs sm>
-              <Typography  variant="body1">
+              <Typography variant="body1">
                 {props.name == null ? "Name Null" : props.name}
               </Typography>
-              <Typography variant="caption"  noWrap>
+              <Typography variant="caption" noWrap>
                 {props.username}
               </Typography>
-              <Typography variant="body2" >
-                {props.bio}
-              </Typography>
+              <Typography variant="body2">{props.bio}</Typography>
             </Grid>
           </Grid>
         </Grid>

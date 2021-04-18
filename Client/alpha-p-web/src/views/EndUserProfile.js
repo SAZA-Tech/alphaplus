@@ -21,6 +21,7 @@ import {
 import { Redirect, useParams } from "react-router";
 import { useQuery } from "@apollo/client";
 import { PROFILE_GQL } from "../graphql/Auth/authGql";
+import CommentComponentBody from "../components/Content/CommentComponents";
 
 const img = "avatars/7.jpg";
 const userInfo = {
@@ -230,6 +231,7 @@ const EndUserProfile = (props) => {
   });
   if (error) return <Redirect to="404" />;
   if (loading) return <CircularProgress />;
+  if (!data) return <Redirect to="404" />;
   return (
     <div className={classes.root}>
       <Grid
@@ -242,9 +244,12 @@ const EndUserProfile = (props) => {
         <Grid item>
           <Paper className={classes.paper1} elevation={2}>
             <UserInfo
+              id={userId}
               img={userInfo.img}
               name={data.findUser.name}
               bio={userInfo.bio}
+              userId={data.findUser.id}
+              isFollowed={data.findUser.isFollowed}
             />
           </Paper>
         </Grid>
@@ -252,6 +257,7 @@ const EndUserProfile = (props) => {
         <Grid item xs sm md lg={8}>
           <Paper className={classes.paper2} elevation={2}>
             <UserProfileDetails
+              name={data.findUser.name}
               followers={data.findUser.followers}
               following={data.findUser.following}
               comments={data.getComments}
@@ -285,6 +291,7 @@ export function UserProfileDetails(props) {
         name={v.name}
         bio={v.bio ? v.bio : "Default Bio"}
         avatar={v.avatar}
+        userId={v.id}
       />
     ));
 
@@ -294,6 +301,7 @@ export function UserProfileDetails(props) {
         name={v.name}
         bio={v.bio ? v.bio : "Default Bio"}
         avatar={v.avatar}
+        userId={v.id}
       />
     ));
 
@@ -368,7 +376,9 @@ export function UserProfileDetails(props) {
                     </Typography>
                   }
                   secondary={
-                    <Typography className={classes.typogrLabel}>500</Typography>
+                    <Typography className={classes.typogrLabel}>
+                      {props.comments.length}
+                    </Typography>
                   }
                 />
               </List>
@@ -385,7 +395,9 @@ export function UserProfileDetails(props) {
                     </Typography>
                   }
                   secondary={
-                    <Typography className={classes.typogrLabel}>500</Typography>
+                    <Typography className={classes.typogrLabel}>
+                      {props.followers.length}
+                    </Typography>
                   }
                 />
               </List>
@@ -402,7 +414,9 @@ export function UserProfileDetails(props) {
                     </Typography>
                   }
                   secondary={
-                    <Typography className={classes.typogrLabel}>500</Typography>
+                    <Typography className={classes.typogrLabel}>
+                      {props.following.length}
+                    </Typography>
                   }
                 />
               </List>
@@ -419,7 +433,9 @@ export function UserProfileDetails(props) {
                     </Typography>
                   }
                   secondary={
-                    <Typography className={classes.typogrLabel}>500</Typography>
+                    <Typography className={classes.typogrLabel}>
+                      {props.articles.length}
+                    </Typography>
                   }
                 />
               </List>
@@ -449,11 +465,17 @@ export function UserProfileDetails(props) {
 
         {value === 0 && (
           <Container>
-            {<HomeCard dataLimit={4} data={props.comments} btnText="More" />}
+            {props.comments.map((e) => (
+              <CommentComponentBody
+                body={e.commentBody}
+                date={e.createdAt}
+                name={props.name}
+              />
+            ))}
           </Container>
         )}
-        {value === 1 && <Container>{Followers(props.following)}</Container>}
-        {value === 2 && <Container>{Following(props.followers)}</Container>}
+        {value === 1 && <Container>{Followers(props.followers)}</Container>}
+        {value === 2 && <Container>{Following(props.following)}</Container>}
         {value === 3 && (
           <Container>
             {<HomeCard dataLimit={4} data={props.articles} btnText="More" />}

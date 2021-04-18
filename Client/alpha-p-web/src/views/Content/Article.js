@@ -175,6 +175,7 @@ const ArticleSection = (props) => {
         <ArticleAutherInfo
           img={props.auther.img}
           name={props.auther.username}
+          userId={props.auther.id}
         />
         {/* Title + Body Container */}
         <Container>
