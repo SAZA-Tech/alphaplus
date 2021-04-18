@@ -18,7 +18,21 @@ import {
 import { gql, useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import { useForm } from "../../util/hooks";
+import { fade, makeStyles } from "@material-ui/core/styles";
+import { Link as RouterLink, Redirect } from "react-router-dom";
 
+const useStyles = makeStyles((theme) => ({
+
+  paper: {
+    marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+
+
+
+}));
 const CREATE_PORT = gql`
 
 mutation createPortfolio(
@@ -31,7 +45,10 @@ mutation createPortfolio(
 }
 `;
 
-const InputFormPort= (props) => {
+
+const InputFormPort = (props) => {
+  const classes = useStyles();
+
   const [modal, setModal] = useState(false);
   const toggle = () => {
     setModal(!modal);
@@ -55,28 +72,30 @@ const InputFormPort= (props) => {
   }
   return (
     <>
-      <CButton name=""
-        onClick={toggle}
-        size="sm" color="primary"
-      >{props.buttonName} </CButton>
-      <CModal
-        show={modal}
-        onClose={toggle}
-      >
-        <CModalHeader closeButton>
-        </CModalHeader>
-
+      
         {loading ? (
           <CSpinner></CSpinner>
         ) : (
+          <div className={classes.paper}>
           <CModalBody>
-            <CContainer>
+            <CContainer className="" >
               <CRow>
                 <CCol sm="12">
-                  <CForm onSubmit>
+                  <CForm onSubmit={(event)=>{
+                    event.preventDefault();
+                    var arr=[];
+                    arr.push(values.tags);
+                    console.log(arr[0]);
+                    CreateCompanyInfo({variables:{
+                      name:values.name,
+                      tags:arr,
+                    }});
+                    
+                    <Redirect to="/portfolio" />
+                  }}>
 
                     <CFormGroup>
-                      <CLabel htmlFor="name">  name</CLabel>
+                      <CLabel htmlFor="name">  name  {values.name}</CLabel>
                       <CInput
                         id="name"
                         name="name"
@@ -88,7 +107,7 @@ const InputFormPort= (props) => {
                     </CFormGroup>
 
                     <CFormGroup>
-                      <CLabel htmlFor="tags">tags</CLabel>
+                      <CLabel htmlFor="tags">tags {values.tags}</CLabel>
                       <CInput
                         name="tags"
                         id="tags"
@@ -99,23 +118,19 @@ const InputFormPort= (props) => {
                     </CFormGroup>
                     <CButton color="primary" type="submit">
                       Submit
-                    </CButton>{" "}
-                    <CButton color="secondary" onClick={toggle}>
-                      Cancel
                     </CButton>
-
-
                   </CForm>
                 </CCol>
               </CRow>
             </CContainer>
           </CModalBody>
-
+          </div>
         )}
         <CModalFooter>
 
         </CModalFooter>
-      </CModal>
+      
+      
     </>
   )
 

@@ -21,8 +21,6 @@ import { useQuery } from "@apollo/client";
 import { PORTFOLIO_GQL } from "../graphql/Content/portfolioGql";
 import { NetworkStatus } from '@apollo/client';
 import InputFormPort from "../components/Company/inputformport"
-
-
 import {
   CompanyCardLine,
   BigMiniCompanyCardTable,
@@ -56,6 +54,12 @@ const useStyles = makeStyles((theme) => ({
       paddingLeft: theme.spacing(6.5),
       paddingRight: theme.spacing(2),
     },
+  },
+  paper: {
+    marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
 
   paper2: {
@@ -109,52 +113,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const img = "avatars/7.jpg";
-
-const FollowersDocs = [
-  {
-    avatar: img,
-    title:
-      "Amazon And Disney Move Sports Streaming Down The Field As NFL Finalizes New Deals",
-    editors: "Editors' PickScott Galloway",
-    numberOfComm: "18 Comments",
-  },
-  {
-    avatar: img,
-    title:
-      "Amazon And Disney Move Sports Streaming Down The Field As NFL Finalizes New Deals",
-    editors: "Editors' PickScott Galloway",
-    numberOfComm: "18 Comments",
-  },
-  {
-    avatar: img,
-    title:
-      "Amazon And Disney Move Sports Streaming Down The Field As NFL Finalizes New Deals",
-    editors: "Editors' PickScott Galloway",
-    numberOfComm: "18 Comments",
-  },
-  {
-    avatar: img,
-    title:
-      "Amazon And Disney Move Sports Streaming Down The Field As NFL Finalizes New Deals",
-    editors: "Editors' PickScott Galloway",
-    numberOfComm: "18 Comments",
-  },
-  {
-    avatar: img,
-    title:
-      "Amazon And Disney Move Sports Streaming Down The Field As NFL Finalizes New Deals",
-    editors: "Editors' PickScott Galloway",
-    numberOfComm: "18 Comments",
-  },
-];
 
 function Portfolio(props) {
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const togglePopup = () => {
+    setIsOpen(!isOpen);
+  }
   const user = useContext(AuthContext);
   // check if he has porfolio 
   const classes = useStyles();
   const [Companies, setCompanies] = useState([]);
+
+  const Popup = props => {
+    return (
+      <div className="popup-box">
+        <div className="box">
+          <span className="close-icon" onClick={props.handleClose}>x</span>
+          {props.content}
+        </div>
+      </div>
+    );
+  };
 
 
   const { data, error, loading, refetch, networkStatus } = useQuery(PORTFOLIO_GQL, {
@@ -178,8 +159,8 @@ function Portfolio(props) {
   const Followers = (FollowersDocs) =>
     FollowersDocs.map((v) => (
       <FollowerFollowingForm
-        editors={v.articleAuthor.name+" ,  "}
-        numberOfComm={"   number of comments    "+v.commentCount}
+        editors={v.articleAuthor.name + " ,  "}
+        numberOfComm={"   number of comments    " + v.commentCount}
         title={v.articleTitle}
         avatar={img}
       />
@@ -288,15 +269,38 @@ function Portfolio(props) {
 
   if (data.findUser.portofolio == null || data.findUser.portofolio.length < 1) {
     return (
-      <div>
-      <Grid item>
-        <p>please create portfolio</p>
-        <CButton >
+      // <div>
+      // <Grid item>
+      //   <p>please create portfolio</p>
+      //   <CButton >
 
-          <InputFormPort buttonName="Edit"
-          />
-        </CButton>
-      </Grid>
+      //     <InputFormPort buttonName="Edit"
+      //     />
+      //   </CButton>
+      // </Grid>
+      // </div>
+      <div className={classes.paper}>
+        <p>Please create a portfolio</p>
+        <Grid item>
+          <Button
+            variant="contained"
+            color="secondary"
+            value="Create Portfolio"
+            className={classes.AddEditBtn}
+            startIcon={<CreateIcon />}
+            onClick={togglePopup}
+          >
+            Create Portfolio
+                </Button>
+        </Grid>
+        {isOpen && <Popup
+          content={<>
+
+            <InputFormPort></InputFormPort>
+
+          </>}
+          handleClose={togglePopup}
+        />}
       </div>
     );
 
@@ -376,173 +380,3 @@ export function FollowerFollowingForm(props) {
     </div>
   );
 }
-
-const BigsimilarCompanydummyData = [
-  {
-    Symbol: "AAPL",
-    price: 293,
-    change: "4.2(-8%)",
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "GOOG",
-    price: 351,
-    change: "4.2(-8%)",
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "AMZN",
-    price: 120,
-    change: "4.2(-8%)",
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "EBSY",
-    price: 963,
-    change: "4.2(-8%)",
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "MOZA",
-    price: 56,
-    change: "4.2(-8%)",
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "NANI",
-    price: 123,
-    change: "4.2(-8%)",
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "AAPL",
-    price: 293,
-    change: "4.2(-8%)",
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "GOOG",
-    price: 351,
-    change: "4.2(-8%)",
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "AMZN",
-    price: 120,
-    change: "4.2(-8%)",
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "EBSY",
-    price: 963,
-    change: "4.2(-8%)",
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "MOZA",
-    price: 56,
-    change: "4.2(-8%)",
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "NANI",
-    price: 123,
-    change: "4.2(-8%)",
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-];
-
-const companydummyData = [
-  { Symbol: "AAPL", price: 293, changePrice: "4.2(-8%)" },
-  { Symbol: "GOOG", price: 351, changePrice: "4.2(+8%)" },
-  { Symbol: "AMZN", price: 120, changePrice: "4.2(-8%)" },
-  { Symbol: "EBSY", price: 963, changePrice: "4.2(-8%)" },
-  { Symbol: "MOZA", price: 56, changePrice: "4.2(+3%)" },
-  { Symbol: "NANI", price: 123, changePrice: "4.2(-8%)" },
-  { Symbol: "AAPL", price: 293, changePrice: "4.2(-8%)" },
-  { Symbol: "GOOG", price: 351, changePrice: "4.2(+9%)" },
-  { Symbol: "AMZN", price: 120, changePrice: "4.2(-8%)" },
-  { Symbol: "EBSY", price: 963, changePrice: "4.2(-8%)" },
-  { Symbol: "MOZA", price: 56, changePrice: "4.2(-8%)" },
-  { Symbol: "NANI", price: 123, changePrice: "4.2(-8%)" },
-];
-const contentdummyData = [
-  {
-    name: "jhon Doe",
-    img: "Jh",
-    title: "This a test dummy title",
-    bio: "simpleBio",
-  },
-  {
-    name: "Ziad Fnan",
-    img: "Zi",
-    title: "Don't Miss This intersting analyst",
-    bio: "simpleBio",
-  },
-  {
-    name: "Abo Motlaq",
-    img: "AH",
-    title: "I only love apple products",
-    bio: "simpleBio",
-  },
-  {
-    name: "Aziz Amir",
-    img: "AA",
-    title: "Play it cool with your stocks",
-    bio: "simpleBio",
-  },
-  {
-    name: "Saleh Mogren",
-    img: "SM",
-    title: "How to write dummy data like a pro",
-    bio: "simpleBio",
-  },
-];

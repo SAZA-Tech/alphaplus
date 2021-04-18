@@ -26,7 +26,7 @@ const createPortfolio = async (_, { name, tags },context) => {
 
   // const user = await findUser(_, { id:"60747c3595129a3bdc7678db"});
   const user= await yes.findById(auth.id).exec();
-  // console.log(user);
+  console.log(user);
 
   if (valid) {
     const newPorto = new Portfolio({
