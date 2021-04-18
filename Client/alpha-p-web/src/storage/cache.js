@@ -8,9 +8,12 @@ export const cache = new InMemoryCache({
           // read the reactive variable of the current logged in user
           read(_, { variables }) {
             const id = JSON.stringify(variables.id);
-            const result = currentFollwedUsers().find(
-              (v) => JSON.stringify(v.id) == id
-            );
+            console.log(id);
+            console.log(currentFollwedUsers());
+
+            const result = currentFollwedUsers().find((v) => {
+              return JSON.stringify(v.id) == id;
+            });
             return result ? true : false;
           },
         },
