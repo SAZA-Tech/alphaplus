@@ -21,6 +21,7 @@ import { useQuery } from "@apollo/client";
 import { PORTFOLIO_GQL } from "../graphql/Content/portfolioGql";
 import { NetworkStatus } from '@apollo/client';
 import InputFormPort from "../components/Company/inputformport"
+import EditFormport from "../components/Company/edfitformport"
 import {
   CompanyCardLine,
   BigMiniCompanyCardTable,
@@ -193,17 +194,29 @@ function Portfolio(props) {
               justify="flex-end"
               spacing={2}
             >
-              <Grid item>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  // style={{color:""}}
-                  className={classes.AddEditBtn}
-                  startIcon={<CreateIcon />}
-                >
-                  EDIT
+        <Grid item>
+          <Button
+            variant="contained"
+            color="secondary"
+            value="Create Portfolio"
+            className={classes.AddEditBtn}
+            startIcon={<CreateIcon />}
+            onClick={togglePopup}
+          >
+            Edit
                 </Button>
-              </Grid>
+        </Grid>
+        {isOpen && <Popup
+          content={<>
+
+            <EditFormport
+            portoId={data.findUser.portofolio[0].id}
+
+            ></EditFormport>
+
+          </>}
+          handleClose={togglePopup}
+        />}
             </Grid>
           </Grid>
         </Paper>

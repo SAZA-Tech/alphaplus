@@ -28,6 +28,7 @@ query HomePageQuery(
    username
   portofolio{
     name
+    id
     followedCompanies{
       symbol
       comname
