@@ -1,25 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import {
-  CModalHeader,
-  CModalBody,
-  CModalFooter,
-  CButton,
-  CModal,
-  CContainer,
-  CCol,
-  CForm,
-  CFormGroup,
-  CLabel,
-  CInput,
-  CRow,
-  CSelect,
-  CSpinner,
-} from "@coreui/react";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
 import { gql, useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import { useForm } from "../../util/hooks";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import { Link as RouterLink, Redirect } from "react-router-dom";
+import { CircularProgress } from "@material-ui/core";
+
 
 const useStyles = makeStyles((theme) => ({
 
@@ -29,7 +17,20 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
   },
-
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: "100%",
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+  GTsubmit: {
+    margin: theme.spacing(3, 0, 0),
+  },
 
 
 }));
@@ -72,65 +73,64 @@ const InputFormPort = (props) => {
   }
   return (
     <>
-      
-        {loading ? (
-          <CSpinner></CSpinner>
-        ) : (
-          <div className={classes.paper}>
-          <CModalBody>
-            <CContainer className="" >
-              <CRow>
-                <CCol sm="12">
-                  <CForm onSubmit={(event)=>{
-                    event.preventDefault();
-                    var arr=[];
-                    arr.push(values.tags);
-                    console.log(arr[0]);
-                    CreateCompanyInfo({variables:{
-                      name:values.name,
-                      tags:arr,
-                    }});
-                    
-                    <Redirect to="/portfolio" />
-                  }}>
 
-                    <CFormGroup>
-                      <CLabel htmlFor="name">  name  {values.name}</CLabel>
-                      <CInput
-                        id="name"
-                        name="name"
-                        placeholder="Enter Name"
-                        autoComplete="name"
-                        onChange={onChange}
+      <div className={classes.paper}>
+        <form className={classes.form} onSubmit={(event) => {
+          event.preventDefault();
+          var arr = [];
+          arr = (values.tags).split(",");
+          console.log(arr[0]);
+          CreateCompanyInfo({
+            variables: {
+              name: values.name,
+              tags: arr,
+            }
+          });
 
-                      />
-                    </CFormGroup>
+          <Redirect to="/portfolio" />
+        }}>
 
-                    <CFormGroup>
-                      <CLabel htmlFor="tags">tags {values.tags}</CLabel>
-                      <CInput
-                        name="tags"
-                        id="tags"
-                        placeholder="Enter Company tags followed with ,"
-                        autoComplete="tags"
-                        onChange={onChange}
-                      />
-                    </CFormGroup>
-                    <CButton color="primary" type="submit">
-                      Submit
-                    </CButton>
-                  </CForm>
-                </CCol>
-              </CRow>
-            </CContainer>
-          </CModalBody>
-          </div>
-        )}
-        <CModalFooter>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Portfolio Name"
+            name="name"
+            autoComplete="name"
+            id="name"
+            autoFocus
+            onChange={onChange}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="tags"
+            autoComplete="tags"
+            id="tags"
+            label="Tags Followed By  , "
+            onChange={onChange}
+          />
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              submit
+            </Button>
+          )}
+        </form>
+      </div>
 
-        </CModalFooter>
-      
-      
+
+
     </>
   )
 

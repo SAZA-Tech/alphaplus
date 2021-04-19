@@ -204,17 +204,6 @@ function Portfolio(props) {
                   EDIT
                 </Button>
               </Grid>
-
-              <Grid item>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={classes.AddEditBtn}
-                  startIcon={<AddIcon />}
-                >
-                  Add Company
-              </Button>
-              </Grid>
             </Grid>
           </Grid>
         </Paper>
