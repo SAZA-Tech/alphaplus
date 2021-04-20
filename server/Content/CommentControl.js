@@ -83,7 +83,10 @@ module.exports.CommentControl = {
     let comments = [];
     commentDocs.map((e) => {
       comments.push({
-        commentAuthor: e.commentAuthorId._doc,
+        commentAuthor: {
+          id: e.commentAuthorId.id,
+          ...e.commentAuthorId._doc,
+        },
         id: e._id,
         ...e._doc,
       });

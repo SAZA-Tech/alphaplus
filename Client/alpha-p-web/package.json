@@ -33,6 +33,7 @@
     "yup": "^0.32.8"
   },
   "devDependencies": {
+    "@types/react-router-dom": "^5.1.7",
     "auto-changelog": "~2.2.1",
     "concurrently": "^5.3.0",
     "nodemon": "^2.0.7",

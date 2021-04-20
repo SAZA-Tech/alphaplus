@@ -69,6 +69,7 @@ export const GET_ARTICLE = gql`
         type
         createdAt
         name
+        id
       }
       commentBody
       createdAt
@@ -84,6 +85,30 @@ export const LIKE_ARTCIEL_GQL = gql`
         id
         username
       }
+    }
+  }
+`;
+export const GET_COMMENTS = gql`
+  query getArticleAndComments($articleId: ID = "6039147851427f2954d5fc4d") {
+    getComments(
+      filter: {
+        userId: null
+        articleId: $articleId
+        companyId: null
+        tags: null
+      }
+    ) {
+      id
+      articleId
+      commentAuthor {
+        username
+        type
+        createdAt
+        name
+        id
+      }
+      commentBody
+      createdAt
     }
   }
 `;
