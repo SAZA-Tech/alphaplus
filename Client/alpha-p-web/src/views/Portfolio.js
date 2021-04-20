@@ -1,12 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import CreateIcon from "@material-ui/icons/Create";
-
-import Typography from "@material-ui/core/Typography";
 import { HomeCard } from "./Home";
-import { Button, Grid, Paper, Avatar, Divider } from "@material-ui/core";
-
+import { AuthContext } from "../context/auth";
+import {
+  Button,
+  Grid,
+  Paper,
+  Avatar,
+  Divider,
+  CircularProgress,
+} from "@material-ui/core";
+import {
+  CButton,
+} from "@coreui/react";
+import { Link as RouterLink, Redirect } from "react-router-dom";
+import Typography from "@material-ui/core/Typography";
+import { useQuery } from "@apollo/client";
+import { PORTFOLIO_GQL } from "../graphql/Content/portfolioGql";
+import { NetworkStatus } from '@apollo/client';
+import InputFormPort from "../components/Company/inputformport"
+import EditFormport from "../components/Company/edfitformport"
 import {
   CompanyCardLine,
   BigMiniCompanyCardTable,
@@ -35,15 +50,22 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(2),
     marginTop: theme.spacing(1),
     paddingTop: theme.spacing(1),
+    padding: theme.spacing(1),
     [theme.breakpoints.up("lg")]: {
       paddingLeft: theme.spacing(6.5),
       paddingRight: theme.spacing(2),
     },
   },
+  paper: {
+    marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
 
   paper2: {
     // width: "100%",
-
+    padding: theme.spacing(2),
     marginTop: theme.spacing(1),
     paddingTop: theme.spacing(3),
     [theme.breakpoints.up("lg")]: {
@@ -92,158 +114,210 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const img = "avatars/7.jpg";
 
-const ArticlesDocs = [
-  {
-    avatar: img,
-    title:
-      "Amazon And Disney Move Sports Streaming Down The Field As NFL Finalizes New Deals",
-    editors: "Editors' PickScott Galloway",
-    numberOfComm: "18 Comments",
-  },
-  {
-    avatar: img,
-    title:
-      "Amazon And Disney Move Sports Streaming Down The Field As NFL Finalizes New Deals",
-    editors: "Editors' PickScott Galloway",
-    numberOfComm: "18 Comments",
-  },
-  {
-    avatar: img,
-    title:
-      "Amazon And Disney Move Sports Streaming Down The Field As NFL Finalizes New Deals",
-    editors: "Editors' PickScott Galloway",
-    numberOfComm: "18 Comments",
-  },
-  {
-    avatar: img,
-    title:
-      "Amazon And Disney Move Sports Streaming Down The Field As NFL Finalizes New Deals",
-    editors: "Editors' PickScott Galloway",
-    numberOfComm: "18 Comments",
-  },
-  {
-    avatar: img,
-    title:
-      "Amazon And Disney Move Sports Streaming Down The Field As NFL Finalizes New Deals",
-    editors: "Editors' PickScott Galloway",
-    numberOfComm: "18 Comments",
-  },
-];
+function Portfolio(props) {
 
-function Portfolio() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const togglePopup = () => {
+    setIsOpen(!isOpen);
+  }
+  const user = useContext(AuthContext);
+  // check if he has porfolio 
   const classes = useStyles();
+  const [Companies, setCompanies] = useState([]);
 
-  const Articles = (ArticlesDocs) =>
-  ArticlesDocs.map((v) => (
-      <ArticlesForm
-        editors={v.editors}
-        numberOfComm={v.numberOfComm}
-        title={v.title}
-        avatar={v.avatar}
+  const Popup = props => {
+    return (
+      <div className="popup-box">
+        <div className="box">
+          <span className="close-icon" onClick={props.handleClose}>x</span>
+          {props.content}
+        </div>
+      </div>
+    );
+  };
+
+
+  const { data, error, loading, refetch, networkStatus } = useQuery(PORTFOLIO_GQL, {
+
+    variables: {
+      id: user.user.id,
+    },
+    onCompleted(data) {
+      setCompanies(data.getCompanies);
+      console.log(data.findUser.username);
+    },
+
+
+  });
+  if (networkStatus === NetworkStatus.refetch) return 'Refetching!';
+  if (loading) return <CircularProgress />;
+  if (error) return <Redirect to="/404" />;
+
+
+  const img = "avatars/7.jpg";
+  const Followers = (FollowersDocs) =>
+    FollowersDocs.map((v) => (
+      <FollowerFollowingForm
+        editors={v.articleAuthor.name + " ,  "}
+        numberOfComm={"   number of comments    " + v.commentCount}
+        title={v.articleTitle}
+        avatar={img}
       />
     ));
 
-  return (
-    <div className={classes.rootCom}>
-      {/* Compnany line + 2 Content cards  */}
 
-      <Paper className={classes.paper1}>
-        <Grid container direction="column">
-          {/* Company Line */}
+  const CompanyHeader = () => {
+    return (
+      <div className={classes.rootCom}>
+        {/* Compnany line + 2 Content cards  */}
 
-          <CompanyCardLine data={companydummyData} />
+        <Paper className={classes.paper1}>
+          <Grid container direction="column">
+            {/* Company Line */}
 
-          <Grid item xs>
-            <BigMiniCompanyCardTable
-              data={BigsimilarCompanydummyData}
-              limit={4}
-              minWidth={400}
-            />
-          </Grid>
-          <Grid
-            item
-            container
-            direction="row"
-            alignItems
-            justify="flex-end"
-            spacing="1"
+            <CompanyCardLine data={data.getCompanies} />
+
+            <Grid item xs>
+              <BigMiniCompanyCardTable
+                data={data.findUser.portofolio[0].followedCompanies}
+                limit={4}
+                minWidth={400}
+              />
+            </Grid>
+            <Grid
+              item
+              container
+              direction="row"
+              alignItems
+              justify="flex-end"
+              spacing={2}
+            >
+        <Grid item>
+          <Button
+            variant="contained"
+            color="secondary"
+            value="Create Portfolio"
+            className={classes.AddEditBtn}
+            startIcon={<CreateIcon />}
+            onClick={togglePopup}
           >
-            <Grid item>
-              <Button
-                variant="contained"
-                color="secondary"
-                // style={{color:""}}
-                className={classes.AddEditBtn}
-                startIcon={<CreateIcon />}
-              >
-                Edit Portfolio
-              </Button>
-            </Grid>
+            Edit
+                </Button>
+        </Grid>
+        {isOpen && <Popup
+          content={<>
 
-            <Grid item>
-              <Button
-                variant="contained"
-                color="primary"
-                className={classes.AddEditBtn}
-                startIcon={<AddIcon />}
-              >
-                Add Company
-              </Button>
+            <EditFormport
+            portoId={data.findUser.portofolio[0].id}
+
+            ></EditFormport>
+
+          </>}
+          handleClose={togglePopup}
+        />}
             </Grid>
           </Grid>
-        </Grid>
-      </Paper>
+        </Paper>
 
-      <Paper className={classes.paper2}>
-        <Grid
-          container
-          direction="column"
+        <Paper className={classes.paper2}>
+          <Grid
+            container
+            direction="column"
           // alignItems
           // justify='flex-end'
-      
-        >
-          <Grid
-            item
-            container
-            direction="row"
-            // alignItems
-            // justify='flex-end'
-            xs
           >
-            <Grid item>
-              {" "}
-              <Button variant="contained">
-                <Typography className={classes.BtnsTypo}>Latest</Typography>
-              </Button>
-            </Grid>
-            <Grid item>
-              {" "}
-              <Button variant="contained">
-                <Typography className={classes.BtnsTypo}>Articles</Typography>
-              </Button>
+            <Grid item container direction="row" spacing={2} xs>
+              <Grid item>
+                {" "}
+                <Button variant="contained">
+                  <Typography className={classes.BtnsTypo}>Latest</Typography>
+                </Button>
+              </Grid>
+              <Grid item>
+                {" "}
+                <Button variant="contained">
+                  <Typography className={classes.BtnsTypo}>Articles</Typography>
+                </Button>
+              </Grid>
+
+              <Grid item>
+                {" "}
+                <Button variant="contained">
+                  <Typography className={classes.BtnsTypo}>News</Typography>
+                </Button>
+              </Grid>
+              <Grid item>
+                {" "}
+                <Button variant="contained">
+                  <Typography className={classes.BtnsTypo}>Analyst</Typography>
+                </Button>
+              </Grid>
             </Grid>
 
             <Grid item>
-              {" "}
-              <Button variant="contained">
-                <Typography className={classes.BtnsTypo}>News</Typography>
-              </Button>
+              <Typography className={classes.labelTypo}>Articles</Typography>
             </Grid>
-            
+
+            <Grid item>{Followers(data.findUser.portofolio[0].relatedArticles)}</Grid>
           </Grid>
+        </Paper>
+      </div>
+    );
+  }
 
-          <Grid item>
-            <Typography className={classes.labelTypo}>Articles</Typography>
-          </Grid>
 
-          <Grid item>{Articles(ArticlesDocs)}</Grid>
+
+  if (data.findUser.portofolio == null || data.findUser.portofolio.length < 1) {
+    return (
+      // <div>
+      // <Grid item>
+      //   <p>please create portfolio</p>
+      //   <CButton >
+
+      //     <InputFormPort buttonName="Edit"
+      //     />
+      //   </CButton>
+      // </Grid>
+      // </div>
+      <div className={classes.paper}>
+        <p>Please create a portfolio</p>
+        <Grid item>
+          <Button
+            variant="contained"
+            color="secondary"
+            value="Create Portfolio"
+            className={classes.AddEditBtn}
+            startIcon={<CreateIcon />}
+            onClick={togglePopup}
+          >
+            Create Portfolio
+                </Button>
         </Grid>
-      </Paper>
-    </div>
-  );
+        {isOpen && <Popup
+          content={<>
+
+            <InputFormPort></InputFormPort>
+
+          </>}
+          handleClose={togglePopup}
+        />}
+      </div>
+    );
+
+  } else {
+
+    return (
+      <div>
+
+        <Grid item>{CompanyHeader()}</Grid>
+      </div>
+    );
+  }
 }
+
+
 
 export default Portfolio;
 
@@ -251,12 +325,7 @@ export function ArticlesForm(props) {
   const classes = useStyles();
   return (
     <div className={classes.divForm}>
-      <Grid
-        container
-        direction="row"
-        justify="flex-start"
-        alignItems="center"
-      >
+      <Grid container direction="row" justify="flex-start" alignItems="center">
         {/* // User Avatar  */}
         <Grid item>
           <Avatar
@@ -274,7 +343,6 @@ export function ArticlesForm(props) {
           alignItems="flex-start"
           justify="flex-start"
           direction="column"
-          spacing={0}
         >
           <Grid item>
             {" "}
@@ -289,7 +357,6 @@ export function ArticlesForm(props) {
             alignItems="flex-start"
             justify="flex-start"
             direction="row"
-            spacing={2}
           >
             <Grid item>
               <Typography
@@ -315,174 +382,3 @@ export function ArticlesForm(props) {
     </div>
   );
 }
-
-const BigsimilarCompanydummyData = [
-  {
-    Symbol: "AAPL",
-    price: 293,
-    change: +192,
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "GOOG",
-    price: 351,
-    change: -122,
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "AMZN",
-    price: 120,
-    change: +50,
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "EBSY",
-    price: 963,
-    change: +124,
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "MOZA",
-    price: 56,
-    change: -56,
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "NANI",
-    price: 123,
-    change: +21,
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "AAPL",
-    price: 293,
-    change: +192,
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "GOOG",
-    price: 351,
-    change: -122,
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "AMZN",
-    price: 120,
-    change: +50,
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "EBSY",
-    price: 963,
-    change: +124,
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "MOZA",
-    price: 56,
-    change: -56,
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-  {
-    Symbol: "NANI",
-    price: 123,
-    change: +21,
-    changePerce: " 20%",
-    volume: "10M",
-    avgVolume: "10.10M",
-    prevClose: 44,
-    open: 121,
-  },
-];
-
-const companydummyData = [
-  { Symbol: "AAPL", price: 293, changePrice: +192 },
-  { Symbol: "GOOG", price: 351, changePrice: -122 },
-  { Symbol: "AMZN", price: 120, changePrice: +50 },
-  { Symbol: "EBSY", price: 963, changePrice: +124 },
-  { Symbol: "MOZA", price: 56, changePrice: -56 },
-  { Symbol: "NANI", price: 123, changePrice: +21 },
-  { Symbol: "AAPL", price: 293, changePrice: +192 },
-  { Symbol: "GOOG", price: 351, changePrice: -122 },
-  { Symbol: "AMZN", price: 120, changePrice: +50 },
-  { Symbol: "EBSY", price: 963, changePrice: +124 },
-  { Symbol: "MOZA", price: 56, changePrice: -56 },
-  { Symbol: "NANI", price: 123, changePrice: +21 },
-];
-
-const contentdummyData = [
-  {
-    name: "jhon Doe",
-    img: "Jh",
-    title: "This a test dummy title",
-    bio: "simpleBio",
-  },
-  {
-    name: "Ziad Fnan",
-    img: "Zi",
-    title: "Don't Miss This intersting analyst",
-    bio: "simpleBio",
-  },
-  {
-    name: "Abo Motlaq",
-    img: "AH",
-    title: "I only love apple products",
-    bio: "simpleBio",
-  },
-  {
-    name: "Aziz Amir",
-    img: "AA",
-    title: "Play it cool with your stocks",
-    bio: "simpleBio",
-  },
-  {
-    name: "Saleh Mogren",
-    img: "SM",
-    title: "How to write dummy data like a pro",
-    bio: "simpleBio",
-  },
-];

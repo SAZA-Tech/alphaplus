@@ -252,18 +252,18 @@ Home.propTypes = {
 };
 
 const companydummyData = [
-  { Symbol: "AAPL", price: 293, changePrice: +192 },
-  { Symbol: "GOOG", price: 351, changePrice: -122 },
-  { Symbol: "AMZN", price: 120, changePrice: +50 },
-  { Symbol: "EBSY", price: 963, changePrice: +124 },
-  { Symbol: "MOZA", price: 56, changePrice: -56 },
-  { Symbol: "NANI", price: 123, changePrice: +21 },
-  { Symbol: "AAPL", price: 293, changePrice: +192 },
-  { Symbol: "GOOG", price: 351, changePrice: -122 },
-  { Symbol: "AMZN", price: 120, changePrice: +50 },
-  { Symbol: "EBSY", price: 963, changePrice: +124 },
-  { Symbol: "MOZA", price: 56, changePrice: -56 },
-  { Symbol: "NANI", price: 123, changePrice: +21 },
+  { Symbol: "AAPL", price: 293, changePrice: "4.2(-8%)" },
+  { Symbol: "GOOG", price: 351, changePrice: "4.2(+8%)" },
+  { Symbol: "AMZN", price: 120, changePrice: "4.2(-8%)" },
+  { Symbol: "EBSY", price: 963, changePrice: "4.2(-8%)" },
+  { Symbol: "MOZA", price: 56, changePrice: "4.2(+3%)" },
+  { Symbol: "NANI", price: 123, changePrice: "4.2(-8%)" },
+  { Symbol: "AAPL", price: 293, changePrice: "4.2(-8%)" },
+  { Symbol: "GOOG", price: 351, changePrice: "4.2(+9%)" },
+  { Symbol: "AMZN", price: 120, changePrice: "4.2(-8%)" },
+  { Symbol: "EBSY", price: 963, changePrice: "4.2(-8%)" },
+  { Symbol: "MOZA", price: 56, changePrice: "4.2(-8%)" },
+  { Symbol: "NANI", price: 123, changePrice: "4.2(-8%)" },
 ];
 const contentdummyData = [
   {

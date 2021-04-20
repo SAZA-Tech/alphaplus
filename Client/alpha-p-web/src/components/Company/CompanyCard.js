@@ -295,9 +295,9 @@ function CompanyCardLine(props) {
         {props.data.map((e) => (
           <CompanyCard
             vertical={true}
-            Symbol={e.symbol}
+            Symbol={e.symbol ? e.symbol : e.Symbol}
             price={e.todayFinance ? e.todayFinance.close : e.price}
-            change={e.change}
+            change={e.change ? e.change : e.changePrice}
             comId={e.id}
           />
         ))}
@@ -382,14 +382,14 @@ export function BigMiniCompanyCardTable(props) {
         <TableBody>
           {props.data.slice(0, props.limit).map((e) => (
             <CompanyCard
-              Symbol={e.Symbol}
-              price={e.price}
-              change={e.change ? e.change : e.changePrice}
-              // changePerce={e.changePerce}
-              volume={e.volume}
-              avgVolume={e.avgVolume}
-              prevClose={e.prevClose}
-              open={e.open}
+              Symbol={e.symbol}
+              price={e.todayFinance.close}
+              change={e.change}
+              changePerce={0}
+              volume={e.todayFinance.volume}
+              avgVolume={0}
+              prevClose={0}
+              open={e.todayFinance.Open}
               horizontal
             />
           ))}
