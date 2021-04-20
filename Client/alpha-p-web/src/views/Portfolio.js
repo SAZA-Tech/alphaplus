@@ -321,7 +321,7 @@ function Portfolio(props) {
 
 export default Portfolio;
 
-export function FollowerFollowingForm(props) {
+export function ArticlesForm(props) {
   const classes = useStyles();
   return (
     <div className={classes.divForm}>

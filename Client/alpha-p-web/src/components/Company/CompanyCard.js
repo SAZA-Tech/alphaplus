@@ -234,13 +234,8 @@ function CompanyCard(props) {
             {props.price}
           </Typography>
         </TableCell>{" "}
-        <TableCell align="right">
-          <ChangePriceValue changePrice={props.change} />
-        </TableCell>
         <TableCell>
-          <Typography variant="subtitle2" className={classes.tableContent}>
-            {props.changePerce}
-          </Typography>
+          <ChangePriceValue changePrice={props.change} />
         </TableCell>
         <TableCell>
           <Typography variant="subtitle2" className={classes.tableContent}>
@@ -377,7 +372,7 @@ export function BigMiniCompanyCardTable(props) {
             <TableCell style={{ fontWeight: "400" }}>Company</TableCell>
             <TableCell style={{ fontWeight: "400" }}>Price</TableCell>
             <TableCell style={{ fontWeight: "400" }}>Change</TableCell>
-            <TableCell style={{ fontWeight: "400" }}>Change%</TableCell>
+
             <TableCell style={{ fontWeight: "400" }}>Volume</TableCell>
             <TableCell style={{ fontWeight: "400" }}>Avg.Volume</TableCell>
             <TableCell style={{ fontWeight: "400" }}>Prev.close</TableCell>
@@ -403,12 +398,12 @@ export function BigMiniCompanyCardTable(props) {
     </TableContainer>
   );
 }
-MiniCompanyCardTable.propTypes = {
+BigMiniCompanyCardTable.propTypes = {
   data: PropTypes.array.isRequired,
   limit: PropTypes.number,
   minWidth: PropTypes.number,
 };
-MiniCompanyCardTable.defaultProps = {
+BigMiniCompanyCardTable.defaultProps = {
   limit: 0,
   minWidth: 0,
 };

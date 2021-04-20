@@ -15,8 +15,8 @@ module.exports = gql`
     email: String!
     createdAt: String
     token: String!
-    following: [User]!
-    followers: [User]!
+    following: [User!]
+    followers: [User!]
     portofolio: [Portfolio!]
   }
 

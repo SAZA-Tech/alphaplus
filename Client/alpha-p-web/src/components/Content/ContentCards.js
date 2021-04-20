@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   title: {
+    overflowWrap: "anywhere",
     textDecoration: "none",
     "&:visited": {
       color: theme.palette.common.black,

@@ -32,6 +32,22 @@ import Popper from '@material-ui/core/Popper';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import Modal from '@material-ui/core/Modal';
+
+function rand() {
+    return Math.round(Math.random() * 20) - 10;
+}
+
+function getModalStyle() {
+    const top = 50 + rand();
+    const left = 50 + rand();
+
+    return {
+        top: `${top}%`,
+        left: `${left}%`,
+        transform: `translate(-${top}%, -${left}%)`,
+    };
+}
 
 const img = "avatars/7.jpg";
 const userInfo = {
@@ -43,6 +59,24 @@ const userInfo = {
 const drawerWidth = 210;
 
 const useStyles = makeStyles((theme) => ({
+    paper: {
+        [theme.breakpoints.between("xs", "sm")]: {
+            // marginLeft: theme.spacing(5.13),
+
+            width: '100%',
+        },
+        position: 'absolute',
+        width: '448px',
+        // height: '471px',
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+        [theme.breakpoints.between("sm", "md")]: {
+            width: '448px',
+        },
+    },
+
     root: {
 
         display: 'flex',
@@ -54,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     appBar: {
-        marginTop: theme.spacing(7),
+        marginTop: theme.spacing(8),
         [theme.breakpoints.between("md", "xl")]: {
             marginTop: theme.spacing(8.5),
         },
@@ -73,13 +107,12 @@ const useStyles = makeStyles((theme) => ({
     // necessary for content to be below app bar
     //   toolbar: theme.mixins.toolbar,
     drawerPaper: {
+        position: 'absolute',
         width: drawerWidth,
-        marginTop: theme.spacing(7),
-
-        [theme.breakpoints.between("md", "xl")]: {
-            marginTop: theme.spacing(8.5),
-        },
+        marginTop: theme.spacing(8.5),
+        height: theme.spacing(45.2),
     },
+
 
     content: {
         flexGrow: 1,
@@ -151,34 +184,7 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(7),
     },
 
-    PopUpPaperReset: {
-        [theme.breakpoints.between("xs", "sm")]: {
-            width: '100%',
-        },
 
-        width: '432px',
-        height: '471px',
-        padding: theme.spacing(3),
-        [theme.breakpoints.between("sm", "md")]: {
-            marginLeft: theme.spacing(30),
-            width: '432px',
-        },
-    },
-
-    PopUpPaperChan: {
-        [theme.breakpoints.between("xs", "sm")]: {
-            width: '100%',
-        },
-
-        width: '432px',
-        height: '301px',
-        padding: theme.spacing(3),
-
-        [theme.breakpoints.between("sm", "md")]: {
-            marginLeft: theme.spacing(30),
-            width: '432px',
-        },
-    },
 
     CancelBtn: {
         fontSize: '20px',
@@ -305,20 +311,21 @@ function AccountSecurty(props) {
     );
 
     const container = window !== undefined ? () => window().document.body : undefined;
-
-    const [anchorElReset, setAnchorElReset] = React.useState(null);
-    const handleClickReset = (event) => {
-        setAnchorElReset(anchorElReset ? null : event.currentTarget);
+    const [modalStyle] = React.useState(getModalStyle);
+    const [openChange, setOpenChange] = React.useState(false);
+    const handleOpenChange = () => {
+        setOpenChange(true);
     };
-    const openReset = Boolean(anchorElReset);
-    const idReset = openReset ? 'Reset-popper' : undefined;
-
-    const [anchorElChange, setAnchorElChange] = React.useState(null);
-    const handleClickChange = (event) => {
-        setAnchorElChange(anchorElChange ? null : event.currentTarget);
+    const handleCloseChange = () => {
+        setOpenChange(false);
     };
-    const openChange = Boolean(anchorElChange);
-    const idChange = openChange ? 'Change-popper' : undefined;
+    const [openReset, setOpenReset] = React.useState(false);
+    const handleOpenReset = () => {
+        setOpenReset(true);
+    };
+    const handleCloseReset = () => {
+        setOpenReset(false);
+    };
 
     return (
         <div className={classes.root}>
@@ -405,8 +412,9 @@ function AccountSecurty(props) {
                             <Grid item>
 
                                 <Button
-                                    onClick={handleClickChange}
-                                    aria-describedby={idChange}
+                                    onClick={handleOpenChange}
+
+                                    // aria-describedby={idChange}
                                     variant="contained"
                                     size="medium"
                                     color="primary"
@@ -414,23 +422,20 @@ function AccountSecurty(props) {
                                     Change
                                  </Button>
 
-                                <Popper
-                                    id={idChange}
+                                <Modal
+                                    disablePortal
+                                    disableEnforceFocus
+                                    disableAutoFocus
+
+
                                     open={openChange}
-                                    anchorEl={anchorElChange}
-                                    className={classes.PopperPassword}
-                                    placement='left'
-                                    modifiers={{
-                                        flip: {
-                                            enabled: false,
-                                        },
-                                        preventOverflow: {
-                                            enabled: true,
-                                        },
-                                    }}
+                                    onClose={handleCloseChange}
+                                    aria-labelledby="simple-modal-title"
+                                    aria-describedby="simple-modal-description"
                                 >
 
-                                    <Paper className={classes.PopUpPaperChan}>
+
+                                    <div style={modalStyle} className={classes.paper}>
 
                                         <Grid item
                                             container
@@ -448,7 +453,7 @@ function AccountSecurty(props) {
                                                 spacing={10}
                                             >
                                                 <Grid item><Typography className={classes.ChPasswordBtn}>Change password</Typography></Grid>
-                                                <Grid item> <Button onClick={handleClickChange}><Typography className={classes.CancelBtn}>Cancel</Typography></Button></Grid>
+                                                <Grid item> <Button onClick={handleCloseChange}><Typography className={classes.CancelBtn}>Cancel</Typography></Button></Grid>
 
                                             </Grid>
 
@@ -468,8 +473,8 @@ function AccountSecurty(props) {
                                             </Grid>
 
                                         </Grid>
-                                    </Paper>
-                                </Popper>
+                                    </div>
+                                </Modal>
                             </Grid>
 
                         </Grid>
@@ -497,8 +502,8 @@ function AccountSecurty(props) {
 
                             <Grid item>
                                 <Button
-                                    aria-describedby={idReset}
-                                    onClick={handleClickReset}
+
+                                    onClick={handleOpenReset}
                                     variant="contained"
                                     size="medium"
                                     color="primary"
@@ -506,23 +511,22 @@ function AccountSecurty(props) {
                                     Reset
                                 </Button>
 
-                                <Popper
-                                    id={idReset}
+
+
+                                <Modal
+                                    disablePortal
+                                    disableEnforceFocus
+                                    disableAutoFocus
+
+
                                     open={openReset}
-                                    anchorEl={anchorElReset}
-                                    className={classes.PopperPassword}
-                                    placement='left'
-                                    modifiers={{
-                                        flip: {
-                                            enabled: false,
-                                        },
-                                        preventOverflow: {
-                                            enabled: true,
-                                        },
-                                    }}
+                                    onClose={handleCloseReset}
+                                    aria-labelledby="simple-modal-title"
+                                    aria-describedby="simple-modal-description"
                                 >
 
-                                    <Paper className={classes.PopUpPaperReset}>
+
+                                    <div style={modalStyle} className={classes.paper}>
 
                                         <Grid item
                                             container
@@ -540,7 +544,7 @@ function AccountSecurty(props) {
                                                 spacing={10}
                                             >
                                                 <Grid item><Typography className={classes.ChPasswordBtn}>Change password</Typography></Grid>
-                                                <Grid item> <Button onClick={handleClickReset}><Typography className={classes.CancelBtn}>Cancel</Typography></Button></Grid>
+                                                <Grid item> <Button onClick={handleCloseReset}><Typography className={classes.CancelBtn}>Cancel</Typography></Button></Grid>
 
                                             </Grid>
 
@@ -643,8 +647,8 @@ function AccountSecurty(props) {
 
                                             </Grid>
                                         </Grid>
-                                    </Paper>
-                                </Popper>
+                                    </div>
+                                </Modal>
                             </Grid>
                         </Grid>
                     </Grid>

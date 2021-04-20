@@ -160,13 +160,18 @@ function Home() {
             My Portfolio
           </Typography>
         </div>
-        <Grid container direction="row" justify="center" spacing={6}>
+        <Grid
+          container
+          direction="row"
+          justify="space-around"
+          alignContent="center"
+        >
           {/* Company */}
           <Grid item xs lg={5}>
             <MiniCompanyCardTable data={data.getCompanies} limit={4} />
           </Grid>
           {/* Articles */}
-          <Grid item xs lg={6}>
+          <Grid item xs lg={5}>
             <ContentCardPaper data={data.getArticles} limit={3} auther />
           </Grid>
         </Grid>
