@@ -17,6 +17,7 @@ import { AuthContext } from "../../context/auth";
 
 import ReplyIcon from "@material-ui/icons/Reply";
 import ThumbUpAltOutlinedIcon from "@material-ui/icons/ThumbUpAltOutlined";
+import ThumbUpAltRoundedIcon from "@material-ui/icons/ThumbUpAltRounded";
 import ShareIcon from "@material-ui/icons/Share";
 import AddCommentIcon from "@material-ui/icons/AddComment";
 import {
@@ -29,6 +30,7 @@ import { fade, makeStyles } from "@material-ui/core/styles";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_ARTICLE } from "../../graphql/Content/articleGql";
 import { ADD_COMMENT } from "../../graphql/Content/commentGql";
+import { useLike } from "../../util/hooks";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -131,7 +133,7 @@ const commentsDocs = [
 const Article = (props) => {
   const classes = useStyles();
   let { articleId } = useParams();
-  console.log(articleId);
+  // console.log(articleId);
   const { loading: articleFetchingLoading, data, error } = useQuery(
     GET_ARTICLE,
     {
@@ -149,9 +151,11 @@ const Article = (props) => {
     <div className="background">
       <div className={classes.articleLayout}>
         <ArticleSection
+          id={articleId}
           title={data.getArticle.articleTitle}
           body={data.getArticle.articleBody}
           auther={data.getArticle.articleAuthor}
+          isLiked={data.getArticle.isLiked}
         />
 
         <CommentsSection
@@ -169,6 +173,7 @@ export default Article;
 
 const ArticleSection = (props) => {
   const classes = useStyles();
+  const { toggleLike, liked } = useLike(props.id, props.isLiked);
   return (
     <Container>
       <Paper elevation={2}>
@@ -218,9 +223,16 @@ const ArticleSection = (props) => {
                 <Button
                   variant="text"
                   color="primary"
-                  startIcon={<ThumbUpAltOutlinedIcon />}
+                  startIcon={
+                    liked ? (
+                      <ThumbUpAltRoundedIcon />
+                    ) : (
+                      <ThumbUpAltOutlinedIcon />
+                    )
+                  }
+                  onClick={toggleLike}
                 >
-                  Like the article?
+                  {liked ? "Liked" : "Like the article?"}
                 </Button>
               </Grid>
               <Grid item>

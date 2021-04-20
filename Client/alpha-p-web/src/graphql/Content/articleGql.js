@@ -49,9 +49,9 @@ export const GET_ARTICLE = gql`
       likes {
         createdAt
         username
-
         id
       }
+      isLiked @client
       updatedAt
     }
     getComments(
@@ -72,6 +72,18 @@ export const GET_ARTICLE = gql`
       }
       commentBody
       createdAt
+    }
+  }
+`;
+
+export const LIKE_ARTCIEL_GQL = gql`
+  mutation MyMutation($articleId: ID = "") {
+    likeArticle(articleId: $articleId) {
+      likes {
+        createdAt
+        id
+        username
+      }
     }
   }
 `;

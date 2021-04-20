@@ -1,6 +1,6 @@
 import React, { useReducer, createContext } from "react";
 import jwtDecode from "jwt-decode";
-import { currentFollwedUsers } from "../storage/cache";
+import { saveUserConfig, userConfigVar } from "../storage/userConfig";
 
 const initialState = {
   user: null,
@@ -44,8 +44,12 @@ function AuthProvider(props) {
 
   function login(userData) {
     localStorage.setItem("jwtToken", userData.token);
-    currentFollwedUsers(userData.following);
-    // console.log(currentFollwedUsers());
+    userConfigVar({
+      followedUsers: userData.following,
+      username: userData.username,
+    });
+    saveUserConfig();
+    // console.log(userConfigVar().followedUsers);
     dispatch({
       type: "LOGIN",
       payload: userData,
@@ -54,7 +58,12 @@ function AuthProvider(props) {
 
   function logout() {
     localStorage.removeItem("jwtToken");
-    currentFollwedUsers([]);
+    userConfigVar({
+      followedUsers: [],
+    });
+    localStorage.removeItem("alph.userConfig");
+    window.location.reload();
+
     dispatch({ type: "LOGOUT" });
   }
 
