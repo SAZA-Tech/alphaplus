@@ -69,7 +69,7 @@ export function ArticleAutherInfo(props) {
   );
 }
 ArticleAutherInfo.defaultProps = {
-  userId: "undefind",
+  // userId: "undefind",
   isFollowed: false,
 };
 ArticleAutherInfo.propTypes = { isFollowed: PropTypes.bool.isRequired };

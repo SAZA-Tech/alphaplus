@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { useHistory } from "react-router";
 import { AuthContext } from "../context/auth";
 import { FOLLOW_USER_GQL } from "../graphql/Auth/authGql";
+import { FOLLOW_COMPANY_GQL } from "../graphql/Company/portfolioGql";
 import { LIKE_ARTCIEL_GQL } from "../graphql/Content/articleGql";
 import { saveUserConfig, userConfigVar } from "../storage/userConfig";
 
@@ -44,6 +45,8 @@ export const useFollow = (id, initialState = false) => {
     update(_, { data: { followUser: currentUser } }) {
       userConfigVar({
         followedUsers: currentUser.following,
+        portfolio: userConfigVar().portfolio,
+        username: userConfigVar().username,
       });
       saveUserConfig();
       console.log(userConfigVar().followedUsers);
@@ -84,5 +87,40 @@ export const useLike = (articleId, initialState = false) => {
   return {
     liked,
     toggleLike,
+  };
+};
+export const useCompanyFollow = (companySybmol, initialState = false) => {
+  const [followedCompany, setFollowedCompany] = useState(initialState);
+  const { user } = useContext(AuthContext);
+  const history = useHistory();
+  const toggleFollowCompany = () => {
+    if (user) {
+      setFollowedCompany(!followedCompany);
+      callFollowCompany();
+    } else {
+      history.push("/login");
+    }
+  };
+  const porto = userConfigVar().portfolio;
+  // const {user}=useContext(AuthContext);
+  // follow mutaion ==> updates cache
+  const [callFollowCompany, { loading }] = useMutation(FOLLOW_COMPANY_GQL, {
+    variables: {
+      portoId: porto.id,
+      symbol: companySybmol,
+    },
+    update(_, { data: { followCompany: portfolio } }) {
+      userConfigVar({
+        portfolio: portfolio,
+        followedUsers: userConfigVar().followedUsers,
+        username: userConfigVar().username,
+      });
+      saveUserConfig();
+      // console.log(userConfigVar().followedUsers);
+    },
+  });
+  return {
+    followedCompany,
+    toggleFollowCompany,
   };
 };

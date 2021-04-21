@@ -10,6 +10,11 @@ export const LOGIN_USER = gql`
       following {
         id
       }
+      portfolios {
+        follwedTags
+        id
+        name
+      }
     }
   }
 `;

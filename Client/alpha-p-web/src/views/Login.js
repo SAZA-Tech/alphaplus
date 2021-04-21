@@ -1,4 +1,4 @@
-import React, {  useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -71,6 +71,7 @@ export default function SignIn(props) {
   const [loginUser, { loading }] = useMutation(LOGIN_USER, {
     update(_, { data: { login: userData } }) {
       context.login(userData);
+      // setSuccess(true);
       props.history.push("/");
     },
     onError(err) {
@@ -179,7 +180,7 @@ export default function SignIn(props) {
       </Box>
       {success && (
         <div>
-          <CustomizedSnackbars color="success" message="Draft is created" />;
+          <CustomizedSnackbars color="success" message="Welcome Back" />;
         </div>
       )}
       {Object.keys(errors).length > 0 && (

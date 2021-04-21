@@ -59,3 +59,13 @@ query HomePageQuery(
 }
 `;
 
+export const FOLLOW_COMPANY_GQL = gql`
+mutation MyMutation($portoId: ID = "", $symbol: String = "") {
+  followCompany(portoId: $portoId, symbol: $symbol) {
+    follwedTags
+    id
+    name
+  }
+}
+
+`

@@ -16,7 +16,7 @@ import {
 import { Link as RouterLink, Redirect } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import { useQuery } from "@apollo/client";
-import { PORTFOLIO_GQL } from "../graphql/Content/portfolioGql";
+import { PORTFOLIO_GQL } from "../graphql/Company/portfolioGql";
 import { NetworkStatus } from "@apollo/client";
 import InputFormPort from "../components/Company/inputformport";
 import EditFormport from "../components/Company/edfitformport";
