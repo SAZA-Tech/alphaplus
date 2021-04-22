@@ -41,6 +41,7 @@ const InputFormUser = (props) => {
       console.log(`Error Happend Updating user info ${error}`);
     },
     onCompleted(data) {
+      refreshPage();
       props.history.push("/users/usersInfo");
     },
     variables: values,

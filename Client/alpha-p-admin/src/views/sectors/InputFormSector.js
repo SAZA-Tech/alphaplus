@@ -47,6 +47,7 @@ const InputFormSector = (props) => {
       console.log(`Error Happend Updating user info ${error}`);
     },
     onCompleted(data) {
+      refreshPage();
       console.log("here");
     },
   });

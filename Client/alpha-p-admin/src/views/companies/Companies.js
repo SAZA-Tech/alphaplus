@@ -52,7 +52,9 @@ const DELETE_COMPANY = gql`
 
 const Companies = () => {
 
-
+  function refreshPage() {
+    window.location.reload(false);
+  }
   const [details, setDetails] = useState([])
    const [items, setItems] = useState([])
    const [warning, setWarning] = useState(false);
@@ -62,7 +64,12 @@ const Companies = () => {
       setItems(data.getCompanies);
     },
   });
-  const [delteCompany, { loading: deleteLoading }] = useMutation(DELETE_COMPANY); 
+  const [delteCompany, { loading: deleteLoading }] = useMutation(DELETE_COMPANY,{
+    onCompleted(data){
+      refreshPage();
+    }
+
+  }); 
   const history = useHistory();
 
   const toggleDetails = (index) => {

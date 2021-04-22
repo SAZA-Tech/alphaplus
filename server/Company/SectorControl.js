@@ -62,7 +62,6 @@ const getSectors=async(_,) => {
    
     var sector=[];
     sectorsdoc.map((e)=>{
-      console.log(e)
       var companies =[];
       companies =  CompanyControl.getCompanies(_,{
         CompanyInput:{

@@ -61,10 +61,11 @@ const InputFormCompany = (props) => {
       console.log(`Error Happend Updating user info ${error}`);
     },
     onCompleted(data) {
+      refreshPage()
       console.log("here");
     },
   });
-  function refreshPage() {
+   function refreshPage() {
     window.location.reload(false);
   }
   function CreateCompanyInfoCallBack() {
@@ -81,7 +82,7 @@ const InputFormCompany = (props) => {
         show={modal}
         onClose={toggle}
       >
-        <CModalHeader >
+        <CModalHeader closeButton>
         </CModalHeader>
 
         {mutationError ? (<div>

@@ -46,7 +46,9 @@ const DELETE_COMMENT= gql`
 
 
 const Comments = () => {
-
+  function refreshPage() {
+    window.location.reload(false);
+  }
   const [details, setDetails] = useState([])
   const [items, setItems] = useState([])
   const [warning, setWarning] = useState(false);
@@ -58,7 +60,11 @@ const Comments = () => {
    },
  });
 
- const [delteComment, { loading: deleteLoading }] = useMutation(DELETE_COMMENT); 
+ const [delteComment, { loading: deleteLoading }] = useMutation(DELETE_COMMENT,{
+   onCompleted(){
+    refreshPage();
+   }
+ }); 
 
   
   const toggleDetails = (index) => {
