@@ -13,7 +13,6 @@ import {
   CModalTitle,
 } from "@coreui/react";
 import commentsData from './CommentsData'
-import InputFormComment from './InputFormComment'
 import { gql, useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 
@@ -38,12 +37,6 @@ query getComments(
     createdAt
   }
 }
-`;
-
-const DELETE_USER = gql`
-  mutation deleteUser($id: ID!) {
-    deleteUser(id: $id)
-  }
 `;
 const DELETE_COMMENT= gql`
   mutation deleteComment($commentId: ID!) {
@@ -145,9 +138,6 @@ const Comments = () => {
       items={items}
       fields={fields}
       columnFilter
-      theadTopSlot={ <CButton>
-        <InputFormComment buttonName="Add Comment"/>
-        </CButton>}
       footer
       itemsPerPageSelect
       itemsPerPage={5}
@@ -185,15 +175,6 @@ const Comments = () => {
                   <h4>
                     {item.commentBody}
                   </h4>
-                  <CButton>
-                    <InputFormComment buttonName="Edit"
-                    
-                    name={item.commentBody}
-                    id={item.id}
-                    type={item.createdAt}
-                    
-                    />
-                  </CButton>
                   {deleteCommentAction(item.id)}
                 </CCardBody>
               </CCollapse>

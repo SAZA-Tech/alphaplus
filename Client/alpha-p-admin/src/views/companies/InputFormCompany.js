@@ -56,7 +56,7 @@ const InputFormCompany = (props) => {
     Market: props.Market,
     Symbol: null
   });
-  const [CreateCompanyInfo, { loading }] = useMutation(EDIT_COMPANY, {
+  const [CreateCompanyInfo, { loading, error: mutationError }] = useMutation(EDIT_COMPANY, {
     onError(error) {
       console.log(`Error Happend Updating user info ${error}`);
     },
@@ -64,6 +64,9 @@ const InputFormCompany = (props) => {
       console.log("here");
     },
   });
+  function refreshPage() {
+    window.location.reload(false);
+  }
   function CreateCompanyInfoCallBack() {
     console.log(`Called `);
     CreateCompanyInfo();
@@ -78,106 +81,87 @@ const InputFormCompany = (props) => {
         show={modal}
         onClose={toggle}
       >
-        <CModalHeader closeButton>
+        <CModalHeader >
         </CModalHeader>
 
-        {loading ? (
-          <CSpinner></CSpinner>
-        ) : (
-          <CModalBody>
-            <CContainer>
-              <CRow>
-                <CCol sm="12">
-                  <CForm onSubmit={(event) => {
-                    event.preventDefault();
-                    var CompanyInput = {
-                      CompanyID: values.CompanyID,
-                      Comname: values.Comname,
-                      SectorID: values.SectorID,
-                      Market: values.Market,
-                      Symbol: null
+        {mutationError ? (<div>
+          <p>Error :( Please try again)</p>
+          <CButton name=""
+            onClick={refreshPage}
+            size="sm" color="primary"
+          >close </CButton>
+        </div>) : loading ? (<CSpinner></CSpinner>) : (
+        <CModalBody>
+          <CContainer>
+            <CRow>
+              <CCol sm="12">
+                <CForm onSubmit={(event) => {
+                  event.preventDefault();
+                  var CompanyInput = {
+                    CompanyID: values.CompanyID,
+                    Comname: values.Comname,
+                    SectorID: values.SectorID,
+                    Market: values.Market,
+                    Symbol: null
 
-                    };
-                    CreateCompanyInfo({ variables: { CompanyInput } });
-                  }}>
+                  };
+                  CreateCompanyInfo({ variables: { CompanyInput } });
+                }}>
 
-                    <CFormGroup>
-                      <CLabel htmlFor="Comname">old company name:  {values.Comname}	</CLabel>
-                      <CInput
-                        id="Comname"
-                        name="Comname"
-                        placeholder="Enter Company Name"
-                        autoComplete="Comname"
-                        onChange={onChange}
+                  <CFormGroup>
+                    <CLabel htmlFor="Comname">old company name:  {values.Comname}	</CLabel>
+                    <CInput
+                      id="Comname"
+                      name="Comname"
+                      placeholder="Enter Company Name"
+                      autoComplete="Comname"
+                      onChange={onChange}
 
-                      />
-                    </CFormGroup>
+                    />
+                  </CFormGroup>
 
-                    <CFormGroup>
-                      <CLabel htmlFor="Market">old market:  {values.Market}	</CLabel>
-                      <CInput
-                        name="Market"
-                        id="Market"
-                        placeholder="Enter Company market"
-                        autoComplete="Market"
-                        onChange={onChange}
-                      />
-                    </CFormGroup>
+                  <CFormGroup>
+                    <CLabel htmlFor="Market">old market:  {values.Market}	</CLabel>
+                    <CInput
+                      name="Market"
+                      id="Market"
+                      placeholder="Enter Company market"
+                      autoComplete="Market"
+                      onChange={onChange}
+                    />
+                  </CFormGroup>
 
-                    {
-            /* <CFormGroup>
-              <CLabel htmlFor="symbol	">Company symbol	</CLabel>
-              <CInput
-                 name="symbol"
-                placeholder="Enter User symbol"
-                autoComplete="symbol"
-                onChange={onChange}
-              />
-            </CFormGroup> */}
-                    {/* <CFormGroup>
-                      <CLabel htmlFor="SectorID">old sector:  {values.SectorID}</CLabel>
-                      <CInput
-                        id="SectorID"
-                        name="SectorID"
-                        placeholder="Enter SectorID"
-                        autoComplete="SectorID"
-                        onChange={onChange}
+                  <CFormGroup>
+                    <CLabel htmlFor="SectorID">Role</CLabel>
+                    <CSelect
+                      id="SectorID"
+                      name="SectorID"
+                      placeholder="Enter User type"
+                      onChange={onChange}
+                      value={values.SectorID}
+                    >
 
-                      />
-                    </CFormGroup>
-                     */}
-
-                    <CFormGroup>
-                      <CLabel htmlFor="SectorID">Role</CLabel>
-                      <CSelect
-                        id="SectorID"
-                        name="SectorID"
-                        placeholder="Enter User type"
-                        onChange={onChange}
-                        value={values.SectorID}
-                      >
-
-                        {
-                          FetchSectors ? null :
-                            SectosData.getSectors.map((e) => <option value={e.id}>{e.Secname}</option>)
-                        }
-                      </CSelect>
-                    </CFormGroup>
-                    <CButton color="primary" type="submit">
-                      Submit
+                      {
+                        FetchSectors ? null :
+                          SectosData.getSectors.map((e) => <option value={e.id}>{e.Secname}</option>)
+                      }
+                    </CSelect>
+                  </CFormGroup>
+                  <CButton color="primary" type="submit">
+                    Submit
                     </CButton>{" "}
-                    <CButton color="secondary" onClick={toggle}>
-                      Cancel
+                  <CButton color="secondary" onClick={toggle}>
+                    Cancel
                     </CButton>
 
 
-                  </CForm>
-                </CCol>
-              </CRow>
-            </CContainer>
-          </CModalBody>
-
+                </CForm>
+              </CCol>
+            </CRow>
+          </CContainer>
+        </CModalBody>
         )}
+
         <CModalFooter>
 
         </CModalFooter>

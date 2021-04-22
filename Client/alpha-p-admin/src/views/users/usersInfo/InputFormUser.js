@@ -36,7 +36,7 @@ const InputFormUser = (props) => {
     name: props.name,
     type: props.type,
   });
-  const [updateUserInfo, { loading }] = useMutation(UPDATEUSERINFO, {
+  const [updateUserInfo, { loading, error: mutationError }] = useMutation(UPDATEUSERINFO, {
     onError(error) {
       console.log(`Error Happend Updating user info ${error}`);
     },
@@ -45,6 +45,9 @@ const InputFormUser = (props) => {
     },
     variables: values,
   });
+  function refreshPage() {
+    window.location.reload(false);
+  }
   function updateUserInfoCallBack() {
     console.log(`Called `);
     updateUserInfo();
@@ -56,99 +59,58 @@ const InputFormUser = (props) => {
       </CButton>
 
       <CModal show={modal} onClose={toggle}>
-        <CModalHeader closeButton></CModalHeader>
-        {loading ? (
-          <CSpinner></CSpinner>
-        ) : (
-          <CModalBody>
-            <CContainer>
-              <CRow>
-                <CCol sm="12">
-                  <CForm onSubmit={onSubmit}>
-                    <CFormGroup>
-                      <CLabel htmlFor="name">User Name</CLabel>
-                      <CInput
-                        type="name"
-                        id="name"
-                        name="name"
-                        placeholder={values.name}
-                        autoComplete="name"
-                        onChange={onChange}
-                      />
-                    </CFormGroup>
-                    {/* <CFormGroup>
-              <CLabel htmlFor="id">User Id</CLabel>
-              <CInput
-                type="number"
-                id="id"
-                name="id"
-                placeholder="Enter User Id"
-                
-              />
-            </CFormGroup> */}
-                    {/* <CFormGroup>
-                    <CLabel htmlFor="UserEmail">User Email</CLabel>
-                    <CInput
-                      type="email"
-                      id="UserEmail"
-                      name="UserEmail"
-                      placeholder="Enter User Email"
-                    />
-                  </CFormGroup> */}
-                    {/* <CFormGroup>
-              <CLabel htmlFor="UserTwitterAcc">User Twitter Acc</CLabel>
-              <CInput
-                type="text"
-                id="UserTwitterAcc"
-                name="UserTwitterAcc"
-                placeholder="Enter User Twitter Acc"
-                
-              />
-            </CFormGroup>
-            <CFormGroup>
-              <CLabel htmlFor="UserGoogleAcc">User Google Acc</CLabel>
-              <CInput
-                type="text"
-                id="UserGoogleAcc"
-                name="UserGoogleAcc"
-                placeholder="Enter User Google Acc"
-                
-              />
-            </CFormGroup> */}
-                    <CFormGroup>
-                      <CLabel htmlFor="type">Role</CLabel>
-                      <CSelect
-                        id="type"
-                        name="type"
-                        placeholder="Enter User type"
-                        onChange={onChange}
-                      >
-                        <option value="endUser">EndUser</option>
-                        <option value="analyst">Analyst</option>
-                      </CSelect>
-                    </CFormGroup>
-                    {/* <CFormGroup>
-              <CLabel htmlFor="RegisterDate">Register Date</CLabel>
-              <CInput
-                type="date"
-                id="RegisterDate"
-                name="RegisterDate"
-                placeholder="Enter User Register Date"
-                
-              />
-            </CFormGroup> */}
-                    <CButton color="primary" type="submit">
-                      Submit
+        <CModalHeader ></CModalHeader>
+        {mutationError ? (<div>
+          <p>Error :( Please try again)</p>
+          <CButton name=""
+            onClick={refreshPage}
+            size="sm" color="primary"
+          >close </CButton>
+        </div>) :
+          loading ? (
+            <CSpinner></CSpinner>
+          ) : (
+            <CModalBody>
+              <CContainer>
+                <CRow>
+                  <CCol sm="12">
+                    <CForm onSubmit={onSubmit}>
+                      <CFormGroup>
+                        <CLabel htmlFor="name">User Name</CLabel>
+                        <CInput
+                          type="name"
+                          id="name"
+                          name="name"
+                          placeholder={values.name}
+                          autoComplete="name"
+                          onChange={onChange}
+                        />
+                      </CFormGroup>
+
+                      <CFormGroup>
+                        <CLabel htmlFor="type">Role</CLabel>
+                        <CSelect
+                          id="type"
+                          name="type"
+                          placeholder="Enter User type"
+                          onChange={onChange}
+                        >
+                          <option value="endUser">EndUser</option>
+                          <option value="analyst">Analyst</option>
+                        </CSelect>
+                      </CFormGroup>
+                      <CButton color="primary" type="submit">
+                        Submit
                     </CButton>{" "}
-                    <CButton color="secondary" onClick={toggle}>
-                      Cancel
+                      <CButton color="secondary" onClick={toggle}>
+                        Cancel
                     </CButton>
-                  </CForm>
-                </CCol>
-              </CRow>
-            </CContainer>
-          </CModalBody>
-        )}
+                    </CForm>
+                  </CCol>
+                </CRow>
+              </CContainer>
+            </CModalBody>
+          )}
         <CModalFooter></CModalFooter>
       </CModal>
     </>

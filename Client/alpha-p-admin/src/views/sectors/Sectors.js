@@ -14,7 +14,6 @@ import {
   CModalTitle,
 } from "@coreui/react";
 import CIcon from '@coreui/icons-react'
-import sectorsData from './SectorsData'
 import InputFormSector from './InputFormSector'
 import AddFormSector from './AddFormSector'
 import { gql, useQuery } from "@apollo/client";

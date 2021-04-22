@@ -14,7 +14,6 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-
 import companiesData from './CompaniesData'
 import InputFormCompany from './InputFormCompany'
 import AddFormCompany from './AddFormCompany'
@@ -23,33 +22,25 @@ import { useMutation } from "@apollo/client";
 
 const GET_COMPANIES = gql`
 
-  query getCompanies(
-    $Comname: String = null
-    $Symbol: String = null
-    $CompanyID: String = null
-    $Market: String = null
-    $SectorID: String = null
-
+query getCompanies(
+  $companyFilter: CompanyFilter = {
+  Comname: null
+  CompanyID: null
+  Market: null
+  SectorID: null
+  Symbol: null
+},
+) {
+  getCompanies(companyFilter: $companyFilter
   ) {
-    getCompanies(
+    market
+    sectorId
+    id
+    comname
+    symbol
 
-      CompanyInput:{
-        Comname: $Comname
-        Symbol: $Symbol
-        CompanyID: $CompanyID
-        Market: $Market
-        SectorID: $SectorID
-
-      }
-    ) {
-      market
-      sectorId
-      id
-      comname
-      symbol
-
-    }
   }
+}
 `;
 
 const DELETE_COMPANY = gql`
