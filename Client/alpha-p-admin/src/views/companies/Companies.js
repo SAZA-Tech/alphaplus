@@ -14,7 +14,6 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-
 import companiesData from './CompaniesData'
 import InputFormCompany from './InputFormCompany'
 import AddFormCompany from './AddFormCompany'
@@ -23,33 +22,25 @@ import { useMutation } from "@apollo/client";
 
 const GET_COMPANIES = gql`
 
-  query getCompanies(
-    $Comname: String = null
-    $Symbol: String = null
-    $CompanyID: String = null
-    $Market: String = null
-    $SectorID: String = null
-
+query getCompanies(
+  $companyFilter: CompanyFilter = {
+  Comname: null
+  CompanyID: null
+  Market: null
+  SectorID: null
+  Symbol: null
+},
+) {
+  getCompanies(companyFilter: $companyFilter
   ) {
-    getCompanies(
+    market
+    sectorId
+    id
+    comname
+    symbol
 
-      CompanyInput:{
-        Comname: $Comname
-        Symbol: $Symbol
-        CompanyID: $CompanyID
-        Market: $Market
-        SectorID: $SectorID
-
-      }
-    ) {
-      market
-      sectorId
-      id
-      comname
-      symbol
-
-    }
   }
+}
 `;
 
 const DELETE_COMPANY = gql`
@@ -61,7 +52,9 @@ const DELETE_COMPANY = gql`
 
 const Companies = () => {
 
-
+  function refreshPage() {
+    window.location.reload(false);
+  }
   const [details, setDetails] = useState([])
    const [items, setItems] = useState([])
    const [warning, setWarning] = useState(false);
@@ -71,7 +64,12 @@ const Companies = () => {
       setItems(data.getCompanies);
     },
   });
-  const [delteCompany, { loading: deleteLoading }] = useMutation(DELETE_COMPANY); 
+  const [delteCompany, { loading: deleteLoading }] = useMutation(DELETE_COMPANY,{
+    onCompleted(data){
+      refreshPage();
+    }
+
+  }); 
   const history = useHistory();
 
   const toggleDetails = (index) => {

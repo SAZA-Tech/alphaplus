@@ -7,7 +7,7 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { cache } from "./storage/cache";
+import { cache } from "./storage";
 //Server URL
 
 const httpLink = createHttpLink({

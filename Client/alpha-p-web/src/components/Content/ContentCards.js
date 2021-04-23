@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     color: theme.palette.common.black,
+    overflowWrap: "anywhere",
     textDecoration: "none",
     "&:visited": {
       color: theme.palette.common.black,

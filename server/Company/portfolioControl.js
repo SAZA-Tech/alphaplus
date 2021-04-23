@@ -1,10 +1,12 @@
 const { UserInputError } = require("apollo-server-errors");
 const { findUser } = require("../Auth/AuthControl");
+const yes = require("../Auth/UserModel");
 const checkAuth = require("../Auth/check-auth");
 const { validateSymbols } = require("../Auth/validators");
 const { CompanyControl } = require("./companyControl");
 const Portfolio = require("./Models/PortfolioModel");
 const getArticleWithTags = require("../Content/getArticlesTags");
+const UserModel = require("../Auth/UserModel");
 
 /**
  * Create a new portfolio@
@@ -23,9 +25,11 @@ const createPortfolio = async (_, { name, tags }, context) => {
     throw new UserInputError(`Error in tags ${errors}`);
   }
 
-  const user = await findUser(_, { id: auth.id });
+  // const user = await findUser(_, { id:"60747c3595129a3bdc7678db"});
+  const user = await yes.findById(auth.id).exec();
+  console.log(user);
 
-  if (companies) {
+  if (valid) {
     const newPorto = new Portfolio({
       name: name,
       follwedTags: tags,
@@ -59,7 +63,7 @@ const editPortfolio = async (_, { portoId, name, tags }, context) => {
   const porto = await Portfolio.findById(portoId);
   if (porto.$isValid) {
     if (name != "") porto.name = name;
-    if (validateSymbols(tags).valid) porto.tags = tags;
+    if (validateSymbols(tags).valid) porto.follwedTags = tags;
     const res = await porto.save();
     return getPortfolio(_, { portoId: res.id });
   } else {
@@ -82,9 +86,30 @@ const deletePortfolio = async (_, { portoId }, context) => {
     throw new Error("No Autrhized");
   }
 };
+
+const followCompany = async (_, { portoId, symbol }, context) => {
+  const user = checkAuth(context);
+  const foundUser = await UserModel.findById(user.id);
+  if (foundUser) {
+    const porto = await Portfolio.findById(portoId);
+    if (porto.follwedTags.includes(symbol)) {
+      porto.follwedTags = porto.follwedTags.filter((u) => u != symbol);
+    } else {
+      porto.follwedTags.push(symbol);
+    }
+    const res = await porto.save();
+    return {
+      id: res._id,
+      ...res._doc,
+    };
+  } else {
+    throw new Error("User Not Found ");
+  }
+};
 module.exports.PortfolioControl = {
   createPortfolio,
   getPortfolio,
   editPortfolio,
   deletePortfolio,
+  followCompany,
 };

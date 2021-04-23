@@ -62,6 +62,7 @@ function Company(props) {
             price={data.getCompany.todayFinance.close}
             changePrice={data.getCompany.change}
             name={data.getCompany.comname}
+            isFollowed={data.getCompany.isFollowed}
           />
           {/* Company Chart */}
           <Grid container direction="row" className={classes.chart_similar}>

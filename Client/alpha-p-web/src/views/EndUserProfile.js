@@ -227,14 +227,17 @@ const useStyles = makeStyles((theme) => ({
 const EndUserProfile = (props) => {
   const classes = useStyles();
   const { userId } = useParams();
+  console.log(userId);
   const { data, error, loading } = useQuery(PROFILE_GQL, {
     variables: {
       id: userId,
     },
   });
-  if (error) return <Redirect to="404" />;
+  if (error) {
+    console.log(error);
+    return <Redirect to="404" />;
+  }
   if (loading) return <CircularProgress />;
-  if (!data) return <Redirect to="404" />;
   return (
     <div className={classes.root}>
       <Grid container direction="row" justify="center" alignItems="flex-start">

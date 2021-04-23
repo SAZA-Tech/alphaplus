@@ -10,25 +10,28 @@ import {
   Button,
   Avatar,
   TextField,
-  FormHelperText,
+  // FormHelperText,
   CircularProgress,
 } from "@material-ui/core";
 import { AuthContext } from "../../context/auth";
-
+import moment from "moment";
 import ReplyIcon from "@material-ui/icons/Reply";
 import ThumbUpAltOutlinedIcon from "@material-ui/icons/ThumbUpAltOutlined";
+import ThumbUpAltRoundedIcon from "@material-ui/icons/ThumbUpAltRounded";
 import ShareIcon from "@material-ui/icons/Share";
-import AddCommentIcon from "@material-ui/icons/AddComment";
+// import AddCommentIcon from "@material-ui/icons/AddComment";
 import {
   ArticleAutherInfo,
   ArticleAutherInfoExpanded,
 } from "../../components/AnalystInfo";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, Redirect } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 import { fade, makeStyles } from "@material-ui/core/styles";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_ARTICLE } from "../../graphql/Content/articleGql";
+import { GET_ARTICLE, GET_COMMENTS } from "../../graphql/Content/articleGql";
 import { ADD_COMMENT } from "../../graphql/Content/commentGql";
+import { useLike } from "../../util/hooks";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,9 +57,11 @@ const useStyles = makeStyles((theme) => ({
   title: {
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(2),
+    overflowWrap: "anywhere",
   },
   body: {
     padding: theme.spacing(2),
+    overflowWrap: "anywhere",
   },
   likeBtn: {
     "&:hover": {
@@ -72,11 +77,13 @@ const useStyles = makeStyles((theme) => ({
   },
   addComment: {
     paddingBottom: theme.spacing(2),
-    paddingRight: theme.spacing(4),
+    paddingRight: theme.spacing(1),
+    width: "90%",
     "& .MuiTextField-root": {
       width: "100%",
-      padding: theme.spacing(4),
+      padding: theme.spacing(1),
       paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(4),
       borderTopLeftRadius: 0,
     },
   },
@@ -131,7 +138,7 @@ const commentsDocs = [
 const Article = (props) => {
   const classes = useStyles();
   let { articleId } = useParams();
-  console.log(articleId);
+  // console.log(articleId);
   const { loading: articleFetchingLoading, data, error } = useQuery(
     GET_ARTICLE,
     {
@@ -143,22 +150,25 @@ const Article = (props) => {
       },
     }
   );
+  if (error) return <Redirect to="404" />;
   return articleFetchingLoading ? (
     <CircularProgress />
   ) : (
-    <div className="background">
-      <div className={classes.articleLayout}>
-        <ArticleSection
-          title={data.getArticle.articleTitle}
-          body={data.getArticle.articleBody}
-          auther={data.getArticle.articleAuthor}
-        />
+    <div className={classes.articleLayout}>
+      <ArticleSection
+        id={articleId}
+        title={data.getArticle.articleTitle}
+        body={data.getArticle.articleBody}
+        auther={data.getArticle.articleAuthor}
+        isLiked={data.getArticle.isLiked}
+        updatedAt={data.getArticle.updatedAt}
+        createdAt={data.getArticle.createdAt}
+      />
 
-        <CommentsSection
-          commentCount={data.getArticle.commentCount}
-          cooments={data.getComments}
-        />
-      </div>
+      <CommentsSection
+        commentCount={data.getArticle.commentCount}
+        cooments={data.getComments}
+      />
     </div>
   );
 };
@@ -169,6 +179,7 @@ export default Article;
 
 const ArticleSection = (props) => {
   const classes = useStyles();
+  const { toggleLike, liked } = useLike(props.id, props.isLiked);
   return (
     <Container>
       <Paper elevation={2}>
@@ -195,12 +206,12 @@ const ArticleSection = (props) => {
               <Grid item container direction="row" spacing={1}>
                 <Grid item xs>
                   <Typography variant="caption">
-                    Published 17 Feb, 2021
+                    {moment(props.createdAt).fromNow()}
                   </Typography>
                 </Grid>
                 <Grid item xs>
                   <Typography variant="caption">
-                    last updated feb 19 2021
+                    {moment(props.updatedAt).fromNow()}
                   </Typography>
                 </Grid>
               </Grid>
@@ -213,14 +224,21 @@ const ArticleSection = (props) => {
           <Divider variant="middle" />
           {/* Article Buttons */}
           <Container>
-            <Grid container justify="space-evenly" spacing={2} xs sm>
+            <Grid container justify="space-between" spacing={4} xs sm>
               <Grid item>
                 <Button
                   variant="text"
                   color="primary"
-                  startIcon={<ThumbUpAltOutlinedIcon />}
+                  startIcon={
+                    liked ? (
+                      <ThumbUpAltRoundedIcon />
+                    ) : (
+                      <ThumbUpAltOutlinedIcon />
+                    )
+                  }
+                  onClick={toggleLike}
                 >
-                  Like the article?
+                  {liked ? "Liked" : "Like the article?"}
                 </Button>
               </Grid>
               <Grid item>
@@ -232,7 +250,7 @@ const ArticleSection = (props) => {
                   Share the article
                 </Button>
               </Grid>
-              <Grid item>
+              {/* <Grid item>
                 <Button
                   variant="text"
                   color="primary"
@@ -240,7 +258,7 @@ const ArticleSection = (props) => {
                 >
                   Add Comment
                 </Button>
-              </Grid>
+              </Grid> */}
             </Grid>
           </Container>
         </Container>
@@ -275,6 +293,7 @@ function CommentsSection(props) {
         body={v.commentBody}
         date={v.createdAt}
         avatar={v.commentAuthor.img}
+        userId={v.commentAuthor.id}
       />
     ));
   const [addComment, { laoding: commentLoading }] = useMutation(ADD_COMMENT, {
@@ -283,9 +302,18 @@ function CommentsSection(props) {
       articleId: articleId,
       commentBody: commentBody,
     },
-    onCompleted(data) {
-      window.location.reload();
+    update(cache, { data: { addComment: newComment } }) {
+      cache.writeQuery({
+        query: GET_COMMENTS,
+        variables: {
+          articleId,
+        },
+        data: [...props.comments, newComment],
+      });
     },
+    // onCompleted(data) {
+    //   window.location.reload();
+    // },
     onError(err) {
       console.log(`Error on ${err}`);
       setErrors(
@@ -348,9 +376,18 @@ const CreateComment = (props) => {
           <Avatar>
             {props.avatar == null ? props.name.split(2) : props.avatar}
           </Avatar>
-          <Typography variant="subtitle1">{props.name}</Typography>
+          <Typography
+            variant="subtitle1"
+            component={RouterLink}
+            style={{ textDecoration: "none", color: "black" }}
+            to={`/userProfile/${props.userId}`}
+          >
+            {props.name}
+          </Typography>
         </Grid>
-        <Typography variant="caption">{props.date}</Typography>
+        <Typography variant="caption">
+          {moment(props.date).fromNow()}
+        </Typography>
       </Grid>
       <Container className="commentBody">
         <Typography variant="body2">{props.body}</Typography>
@@ -362,5 +399,9 @@ const CreateComment = (props) => {
     </Container>
   );
 };
-
-CreateComment.propTypes = {};
+CreateComment.defaultProps = {
+  userId: "undefind",
+};
+CreateComment.propTypes = {
+  userId: PropTypes.string.isRequired,
+};

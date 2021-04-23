@@ -44,6 +44,28 @@ const GET_SECTORS = gql`
     }
   }
 `;
+const GET_COMPANIES = gql`
+
+query getCompanies(
+  $companyFilter: CompanyFilter = {
+  Comname: null
+  CompanyID: null
+  Market: null
+  SectorID: null
+  Symbol: null
+},
+) {
+  getCompanies(companyFilter: $companyFilter
+  ) {
+    market
+    sectorId
+    id
+    comname
+    symbol
+
+  }
+}
+`;
 
 const AddFormCompany = (props) => {
   const [modal, setModal] = useState(false);
@@ -60,14 +82,18 @@ const AddFormCompany = (props) => {
     Market: "",
     Symbol: props.Symbol
   });
-  const [CreateCompanyInfo, { loading }] = useMutation(CREATE_COMPANY, {
+  const [CreateCompanyInfo, { loading, error: mutationError }] = useMutation(CREATE_COMPANY, {
     onError(error) {
       console.log(`Error Happend Updating user info ${error}`);
     },
     onCompleted(data) {
+      refreshPage();
       console.log("here");
     },
   });
+  function refreshPage() {
+    window.location.reload(false);
+  }
   function CreateCompanyInfoCallBack() {
     console.log(`Called `);
     CreateCompanyInfo();
@@ -82,12 +108,15 @@ const AddFormCompany = (props) => {
         show={modal}
         onClose={toggle}
       >
-        <CModalHeader closeButton>
+        <CModalHeader>
         </CModalHeader>
-
-        {loading ? (
-          <CSpinner></CSpinner>
-        ) : (
+        {mutationError ? (<div>
+          <p>Error :( Please try again)</p>
+          <CButton name=""
+            onClick={refreshPage}
+            size="sm" color="primary"
+          >close </CButton>
+        </div>) : loading ? (<CSpinner></CSpinner>) : (
           <CModalBody>
             <CContainer>
               <CRow>
@@ -139,18 +168,6 @@ const AddFormCompany = (props) => {
                         onChange={onChange}
                       />
                     </CFormGroup>
-                    {/* <CFormGroup>
-              <CLabel htmlFor="SectorID">sector</CLabel>
-              <CInput
-                id="SectorID"
-                name="SectorID"
-                placeholder="Enter SectorID"
-                autoComplete="SectorID"
-                onChange={onChange}
-                
-              />
-            </CFormGroup> */}
-
                     <CFormGroup>
                       <CLabel htmlFor="SectorID">Role</CLabel>
                       <CSelect
@@ -177,9 +194,7 @@ const AddFormCompany = (props) => {
                 </CCol>
               </CRow>
             </CContainer>
-          </CModalBody>
-
-        )}
+          </CModalBody>)}
         <CModalFooter>
 
         </CModalFooter>

@@ -12,8 +12,6 @@ import {
   CModalHeader,
   CModalTitle,
 } from "@coreui/react";
-import articlesData from './ArticlesData'
-import InputFormArticle from './InputFormArticle'
 import { gql, useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 
@@ -48,23 +46,12 @@ const DELETE_ARTICLE= gql`
   }
 `;
 
-// const EDIT_ARTICLE = gql`
-//   mutation editDraft($articleId: ID!, $id: ID!, $contentInput: ContentInput) {
-//     editDraft(articleId: $articleId, id: $id, contentInput: $contentInput) {
-//       createdAt
-//       updatedAt
-//       id
-//       articleAuthor {
-//         id
-//         username
-//       }
-//     }
-//   }
-// `;
-
 
 const Articles = () => {
   
+  function refreshPage() {
+    window.location.reload(false);
+  }
   const [details, setDetails] = useState([])
    const [items, setItems] = useState([])
    const [warning, setWarning] = useState(false);
@@ -75,7 +62,11 @@ const Articles = () => {
       setItems(data.getArticles);
     },
   });
-    const [deleteArticle, { loading: deleteLoading }] = useMutation(DELETE_ARTICLE);
+    const [deleteArticle, { loading: deleteLoading }] = useMutation(DELETE_ARTICLE,{
+      onCompleted(){
+        refreshPage();
+      }
+    });
 
   const toggleDetails = (index) => {
     const position = details.indexOf(index)
@@ -156,9 +147,6 @@ const Articles = () => {
       items={items}
       fields={fields}
       columnFilter
-      theadTopSlot={ <CButton>
-        <InputFormArticle buttonName="Add Article"/>
-    </CButton>}
       footer
       itemsPerPageSelect
       itemsPerPage={5}
@@ -196,15 +184,6 @@ const Articles = () => {
                   <h4>
                     {item.articleTitle}
                   </h4>
-                  <CButton>
-                    <InputFormArticle buttonName="Edit"
-                    
-                    name={item.articleTitle}
-                    id={item.id}
-                    type={item.createdAt}
-                    
-                    />
-                  </CButton>
 
                   { 
                   deleteArticleAction(item.id)}
