@@ -188,6 +188,9 @@ const userStyles = makeStyles((theme) => ({
       paddingLeft: theme.spacing(12),
     },
   },
+  title: {
+    color: theme.palette.grey[700],
+  }
 }));
 
 // Variant , Size
@@ -225,7 +228,13 @@ function CompanyCard(props) {
     return (
       <TableRow>
         <TableCell>
-          <Typography variant="subtitle2" className={classes.companySymbol}>
+          <Typography
+            component={Link}
+            to={`/company/${props.comId}`}
+            target="_blank"
+            variant="subtitle2"
+            className={classes.companySymbol}>
+
             {props.Symbol}
           </Typography>
         </TableCell>
@@ -237,26 +246,39 @@ function CompanyCard(props) {
         <TableCell>
           <ChangePriceValue changePrice={props.change} />
         </TableCell>
-        <TableCell>
-          <Typography variant="subtitle2" className={classes.tableContent}>
-            {props.volume}
-          </Typography>
-        </TableCell>
-        <TableCell>
-          <Typography variant="subtitle2" className={classes.tableContent}>
-            {props.avgVolume}
-          </Typography>
-        </TableCell>
-        <TableCell>
-          <Typography variant="subtitle2" className={classes.tableContent}>
-            {props.prevClose}
-          </Typography>
-        </TableCell>
-        <TableCell>
-          <Typography variant="subtitle2" className={classes.tableContent}>
-            {props.open}
-          </Typography>
-        </TableCell>
+
+        { props.volume ?
+          (<TableCell  >
+            <Typography variant="subtitle2" className={classes.tableContent}>
+              {props.volume}
+            </Typography>
+          </TableCell>) : null
+        }
+
+
+        { props.avgVolume ?
+          (<TableCell>
+            <Typography variant="subtitle2" className={classes.tableContent}>
+              {props.avgVolume}
+            </Typography>
+          </TableCell>) : null
+        }
+
+        { props.prevClose ?
+          (<TableCell>
+            <Typography variant="subtitle2" className={classes.tableContent}>
+              {props.prevClose}
+            </Typography>
+          </TableCell>) : null
+        }
+
+        { props.open ?
+          (<TableCell>
+            <Typography variant="subtitle2" className={classes.tableContent}>
+              {props.open}
+            </Typography>
+          </TableCell>) : null
+        }
       </TableRow>
     );
   };
@@ -329,18 +351,21 @@ function MiniCompanyCardTable(props) {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell align="left">Company</TableCell>
-            <TableCell align="center">Price</TableCell>
-            <TableCell align="right">Change</TableCell>
+            <TableCell >Company</TableCell>
+            <TableCell >Price</TableCell>
+            <TableCell >Change</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody >
           {props.data.slice(0, props.limit).map((e) => (
             <CompanyCard
+
+              horizontal={true}
               Symbol={e.symbol ? e.symbol : e.Symbol}
               price={e.todayFinance ? e.todayFinance.close : e.price}
               change={e.change ? e.change : e.changePrice}
-              horizontal
+              comId={e.id}
+
             />
           ))}
         </TableBody>
@@ -358,7 +383,7 @@ MiniCompanyCardTable.defaultProps = {
   minWidth: 0,
 };
 
-export function BigMiniCompanyCardTable(props) {
+export function BigCompanyCardTable(props) {
   const classes = userStyles();
 
   return (
@@ -372,7 +397,6 @@ export function BigMiniCompanyCardTable(props) {
             <TableCell style={{ fontWeight: "400" }}>Company</TableCell>
             <TableCell style={{ fontWeight: "400" }}>Price</TableCell>
             <TableCell style={{ fontWeight: "400" }}>Change</TableCell>
-
             <TableCell style={{ fontWeight: "400" }}>Volume</TableCell>
             <TableCell style={{ fontWeight: "400" }}>Avg.Volume</TableCell>
             <TableCell style={{ fontWeight: "400" }}>Prev.close</TableCell>
@@ -398,12 +422,12 @@ export function BigMiniCompanyCardTable(props) {
     </TableContainer>
   );
 }
-BigMiniCompanyCardTable.propTypes = {
+BigCompanyCardTable.propTypes = {
   data: PropTypes.array.isRequired,
   limit: PropTypes.number,
   minWidth: PropTypes.number,
 };
-BigMiniCompanyCardTable.defaultProps = {
+BigCompanyCardTable.defaultProps = {
   limit: 0,
   minWidth: 0,
 };
@@ -565,7 +589,7 @@ function CompanyMiniDataTable(props) {
         <TableHead>
           <TableRow>
             <TableCell align="center">
-              <Typography variant="h5">{props.title}</Typography>
+              <Typography className={classes.title} variant="h5">{props.title}</Typography>
             </TableCell>
             {/* <TableCell></TableCell> */}
           </TableRow>

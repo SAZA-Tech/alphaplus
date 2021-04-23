@@ -9,7 +9,7 @@ import { Button, Grid, Paper, Avatar, Divider } from "@material-ui/core";
 
 import {
   CompanyCardLine,
-  BigMiniCompanyCardTable,
+  BigCompanyCardTable,
 } from "../components/Company/CompanyCard";
 import { Height } from "@material-ui/icons";
 
@@ -90,6 +90,14 @@ const useStyles = makeStyles((theme) => ({
   divForm: {
     marginBottom: theme.spacing(2),
   },
+
+  buttons:{
+    [theme.breakpoints.between("xs","sm")]: {
+      marginRight:theme.spacing(3),
+    },
+
+    marginRight:theme.spacing(4.5),
+  }
 }));
 
 const img = "avatars/7.jpg";
@@ -156,7 +164,7 @@ function Portfolio() {
           <CompanyCardLine data={companydummyData} />
 
           <Grid item xs>
-            <BigMiniCompanyCardTable
+            <BigCompanyCardTable
               data={BigsimilarCompanydummyData}
               limit={4}
               minWidth={400}
@@ -214,20 +222,20 @@ function Portfolio() {
           >
             <Grid item>
               {" "}
-              <Button variant="contained">
+              <Button className={classes.buttons} variant="contained">
                 <Typography className={classes.BtnsTypo}>Latest</Typography>
               </Button>
             </Grid>
             <Grid item>
               {" "}
-              <Button variant="contained">
+              <Button className={classes.buttons} variant="contained">
                 <Typography className={classes.BtnsTypo}>Articles</Typography>
               </Button>
             </Grid>
 
             <Grid item>
               {" "}
-              <Button variant="contained">
+              <Button className={classes.buttons} variant="contained">
                 <Typography className={classes.BtnsTypo}>News</Typography>
               </Button>
             </Grid>
@@ -440,18 +448,18 @@ const BigsimilarCompanydummyData = [
 ];
 
 const companydummyData = [
-  { Symbol: "AAPL", price: 293, changePrice: +192 },
-  { Symbol: "GOOG", price: 351, changePrice: -122 },
-  { Symbol: "AMZN", price: 120, changePrice: +50 },
-  { Symbol: "EBSY", price: 963, changePrice: +124 },
-  { Symbol: "MOZA", price: 56, changePrice: -56 },
-  { Symbol: "NANI", price: 123, changePrice: +21 },
-  { Symbol: "AAPL", price: 293, changePrice: +192 },
-  { Symbol: "GOOG", price: 351, changePrice: -122 },
-  { Symbol: "AMZN", price: 120, changePrice: +50 },
-  { Symbol: "EBSY", price: 963, changePrice: +124 },
-  { Symbol: "MOZA", price: 56, changePrice: -56 },
-  { Symbol: "NANI", price: 123, changePrice: +21 },
+  { symbol: "AAPL", price: 293, change: +192 },
+  { symbol: "GOOG", price: 351, change: -122 },
+  { symbol: "EBSY", price: 963, change: +124 },
+  { symbol: "AMZN", price: 120, change: +50 },
+  { symbol: "MOZA", price: 56, change: -56 },
+  { symbol: "NANI", price: 123, change: +21 },
+  { symbol: "AAPL", price: 293, change: +192 },
+  { symbol: "GOOG", price: 351, change: -122 },
+  { symbol: "AMZN", price: 120, change: +50 },
+  { symbol: "EBSY", price: 963, change: +124 },
+  { symbol: "MOZA", price: 56, change: -56 },
+  { symbol: "NANI", price: 123, change: +21 },
 ];
 
 const contentdummyData = [

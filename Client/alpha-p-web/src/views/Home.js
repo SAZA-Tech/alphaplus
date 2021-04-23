@@ -84,6 +84,10 @@ const useStyles = makeStyles((theme) => ({
       alignItems: "center",
     },
   },
+
+  CardPaper: {
+    width: '100%',
+  }
 }));
 
 function Home() {
@@ -129,9 +133,9 @@ function Home() {
 
       {/* Editors Picks + Latest Articles */}
 
-      <Grid container direction="row" xs justify="space-between">
-        <Grid item xs={12} lg={5}>
-          <Paper>
+      <Grid container direction="row" justify="space-between" spacing='1'>
+        <Grid item xs={12} md={6} >
+          <Paper className={classes.CardPaper}>
             <HomeCard
               dataLimit={3}
               cardTitle="Editors Picks"
@@ -141,8 +145,8 @@ function Home() {
             />
           </Paper>
         </Grid>
-        <Grid item xs lg={5}>
-          <Paper>
+        <Grid item xs={12} md={6}>
+          <Paper className={classes.CardPaper}>
             <HomeCard
               dataLimit={3}
               cardTitle="Latest Articles"

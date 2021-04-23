@@ -13,6 +13,9 @@ import {
   Menu,
   Divider,
   List,
+  Grid,
+  Avatar,
+  ButtonBase
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import React, { useState, useEffect, useContext } from "react";
@@ -26,27 +29,20 @@ const useStyles = makeStyles((theme) => ({
 
     [theme.breakpoints.up("sm")]: {
       paddingRight: "79px",
-      paddingLeft: "118px",
+      paddingLeft: "30px",
     },
     flexGrow: 1,
     paddingLeft: 0,
   },
   logo: {
-    fontFamily: "sans-serif",
-    fontStyle: "normal",
-    fontWeight: "bold",
+    width: '180px',
+    height: '41.5px',
     marginRight: theme.spacing(5),
-    /* or 54px */
-    textDecoration: "none",
-    "&:visited": {
-      color: theme.palette.common.white,
-    },
-    letterSpacing: "2px",
-    // display: "none",
-    [theme.breakpoints.up("sm")]: {
-      display: "block",
-      fontSize: "36px",
-      lineHeight: "150%",
+
+    [theme.breakpoints.between("xs", "sm")]: {
+      width: '135px',
+      height: '32px',
+
     },
   },
   leftMenu: {
@@ -65,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-between",
   },
   drawerContainer: {
-    padding: theme.spacing(3, 6),
+    padding: theme.spacing(1, 6),
   },
   search: {
     position: "relative",
@@ -122,6 +118,26 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.getContrastText(theme.palette.common.white),
     },
   },
+  SignInTypog: {
+    fontSize: '24px'
+  },
+
+  avatar: {
+    width: '36px',
+    height: '36px',
+    marginLeft: theme.spacing(-4),
+  },
+
+  divider: {
+    marginBottom: theme.spacing(4),
+  },
+  drawerPaperColor: {
+    "& .MuiDrawer-paper": {
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.primary.contrastText,
+    },
+  }
+
 }));
 
 export default function Header(props) {
@@ -178,6 +194,7 @@ export default function Header(props) {
 
   const leftMenu = [
     {
+
       title: "My Authers",
       link: context.user ? `/MyAuthers/${context.user.id}/` : `/Login`,
     },
@@ -310,7 +327,9 @@ export default function Header(props) {
         </IconButton>
 
         <Drawer
+          className={classes.drawerPaperColor}
           {...{
+
             anchor: "left",
             open: drawerOpen,
             onClose: handleDrawerClose,
@@ -319,7 +338,9 @@ export default function Header(props) {
           <div className={drawerContainer}>{getDrawerChoices()}</div>
         </Drawer>
 
-        <div>{Logo}</div>
+        
+            {Logo}
+        
         <div>{searchBar()}</div>
       </Toolbar>
     );
@@ -327,7 +348,34 @@ export default function Header(props) {
 
   const getDrawerChoices = () => {
     return (
-      <div>
+
+      <div >
+        <Grid
+          container
+          direction="row"
+          justify="flex-start"
+          alignItems="center"
+        >
+          <Grid item>
+            <Avatar className={classes.avatar} src={""} />
+          </Grid>
+
+          <Grid item>
+            <IconButton
+
+              className={classes.SignInTypog}
+              color="inherit"
+              component={RouterLink}
+              to="/Login"
+            >
+              Sign in
+          </IconButton>
+
+          </Grid>
+
+        </Grid>
+
+        <Divider className={classes.divider} />
         {leftMenu.map((e) => {
           return (
             <Link
@@ -348,7 +396,7 @@ export default function Header(props) {
           <List>
             <MenuItem>Profile</MenuItem>
 
-            <MenuItem component={Button} onClick={() => context.logout()}>
+            <MenuItem onClick={() => context.logout()}>
               Logout
             </MenuItem>
           </List>
@@ -362,7 +410,7 @@ export default function Header(props) {
               key: "Login",
             }}
           >
-            <MenuItem>Login</MenuItem>
+
           </Link>
         )}
       </div>
@@ -370,9 +418,18 @@ export default function Header(props) {
   };
 
   const Logo = (
-    <Typography variant="h6" component="h1" className={logo}>
-      Alpha+
-    </Typography>
+     <ButtonBase
+     component={RouterLink}
+     to="/" 
+     disableRipple='true'
+     >
+  
+    <img 
+    src="/logo.png"
+    className={logo} />
+   
+    </ButtonBase>
+
   );
 
   const getLeftMenu = () => {

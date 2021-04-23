@@ -25,11 +25,16 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   title: {
+    color: theme.palette.common.black,
     textDecoration: "none",
     "&:visited": {
       color: theme.palette.common.black,
     },
     padding: theme.spacing(1),
+  },
+  bio:{
+    color:"#707070"
+
   },
   cardLayout: {
     marginTop: theme.spacing(2),
@@ -78,9 +83,9 @@ function ContentCard(props) {
         )}
 
         {/* // Content info  */}
-        <Grid item sm>
-          <Grid item container direction="column">
-            <Grid item>
+        <Grid item sm >
+          <Grid item  container direction="column" >
+            <Grid item >
               <Typography
                 component={RouterLink}
                 to={props.link}
@@ -89,10 +94,13 @@ function ContentCard(props) {
               >
                 {props.title}
               </Typography>
-              <Typography variant="subtitle1">{props.bio}</Typography>
+              
+              
+              
+              <Typography className={classes.bio}  variant="subtitle1">{props.bio}</Typography>
             </Grid>
           </Grid>
-        </Grid>
+       </Grid>
         {/* // Crud Buttons */}
         {state.crudOtion ? (
           <Grid container item>

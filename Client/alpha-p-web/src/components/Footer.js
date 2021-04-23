@@ -1,4 +1,4 @@
-import { Grid, makeStyles, Typography, Link } from "@material-ui/core";
+import { Grid, makeStyles, Typography, Link, ButtonBase } from "@material-ui/core";
 import { EmailRounded } from "@material-ui/icons";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.white,
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
-    
+
   },
   footerLayout: {
     background: theme.palette.primary.dark,
@@ -40,13 +40,15 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   logo: {
-    paddingRight: theme.spacing(4),
-    paddingBottom: theme.spacing(2),
-    justifyContent: "flex-start",
+    width:'180px',
+    height:'41.5px',
+    marginBottom: theme.spacing(3),
+    
     [theme.breakpoints.up("lg")]: {
-      marginRight: theme.spacing(50),
-    },
+           marginRight: theme.spacing(45),
+         },
   },
+ 
   linksGrid: {
     [theme.breakpoints.up("lg")]: {
       display: "flex",
@@ -59,19 +61,37 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
+
 const Footer = () => {
+
   const classes = useStyles();
+  
   const copyRight = () => {
     const year = new Date().getFullYear();
     return `Alpha+ © ${year}`;
   };
+   
+  const Logo = (
+    <ButtonBase
+     component={RouterLink}
+     to="/" 
+     disableRipple='true'
+     >
+    
+    <img  
+    src="/Logo_footer.png" 
+    className={classes.logo}
+      />
+      </ButtonBase>
+  );
+ 
   return (
     <div>
       {/* Footer Elements */}
       <div className={classes.footerLayout}>
-        <Typography variant="h3" className={classes.logo}>
-          ALPHA+
-        </Typography>
+
+      <div>{Logo}</div>        
+
         <Grid container direction="row" spacing={8}>
           <Grid item className={classes.linksGrid}>
             <Typography variant="h5">Useful Links</Typography>
@@ -122,5 +142,6 @@ const Footer = () => {
     </div>
   );
 };
+
 
 export default Footer;
