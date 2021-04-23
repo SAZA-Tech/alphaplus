@@ -41,6 +41,9 @@ export const COMPANY_GQL = gql`
         date
         exchange
       }
+      isFollowed @client
     }
   }
 `;
+
+

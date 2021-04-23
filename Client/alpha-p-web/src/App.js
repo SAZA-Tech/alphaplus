@@ -23,6 +23,7 @@ import { ThemeProvider } from "@material-ui/styles";
 import { CircularProgress, Container } from "@material-ui/core";
 import Company from "./views/Company/Company";
 import ProfileSetting from "./views/profileSetting/ProfileSetting";
+import AccountSecurty from "./views/profileSetting/AccountSecurty";
 // const Company = React.lazy(() => import("./views/Company/Company"));
 export class App extends Component {
   render() {
@@ -42,12 +43,19 @@ export class App extends Component {
                 <Route path="/userProfile/:userId" component={EndUserProfile} />
                 <ProtectedRoute
                   exact
-                  path="/accountSettings/"
+                  path="/ProfileSetting/"
                   component={ProfileSetting}
                 />
+
+                <ProtectedRoute
+                  exact
+                  path="/AccountSecurty/"
+                  component={AccountSecurty}
+                />
+
                 <Route path="/company/:companyId" component={Company} />
                 <Route path="/article/:articleId" component={Article} />
-                <Route exact path="/Portfolio" component={Portfolio} />
+                <ProtectedRoute exact path="/Portfolio" component={Portfolio} />
                 <ProtectedRoute path="/draft/:draftId" component={Draft} />
                 <ProtectedRoute
                   exact

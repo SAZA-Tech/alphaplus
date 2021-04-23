@@ -21,6 +21,7 @@ import {
 import { Redirect, useParams } from "react-router";
 import { useQuery } from "@apollo/client";
 import { PROFILE_GQL } from "../graphql/Auth/authGql";
+import CommentComponentBody from "../components/Content/CommentComponents";
 
 const img = "avatars/7.jpg";
 const userInfo = {
@@ -131,16 +132,19 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(21),
     // height: theme.spacing(14),
     padding: theme.spacing(1),
+    marginBottom: theme.spacing(1),
 
     [theme.breakpoints.between("sm", "md")]: {
       width: theme.spacing(13.5),
       height: theme.spacing(21.5),
       padding: theme.spacing(0.5),
+      marginBottom: theme.spacing(1),
     },
     [theme.breakpoints.between("md", "xl")]: {
       width: theme.spacing(17),
       height: theme.spacing(29),
       padding: theme.spacing(1.5),
+      marginRight: theme.spacing(2),
     },
   },
 
@@ -223,28 +227,29 @@ const useStyles = makeStyles((theme) => ({
 const EndUserProfile = (props) => {
   const classes = useStyles();
   const { userId } = useParams();
+  console.log(userId);
   const { data, error, loading } = useQuery(PROFILE_GQL, {
     variables: {
       id: userId,
     },
   });
-  if (error) return <Redirect to="404" />;
+  if (error) {
+    console.log(error);
+    return <Redirect to="404" />;
+  }
   if (loading) return <CircularProgress />;
   return (
     <div className={classes.root}>
-      <Grid
-        container
-        direction="row"
-        justify="center"
-        alignItems="flex-start"
-        spacing={1}
-      >
+      <Grid container direction="row" justify="center" alignItems="flex-start">
         <Grid item>
           <Paper className={classes.paper1} elevation={2}>
             <UserInfo
+              id={userId}
               img={userInfo.img}
               name={data.findUser.name}
               bio={userInfo.bio}
+              userId={data.findUser.id}
+              isFollowed={data.findUser.isFollowed}
             />
           </Paper>
         </Grid>
@@ -252,6 +257,7 @@ const EndUserProfile = (props) => {
         <Grid item xs sm md lg={8}>
           <Paper className={classes.paper2} elevation={2}>
             <UserProfileDetails
+              name={data.findUser.name}
               followers={data.findUser.followers}
               following={data.findUser.following}
               comments={data.getComments}
@@ -285,6 +291,8 @@ export function UserProfileDetails(props) {
         name={v.name}
         bio={v.bio ? v.bio : "Default Bio"}
         avatar={v.avatar}
+        userId={v.id}
+        isFollowed={v.isFollowed}
       />
     ));
 
@@ -294,6 +302,8 @@ export function UserProfileDetails(props) {
         name={v.name}
         bio={v.bio ? v.bio : "Default Bio"}
         avatar={v.avatar}
+        userId={v.id}
+        isFollowed={v.isFollowed}
       />
     ));
 
@@ -368,7 +378,9 @@ export function UserProfileDetails(props) {
                     </Typography>
                   }
                   secondary={
-                    <Typography className={classes.typogrLabel}>500</Typography>
+                    <Typography className={classes.typogrLabel}>
+                      {props.comments.length}
+                    </Typography>
                   }
                 />
               </List>
@@ -385,7 +397,9 @@ export function UserProfileDetails(props) {
                     </Typography>
                   }
                   secondary={
-                    <Typography className={classes.typogrLabel}>500</Typography>
+                    <Typography className={classes.typogrLabel}>
+                      {props.followers.length}
+                    </Typography>
                   }
                 />
               </List>
@@ -402,7 +416,9 @@ export function UserProfileDetails(props) {
                     </Typography>
                   }
                   secondary={
-                    <Typography className={classes.typogrLabel}>500</Typography>
+                    <Typography className={classes.typogrLabel}>
+                      {props.following.length}
+                    </Typography>
                   }
                 />
               </List>
@@ -419,7 +435,9 @@ export function UserProfileDetails(props) {
                     </Typography>
                   }
                   secondary={
-                    <Typography className={classes.typogrLabel}>500</Typography>
+                    <Typography className={classes.typogrLabel}>
+                      {props.articles.length}
+                    </Typography>
                   }
                 />
               </List>
@@ -449,11 +467,17 @@ export function UserProfileDetails(props) {
 
         {value === 0 && (
           <Container>
-            {<HomeCard dataLimit={4} data={props.comments} btnText="More" />}
+            {props.comments.map((e) => (
+              <CommentComponentBody
+                body={e.commentBody}
+                date={e.createdAt}
+                name={props.name}
+              />
+            ))}
           </Container>
         )}
-        {value === 1 && <Container>{Followers(props.following)}</Container>}
-        {value === 2 && <Container>{Following(props.followers)}</Container>}
+        {value === 1 && <Container>{Followers(props.followers)}</Container>}
+        {value === 2 && <Container>{Following(props.following)}</Container>}
         {value === 3 && (
           <Container>
             {<HomeCard dataLimit={4} data={props.articles} btnText="More" />}

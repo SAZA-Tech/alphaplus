@@ -26,6 +26,7 @@ import {
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import { Link } from "react-router-dom";
+import { useCompanyFollow } from "../../util/hooks";
 
 const userStyles = makeStyles((theme) => ({
   companySymbol: {
@@ -234,13 +235,8 @@ function CompanyCard(props) {
             {props.price}
           </Typography>
         </TableCell>{" "}
-        <TableCell align="right">
-          <ChangePriceValue changePrice={props.change} />
-        </TableCell>
         <TableCell>
-          <Typography variant="subtitle2" className={classes.tableContent}>
-            {props.changePerce}
-          </Typography>
+          <ChangePriceValue changePrice={props.change} />
         </TableCell>
         <TableCell>
           <Typography variant="subtitle2" className={classes.tableContent}>
@@ -300,9 +296,9 @@ function CompanyCardLine(props) {
         {props.data.map((e) => (
           <CompanyCard
             vertical={true}
-            Symbol={e.symbol}
+            Symbol={e.symbol ? e.symbol : e.Symbol}
             price={e.todayFinance ? e.todayFinance.close : e.price}
-            change={e.change}
+            change={e.change ? e.change : e.changePrice}
             comId={e.id}
           />
         ))}
@@ -377,7 +373,7 @@ export function BigMiniCompanyCardTable(props) {
             <TableCell style={{ fontWeight: "400" }}>Company</TableCell>
             <TableCell style={{ fontWeight: "400" }}>Price</TableCell>
             <TableCell style={{ fontWeight: "400" }}>Change</TableCell>
-            <TableCell style={{ fontWeight: "400" }}>Change%</TableCell>
+
             <TableCell style={{ fontWeight: "400" }}>Volume</TableCell>
             <TableCell style={{ fontWeight: "400" }}>Avg.Volume</TableCell>
             <TableCell style={{ fontWeight: "400" }}>Prev.close</TableCell>
@@ -387,14 +383,14 @@ export function BigMiniCompanyCardTable(props) {
         <TableBody>
           {props.data.slice(0, props.limit).map((e) => (
             <CompanyCard
-              Symbol={e.Symbol}
-              price={e.price}
+              Symbol={e.symbol}
+              price={e.todayFinance.close}
               change={e.change}
-              changePerce={e.changePerce}
-              volume={e.volume}
-              avgVolume={e.avgVolume}
-              prevClose={e.prevClose}
-              open={e.open}
+              changePerce={0}
+              volume={e.todayFinance.volume}
+              avgVolume={0}
+              prevClose={0}
+              open={e.todayFinance.Open}
               horizontal
             />
           ))}
@@ -403,12 +399,12 @@ export function BigMiniCompanyCardTable(props) {
     </TableContainer>
   );
 }
-MiniCompanyCardTable.propTypes = {
+BigMiniCompanyCardTable.propTypes = {
   data: PropTypes.array.isRequired,
   limit: PropTypes.number,
   minWidth: PropTypes.number,
 };
-MiniCompanyCardTable.defaultProps = {
+BigMiniCompanyCardTable.defaultProps = {
   limit: 0,
   minWidth: 0,
 };
@@ -419,6 +415,10 @@ MiniCompanyCardTable.defaultProps = {
  * @returns
  */
 function CompanyCardFollow(props) {
+  const { followedCompany, toggleFollowCompany } = useCompanyFollow(
+    props.Symbol,
+    props.isFollowed
+  );
   const classes = userStyles();
   return (
     <div className={classes.followCardLayout}>
@@ -434,22 +434,23 @@ function CompanyCardFollow(props) {
           </div>
         </Grid>
         <Grid item>
-          <Button variant="outlined" size="large">
-            Follow
+          <Button variant="outlined" size="large" onClick={toggleFollowCompany}>
+            {followedCompany ? "Unfollow" : "Follow"}
           </Button>
         </Grid>
       </Grid>
     </div>
   );
 }
-// CompanyCardFollow.defaultProps{
-
-// }
+CompanyCardFollow.defaultProps = {
+  isFollowed: false,
+};
 CompanyCardFollow.propTypes = {
   Symbol: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   changePrice: PropTypes.string.isRequired,
+  isFollowed: PropTypes.bool.isRequired,
 };
 
 const ChangePriceValue = (props) => {

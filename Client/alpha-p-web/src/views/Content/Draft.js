@@ -168,9 +168,7 @@ function Draft(props) {
       console.log(`Draft is Published ${data.publishDraft.id}`);
       setSuccessMessage("Draft is published");
       setSuccess(true);
-      sleep(2000).then(() =>
-        props.history.push(`/MyAuthers/${user.id}`)
-      );
+      sleep(2000).then(() => props.history.push(`/MyAuthers/${user.id}`));
     },
   });
   function actionDraftCallback() {
@@ -180,8 +178,15 @@ function Draft(props) {
     }
   }
   function publishDraftCall() {
-    setPublish(true);
-    saveDraft().then(() => publishDraft());
+    if (tags.length == 0) {
+      setErrors({
+        message: "Please Add Tags",
+      });
+      console.log("Please Add Tags");
+    } else {
+      setPublish(true);
+      saveDraft().then(() => publishDraft());
+    }
   }
   function handleTagsChange(tags) {
     setTags(tags);
@@ -238,7 +243,13 @@ function Draft(props) {
   return fetchLoading ? (
     <CircularProgress />
   ) : (
-    <div style={{ maxWidth: "700px", margin: "2rem auto" }}>
+    <div
+      style={{
+        maxWidth: "700px",
+        margin: "auto",
+        paddingTop: "16px",
+      }}
+    >
       <div style={{ alignItems: "center" }}>
         <TextField
           id="outlined-full-width"

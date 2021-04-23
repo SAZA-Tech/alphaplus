@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     },
 
     appBar: {
-        marginTop: theme.spacing(7),
+        marginTop: theme.spacing(8),
         [theme.breakpoints.between("md", "xl")]: {
             marginTop: theme.spacing(8.5),
         },
@@ -65,12 +65,10 @@ const useStyles = makeStyles((theme) => ({
     // necessary for content to be below app bar
     //   toolbar: theme.mixins.toolbar,
     drawerPaper: {
+        position: 'absolute',
         width: drawerWidth,
-        marginTop: theme.spacing(7),
-
-        [theme.breakpoints.between("md", "xl")]: {
-            marginTop: theme.spacing(8.5),
-        },
+        marginTop: theme.spacing(8.5),
+        height: theme.spacing(65.5),
     },
 
     content: {
@@ -208,7 +206,7 @@ function ProfileSetting(props) {
                 <Hidden smUp implementation="css">
                     <Drawer
                         container={container}
-                        variant="temporary"
+                        variant='temporary'
                         anchor={theme.direction === 'rtl' ? 'right' : 'left'}
                         open={mobileOpen}
                         onClose={handleDrawerToggle}

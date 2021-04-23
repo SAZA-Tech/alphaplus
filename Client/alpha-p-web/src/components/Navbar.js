@@ -150,12 +150,18 @@ export default function Header(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>
+      <MenuItem
+        onClick={handleMenuClose}
+        component={RouterLink}
+        to="/ProfileSetting"
+      >
         <IconButton
           aria-label="account of current user"
           aria-controls="primary-search-account-menu"
           aria-haspopup="true"
           color="inherit"
+          component={RouterLink}
+          to="/ProfileSetting"
         >
           <AccountCircle />
         </IconButton>
@@ -222,7 +228,7 @@ export default function Header(props) {
 
   useEffect(() => {
     const setResponsiveness = () => {
-      return window.innerWidth < 900
+      return window.innerWidth < 1025
         ? setState((prevState) => ({ ...prevState, mobileView: true }))
         : setState((prevState) => ({ ...prevState, mobileView: false }));
     };

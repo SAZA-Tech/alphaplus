@@ -7,6 +7,7 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+import { cache } from "./storage";
 //Server URL
 
 const httpLink = createHttpLink({
@@ -25,7 +26,7 @@ const authLink = setContext((_, { headers }) => {
 
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
+  cache: cache,
 });
 
 export default (
