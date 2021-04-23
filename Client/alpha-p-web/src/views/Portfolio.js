@@ -22,7 +22,7 @@ import InputFormPort from "../components/Company/inputformport";
 import EditFormport from "../components/Company/edfitformport";
 import {
   CompanyCardLine,
-  BigMiniCompanyCardTable,
+  BigCompanyCardTable,
 } from "../components/Company/CompanyCard";
 import { Height } from "@material-ui/icons";
 import { FollowerFollowingForm } from "../components/UserInfo";
@@ -30,6 +30,7 @@ import {
   ContentCard,
   ContentCardPaper,
 } from "../components/Content/ContentCards";
+import { userConfigVar } from "../storage/userConfig";
 
 // import {
 //   ContentCard,
@@ -115,11 +116,19 @@ const useStyles = makeStyles((theme) => ({
   divForm: {
     marginBottom: theme.spacing(2),
   },
+
+  buttons: {
+    [theme.breakpoints.between("xs", "sm")]: {
+      marginRight: theme.spacing(3),
+    },
+
+    marginRight: theme.spacing(4.5),
+  },
 }));
 
 function Portfolio(props) {
   const [isOpen, setIsOpen] = useState(false);
-
+  const portoId = userConfigVar().portfolio.id;
   const togglePopup = () => {
     setIsOpen(!isOpen);
   };
@@ -145,11 +154,7 @@ function Portfolio(props) {
     PORTFOLIO_GQL,
     {
       variables: {
-        id: user.user.id,
-      },
-      onCompleted(data) {
-        setCompanies(data.getCompanies);
-        console.log(data.findUser.username);
+        portoId: portoId,
       },
     }
   );
@@ -179,8 +184,8 @@ function Portfolio(props) {
             <CompanyCardLine data={data.getCompanies} />
 
             <Grid item xs>
-              <BigMiniCompanyCardTable
-                data={data.findUser.portofolio[0].followedCompanies}
+              <BigCompanyCardTable
+                data={data.getPortfolio.followedCompanies}
                 limit={4}
                 minWidth={400}
               />
@@ -209,9 +214,7 @@ function Portfolio(props) {
                 <Popup
                   content={
                     <>
-                      <EditFormport
-                        portoId={data.findUser.portofolio[0].id}
-                      ></EditFormport>
+                      <EditFormport portoId={portoId}></EditFormport>
                     </>
                   }
                   handleClose={togglePopup}
@@ -228,30 +231,31 @@ function Portfolio(props) {
             // alignItems
             // justify='flex-end'
           >
-            <Grid item container direction="row" spacing={2} xs>
+            <Grid
+              item
+              container
+              direction="row"
+              // alignItems
+              // justify='flex-end'
+              xs
+            >
               <Grid item>
                 {" "}
-                <Button variant="contained">
+                <Button className={classes.buttons} variant="contained">
                   <Typography className={classes.BtnsTypo}>Latest</Typography>
                 </Button>
               </Grid>
               <Grid item>
                 {" "}
-                <Button variant="contained">
+                <Button className={classes.buttons} variant="contained">
                   <Typography className={classes.BtnsTypo}>Articles</Typography>
                 </Button>
               </Grid>
 
               <Grid item>
                 {" "}
-                <Button variant="contained">
+                <Button className={classes.buttons} variant="contained">
                   <Typography className={classes.BtnsTypo}>News</Typography>
-                </Button>
-              </Grid>
-              <Grid item>
-                {" "}
-                <Button variant="contained">
-                  <Typography className={classes.BtnsTypo}>Analyst</Typography>
                 </Button>
               </Grid>
             </Grid>
@@ -260,27 +264,15 @@ function Portfolio(props) {
               <Typography className={classes.labelTypo}>Articles</Typography>
             </Grid>
 
-            <Grid item>
-              {Followers(data.findUser.portofolio[0].relatedArticles)}
-            </Grid>
+            <Grid item>{Followers(data.getPortfolio.relatedArticles)}</Grid>
           </Grid>
         </Paper>
       </div>
     );
   };
 
-  if (data.findUser.portofolio == null || data.findUser.portofolio.length < 1) {
+  if (portoId == "") {
     return (
-      // <div>
-      // <Grid item>
-      //   <p>please create portfolio</p>
-      //   <CButton >
-
-      //     <InputFormPort buttonName="Edit"
-      //     />
-      //   </CButton>
-      // </Grid>
-      // </div>
       <div className={classes.paper}>
         <p>Please create a portfolio</p>
         <Grid item>
