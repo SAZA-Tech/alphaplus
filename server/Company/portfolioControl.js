@@ -6,6 +6,7 @@ const { validateSymbols } = require("../Auth/validators");
 const { CompanyControl } = require("./companyControl");
 const Portfolio = require("./Models/PortfolioModel");
 const getArticleWithTags = require("../Content/getArticlesTags");
+const UserModel = require("../Auth/UserModel");
 
 /**
  * Create a new portfolio@
@@ -17,7 +18,7 @@ const getArticleWithTags = require("../Content/getArticlesTags");
  * @param {*} context checkAuth
  * @returns {object} portfolio
  */
-const createPortfolio = async (_, { name, tags },context) => {
+const createPortfolio = async (_, { name, tags }, context) => {
   const auth = checkAuth(context);
   const { errors, valid } = validateSymbols({ tags });
   if (!valid) {
@@ -25,7 +26,7 @@ const createPortfolio = async (_, { name, tags },context) => {
   }
 
   // const user = await findUser(_, { id:"60747c3595129a3bdc7678db"});
-  const user= await yes.findById(auth.id).exec();
+  const user = await yes.findById(auth.id).exec();
   console.log(user);
 
   if (valid) {
@@ -85,9 +86,30 @@ const deletePortfolio = async (_, { portoId }, context) => {
     throw new Error("No Autrhized");
   }
 };
+
+const followCompany = async (_, { portoId, symbol }, context) => {
+  const user = checkAuth(context);
+  const foundUser = await UserModel.findById(user.id);
+  if (foundUser) {
+    const porto = await Portfolio.findById(portoId);
+    if (porto.follwedTags.includes(symbol)) {
+      porto.follwedTags = porto.follwedTags.filter((u) => u != symbol);
+    } else {
+      porto.follwedTags.push(symbol);
+    }
+    const res = await porto.save();
+    return {
+      id: res._id,
+      ...res._doc,
+    };
+  } else {
+    throw new Error("User Not Found ");
+  }
+};
 module.exports.PortfolioControl = {
   createPortfolio,
   getPortfolio,
   editPortfolio,
   deletePortfolio,
+  followCompany,
 };

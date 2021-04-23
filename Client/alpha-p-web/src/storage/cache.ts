@@ -4,6 +4,7 @@ const cache: InMemoryCache = new InMemoryCache({
   typePolicies: {
     User: {
       fields: {
+        
         isFollowed: {
           // read the reactive variable of the current logged in user
           read(_, { readField }) {
@@ -31,6 +32,19 @@ const cache: InMemoryCache = new InMemoryCache({
                 return useranem == userConfigVar().username;
               }
             );
+            return result ? true : false;
+          },
+        },
+      },
+    },
+    Company: {
+      fields: {
+        isFollowed: {
+          read(_, { readField }) {
+            const symbol = readField("symbol");
+            const result = userConfigVar().portfolio.follwedTags.find((v) => {
+              return v === symbol;
+            });
             return result ? true : false;
           },
         },

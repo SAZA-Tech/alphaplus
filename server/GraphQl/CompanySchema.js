@@ -4,7 +4,6 @@ const companySchema = gql`
   input SectorInput {
     SecnameInput: String!
     SectorID: String
-
   }
   input CompanyFilter {
     Symbol: String
@@ -78,12 +77,13 @@ const companySchema = gql`
     createSector(SectorInput: SectorInput!): Sector!
     deleteSector(sectorID: ID!): String!
     createCompany(CompanyInput: CompanyInput!): Company #require api
-    deleteCompany(id: ID!,companyId: ID!): String!
+    deleteCompany(id: ID!, companyId: ID!): String!
     editSector(SectorInput: SectorInput!): Sector!
     editCompany(CompanyInput: CompanyInput!): Company!
     createPortfolio(name: String, tags: [String!]): Portfolio!
     editPortfolio(portoId: ID!, name: String!, tags: [String!]): Portfolio!
     deletePortfolio(portoId: ID!): String!
+    followCompany(portoId: ID!, symbol: String!): Portfolio
   }
   type Portfolio {
     id: ID!

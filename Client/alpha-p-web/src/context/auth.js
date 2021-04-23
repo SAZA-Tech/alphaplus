@@ -1,6 +1,10 @@
 import React, { useReducer, createContext } from "react";
 import jwtDecode from "jwt-decode";
-import { saveUserConfig, userConfigVar } from "../storage/userConfig";
+import {
+  initialUserConfig,
+  saveUserConfig,
+  userConfigVar,
+} from "../storage/userConfig";
 
 const initialState = {
   user: null,
@@ -47,6 +51,7 @@ function AuthProvider(props) {
     userConfigVar({
       followedUsers: userData.following,
       username: userData.username,
+      portfolio: userData.portfolios[0],
     });
     saveUserConfig();
     // console.log(userConfigVar().followedUsers);
@@ -58,10 +63,9 @@ function AuthProvider(props) {
 
   function logout() {
     localStorage.removeItem("jwtToken");
-    userConfigVar({
-      followedUsers: [],
-    });
     localStorage.removeItem("alph.userConfig");
+    userConfigVar(initialUserConfig);
+
     window.location.reload();
 
     dispatch({ type: "LOGOUT" });

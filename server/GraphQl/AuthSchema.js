@@ -17,7 +17,7 @@ module.exports = gql`
     token: String!
     following: [User!]
     followers: [User!]
-    portofolio: [Portfolio!]
+    portfolios: [Portfolio!]
   }
 
   # TODO: add defualt value for type

@@ -5,7 +5,12 @@ const initialUserConfig: UserConfig = JSON.parse(
 ) || {
   username: "",
   followedUsers: [],
-  follwedCompanies: [],
+  portfolio: {
+    name: "",
+    id: "",
+    follwedTags: [],
+    __typename: "",
+  },
 };
 
 export default initialUserConfig;

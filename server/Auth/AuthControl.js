@@ -150,21 +150,24 @@ module.exports.findUser = async (_, { id }) => {
     const user = await User.findById(id)
       .populate("followers")
       .populate("following");
-      var arr = user.portfolios;
-      if(arr==null || arr.length<1){
-        if (user) {
-          return user;
-        } else {
-          throw new Error("User Not Found");
-        }
+    var arr = user.portfolios;
+    if (arr == null || arr.length < 1) {
+      if (user) {
+        return user;
+      } else {
+        throw new Error("User Not Found");
       }
-      var portfolios=await PortfolioControl.getPortfolio(_, { portoId: arr[0] });
-      var test =[];
-      test.push(portfolios);
+    }
+    var portfolios = await PortfolioControl.getPortfolio(_, {
+      portoId: arr[0],
+    });
+    var test = [];
+    test.push(portfolios);
     if (user) {
       return {
-        portofolio:test,
-        ...user._doc
+        id: user.id,
+        portofolio: test,
+        ...user._doc,
       };
     } else {
       throw new Error("User Not Found");

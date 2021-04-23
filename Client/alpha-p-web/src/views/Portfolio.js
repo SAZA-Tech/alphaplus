@@ -12,21 +12,24 @@ import {
   Divider,
   CircularProgress,
 } from "@material-ui/core";
-import {
-  CButton,
-} from "@coreui/react";
+
 import { Link as RouterLink, Redirect } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import { useQuery } from "@apollo/client";
-import { PORTFOLIO_GQL } from "../graphql/Content/portfolioGql";
-import { NetworkStatus } from '@apollo/client';
-import InputFormPort from "../components/Company/inputformport"
-import EditFormport from "../components/Company/edfitformport"
+import { PORTFOLIO_GQL } from "../graphql/Company/portfolioGql";
+import { NetworkStatus } from "@apollo/client";
+import InputFormPort from "../components/Company/inputformport";
+import EditFormport from "../components/Company/edfitformport";
 import {
   CompanyCardLine,
   BigMiniCompanyCardTable,
 } from "../components/Company/CompanyCard";
 import { Height } from "@material-ui/icons";
+import { FollowerFollowingForm } from "../components/UserInfo";
+import {
+  ContentCard,
+  ContentCardPaper,
+} from "../components/Content/ContentCards";
 
 // import {
 //   ContentCard,
@@ -114,49 +117,48 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 function Portfolio(props) {
-
   const [isOpen, setIsOpen] = useState(false);
 
   const togglePopup = () => {
     setIsOpen(!isOpen);
-  }
+  };
   const user = useContext(AuthContext);
-  // check if he has porfolio 
+  // check if he has porfolio
   const classes = useStyles();
   const [Companies, setCompanies] = useState([]);
 
-  const Popup = props => {
+  const Popup = (props) => {
     return (
       <div className="popup-box">
         <div className="box">
-          <span className="close-icon" onClick={props.handleClose}>x</span>
+          <span className="close-icon" onClick={props.handleClose}>
+            x
+          </span>
           {props.content}
         </div>
       </div>
     );
   };
 
-
-  const { data, error, loading, refetch, networkStatus } = useQuery(PORTFOLIO_GQL, {
-
-    variables: {
-      id: user.user.id,
-    },
-    onCompleted(data) {
-      setCompanies(data.getCompanies);
-      console.log(data.findUser.username);
-    },
-
-
-  });
-  if (networkStatus === NetworkStatus.refetch) return 'Refetching!';
+  const { data, error, loading, refetch, networkStatus } = useQuery(
+    PORTFOLIO_GQL,
+    {
+      variables: {
+        id: user.user.id,
+      },
+      onCompleted(data) {
+        setCompanies(data.getCompanies);
+        console.log(data.findUser.username);
+      },
+    }
+  );
+  if (networkStatus === NetworkStatus.refetch) return "Refetching!";
   if (loading) return <CircularProgress />;
   if (error) return <Redirect to="/404" />;
 
-
   const img = "avatars/7.jpg";
+<<<<<<< HEAD
   // const Followers = (FollowersDocs) =>
   //   FollowersDocs.map((v) => (
   //     <FollowerFollowingForm
@@ -167,6 +169,16 @@ function Portfolio(props) {
   //     />
   //   ));
 
+=======
+  const Followers = (FollowersDocs) => (
+    <ContentCardPaper
+      data={FollowersDocs}
+      limit={6}
+      auther
+      title={"Articles"}
+    />
+  );
+>>>>>>> Testing
 
   const CompanyHeader = () => {
     return (
@@ -194,29 +206,30 @@ function Portfolio(props) {
               justify="flex-end"
               spacing={2}
             >
-        <Grid item>
-          <Button
-            variant="contained"
-            color="secondary"
-            value="Create Portfolio"
-            className={classes.AddEditBtn}
-            startIcon={<CreateIcon />}
-            onClick={togglePopup}
-          >
-            Edit
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  value="Create Portfolio"
+                  className={classes.AddEditBtn}
+                  startIcon={<CreateIcon />}
+                  onClick={togglePopup}
+                >
+                  Edit
                 </Button>
-        </Grid>
-        {isOpen && <Popup
-          content={<>
-
-            <EditFormport
-            portoId={data.findUser.portofolio[0].id}
-
-            ></EditFormport>
-
-          </>}
-          handleClose={togglePopup}
-        />}
+              </Grid>
+              {isOpen && (
+                <Popup
+                  content={
+                    <>
+                      <EditFormport
+                        portoId={data.findUser.portofolio[0].id}
+                      ></EditFormport>
+                    </>
+                  }
+                  handleClose={togglePopup}
+                />
+              )}
             </Grid>
           </Grid>
         </Paper>
@@ -225,8 +238,8 @@ function Portfolio(props) {
           <Grid
             container
             direction="column"
-          // alignItems
-          // justify='flex-end'
+            // alignItems
+            // justify='flex-end'
           >
             <Grid item container direction="row" spacing={2} xs>
               <Grid item>
@@ -260,14 +273,18 @@ function Portfolio(props) {
               <Typography className={classes.labelTypo}>Articles</Typography>
             </Grid>
 
+<<<<<<< HEAD
             {/* <Grid item>{Followers(data.findUser.portofolio[0].relatedArticles)}</Grid> */}
+=======
+            <Grid item>
+              {Followers(data.findUser.portofolio[0].relatedArticles)}
+            </Grid>
+>>>>>>> Testing
           </Grid>
         </Paper>
       </div>
     );
-  }
-
-
+  };
 
   if (data.findUser.portofolio == null || data.findUser.portofolio.length < 1) {
     return (
@@ -293,31 +310,28 @@ function Portfolio(props) {
             onClick={togglePopup}
           >
             Create Portfolio
-                </Button>
+          </Button>
         </Grid>
-        {isOpen && <Popup
-          content={<>
-
-            <InputFormPort></InputFormPort>
-
-          </>}
-          handleClose={togglePopup}
-        />}
+        {isOpen && (
+          <Popup
+            content={
+              <>
+                <InputFormPort></InputFormPort>
+              </>
+            }
+            handleClose={togglePopup}
+          />
+        )}
       </div>
     );
-
   } else {
-
     return (
       <div>
-
         <Grid item>{CompanyHeader()}</Grid>
       </div>
     );
   }
 }
-
-
 
 export default Portfolio;
 

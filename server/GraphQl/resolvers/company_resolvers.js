@@ -17,6 +17,7 @@ module.exports = {
     editSector: Company.SectorControl.editSector,
     editCompany: Company.CompanyControl.editCompany,
     createPortfolio: Company.PortfolioControl.createPortfolio,
-    editPortfolio:Company.PortfolioControl.editPortfolio,
+    editPortfolio: Company.PortfolioControl.editPortfolio,
+    followCompany: Company.PortfolioControl.followCompany,
   },
 };
