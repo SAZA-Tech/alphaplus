@@ -191,7 +191,7 @@ const userStyles = makeStyles((theme) => ({
   },
   title: {
     color: theme.palette.grey[700],
-  }
+  },
 }));
 
 // Variant , Size
@@ -234,8 +234,8 @@ function CompanyCard(props) {
             to={`/company/${props.comId}`}
             target="_blank"
             variant="subtitle2"
-            className={classes.companySymbol}>
-
+            className={classes.companySymbol}
+          >
             {props.Symbol}
           </Typography>
         </TableCell>
@@ -247,39 +247,34 @@ function CompanyCard(props) {
         <TableCell>
           <ChangePriceValue changePrice={props.change} />
         </TableCell>
-
-        { props.volume ?
-          (<TableCell  >
+        {props.volume ? (
+          <TableCell>
             <Typography variant="subtitle2" className={classes.tableContent}>
               {props.volume}
             </Typography>
-          </TableCell>) : null
-        }
-
-
-        { props.avgVolume ?
-          (<TableCell>
+          </TableCell>
+        ) : null}
+        {props.avgVolume ? (
+          <TableCell>
             <Typography variant="subtitle2" className={classes.tableContent}>
               {props.avgVolume}
             </Typography>
-          </TableCell>) : null
-        }
-
-        { props.prevClose ?
-          (<TableCell>
+          </TableCell>
+        ) : null}
+        {props.prevClose ? (
+          <TableCell>
             <Typography variant="subtitle2" className={classes.tableContent}>
               {props.prevClose}
             </Typography>
-          </TableCell>) : null
-        }
-
-        { props.open ?
-          (<TableCell>
+          </TableCell>
+        ) : null}
+        {props.open ? (
+          <TableCell>
             <Typography variant="subtitle2" className={classes.tableContent}>
               {props.open}
             </Typography>
-          </TableCell>) : null
-        }
+          </TableCell>
+        ) : null}
       </TableRow>
     );
   };
@@ -352,21 +347,19 @@ function MiniCompanyCardTable(props) {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell >Company</TableCell>
-            <TableCell >Price</TableCell>
-            <TableCell >Change</TableCell>
+            <TableCell>Company</TableCell>
+            <TableCell>Price</TableCell>
+            <TableCell>Change</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody >
+        <TableBody>
           {props.data.slice(0, props.limit).map((e) => (
             <CompanyCard
-
               horizontal={true}
               Symbol={e.symbol ? e.symbol : e.Symbol}
               price={e.todayFinance ? e.todayFinance.close : e.price}
               change={e.change ? e.change : e.changePrice}
               comId={e.id}
-
             />
           ))}
         </TableBody>
@@ -412,8 +405,8 @@ export function BigCompanyCardTable(props) {
               change={e.change}
               changePerce={0}
               volume={e.todayFinance.volume}
-              avgVolume={0}
-              prevClose={0}
+              avgVolume={e.todayFinance.high}
+              prevClose={e.todayFinance.close}
               open={e.todayFinance.Open}
               horizontal
             />
@@ -595,7 +588,9 @@ function CompanyMiniDataTable(props) {
         <TableHead>
           <TableRow>
             <TableCell align="center">
-              <Typography className={classes.title} variant="h5">{props.title}</Typography>
+              <Typography className={classes.title} variant="h5">
+                {props.title}
+              </Typography>
             </TableCell>
             {/* <TableCell></TableCell> */}
           </TableRow>
