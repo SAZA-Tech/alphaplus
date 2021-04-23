@@ -63,7 +63,7 @@ const editPortfolio = async (_, { portoId, name, tags }, context) => {
   const porto = await Portfolio.findById(portoId);
   if (porto.$isValid) {
     if (name != "") porto.name = name;
-    if (validateSymbols(tags).valid) porto.tags = tags;
+    if (validateSymbols(tags).valid) porto.follwedTags = tags;
     const res = await porto.save();
     return getPortfolio(_, { portoId: res.id });
   } else {

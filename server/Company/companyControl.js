@@ -131,7 +131,7 @@ const createCompany = async (
   // }
 };
 
-const deleteCompany = async (_, id, { companyId }, context) => {
+const deleteCompany = async (_, {id, companyId }, context) => {
   if (isAuthrized(_, { id }, context)) {
     try {
       const deleteCompany = await Company.findById(companyId);

@@ -36,6 +36,10 @@ const DELETE_USER = gql`
 `;
 
 const Users = () => {
+
+  function refreshPage() {
+    window.location.reload(false);
+  }
   const [details, setDetails] = useState([]);
   const [items, setItems] = useState([]);
   const [warning, setWarning] = useState(false);
@@ -46,7 +50,11 @@ const Users = () => {
     },
   });
 
-  const [deleteUser, { loading: deleteLoading }] = useMutation(DELETE_USER);
+  const [deleteUser, { loading: deleteLoading }] = useMutation(DELETE_USER,{
+    onCompleted(){
+      refreshPage();
+    }
+  });
 
   const history = useHistory();
   const toggleDetails = (index) => {

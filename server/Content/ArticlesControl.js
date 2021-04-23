@@ -337,16 +337,39 @@ const getArticle = async (_, { articleId }, context) => {
       },
       context
     );
-    console.log(articleComments);
   } else {
     throw new Error(`Article is not found`);
   }
-  if (!article.articleAuthorId._id) {
-    article.articleAuthorId._id = "defalut";
-    article.articleAuthorId.name = "jhon doe";
-    article.articleAuthorId.username = "jhonDoe";
-    article.articleAuthorId.email = "jhon@doe.doe";
-    article.articleAuthorId.createdAt = "2000-18";
+  if (article.articleAuthor==null) {
+    var id = "defalut";
+    var name = "jhon doe";
+    var username= "jhonDoe";
+    var email = "jhon@doe.doe";
+    var createdat = "2000-18";
+    var likes ={
+      createdAt :"dum",
+      username:"dum",
+      id:"dum"
+    }
+
+    var arr=[];
+    arr.push(likes);
+    article.likes=arr;
+    article.save();
+    return {
+      articleComments: articleComments.values(),
+      id: article._id,
+      
+      articleAuthor: {
+        id: id,
+        name: name,
+        username: username,
+        email: email,
+        createdAt: createdat,
+      },
+   
+      ...article._doc,
+    };
   }
   return {
     articleComments: articleComments.values(),

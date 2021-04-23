@@ -14,7 +14,6 @@ import {
   CModalTitle,
 } from "@coreui/react";
 import CIcon from '@coreui/icons-react'
-import sectorsData from './SectorsData'
 import InputFormSector from './InputFormSector'
 import AddFormSector from './AddFormSector'
 import { gql, useQuery } from "@apollo/client";
@@ -39,7 +38,9 @@ const DELETE_SECTOR = gql`
 
 
 const Sectors = () => {
-  
+  function refreshPage() {
+    window.location.reload(false);
+  }
   const [details, setDetails] = useState([])
   const [items, setItems] = useState([])
   const [warning, setWarning] = useState(false);
@@ -49,7 +50,11 @@ const Sectors = () => {
      setItems(data.getSectors);
    },
  });
- const [delteSector, { loading: deleteLoading }] = useMutation(DELETE_SECTOR); 
+ const [delteSector, { loading: deleteLoading }] = useMutation(DELETE_SECTOR,{
+   onCompleted(){
+    refreshPage();
+   }
+ }); 
 
   const toggleDetails = (index) => {
     const position = details.indexOf(index)

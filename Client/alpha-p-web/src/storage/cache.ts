@@ -23,6 +23,9 @@ const cache: InMemoryCache = new InMemoryCache({
           read(_, { readField, toReference }) {
             const likes = readField<any>("likes")!;
             console.log(likes);
+            if(likes==null){
+              return false;
+            }
             const result = likes.find(
               (e: Reference | StoreObject | undefined) => {
                 const useranem = readField("username", e)!;

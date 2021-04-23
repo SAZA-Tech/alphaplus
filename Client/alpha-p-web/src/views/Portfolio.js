@@ -158,6 +158,18 @@ function Portfolio(props) {
   if (error) return <Redirect to="/404" />;
 
   const img = "avatars/7.jpg";
+<<<<<<< HEAD
+  // const Followers = (FollowersDocs) =>
+  //   FollowersDocs.map((v) => (
+  //     <FollowerFollowingForm
+  //       editors={v.articleAuthor.name + " ,  "}
+  //       numberOfComm={"   number of comments    " + v.commentCount}
+  //       title={v.articleTitle}
+  //       avatar={img}
+  //     />
+  //   ));
+
+=======
   const Followers = (FollowersDocs) => (
     <ContentCardPaper
       data={FollowersDocs}
@@ -166,6 +178,7 @@ function Portfolio(props) {
       title={"Articles"}
     />
   );
+>>>>>>> Testing
 
   const CompanyHeader = () => {
     return (
@@ -260,9 +273,13 @@ function Portfolio(props) {
               <Typography className={classes.labelTypo}>Articles</Typography>
             </Grid>
 
+<<<<<<< HEAD
+            {/* <Grid item>{Followers(data.findUser.portofolio[0].relatedArticles)}</Grid> */}
+=======
             <Grid item>
               {Followers(data.findUser.portofolio[0].relatedArticles)}
             </Grid>
+>>>>>>> Testing
           </Grid>
         </Paper>
       </div>
