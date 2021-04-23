@@ -157,15 +157,15 @@ function Portfolio(props) {
 
 
   const img = "avatars/7.jpg";
-  const Followers = (FollowersDocs) =>
-    FollowersDocs.map((v) => (
-      <FollowerFollowingForm
-        editors={v.articleAuthor.name + " ,  "}
-        numberOfComm={"   number of comments    " + v.commentCount}
-        title={v.articleTitle}
-        avatar={img}
-      />
-    ));
+  // const Followers = (FollowersDocs) =>
+  //   FollowersDocs.map((v) => (
+  //     <FollowerFollowingForm
+  //       editors={v.articleAuthor.name + " ,  "}
+  //       numberOfComm={"   number of comments    " + v.commentCount}
+  //       title={v.articleTitle}
+  //       avatar={img}
+  //     />
+  //   ));
 
 
   const CompanyHeader = () => {
@@ -260,7 +260,7 @@ function Portfolio(props) {
               <Typography className={classes.labelTypo}>Articles</Typography>
             </Grid>
 
-            <Grid item>{Followers(data.findUser.portofolio[0].relatedArticles)}</Grid>
+            {/* <Grid item>{Followers(data.findUser.portofolio[0].relatedArticles)}</Grid> */}
           </Grid>
         </Paper>
       </div>
