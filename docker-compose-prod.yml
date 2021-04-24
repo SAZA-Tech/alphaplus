@@ -1,0 +1,31 @@
+version: "3.7"
+services:
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    links:
+      - alpha-web-prod
+      - alpha-admin-prod
+  server-prod:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.prod
+    env_file: ./server/.env
+    ports:
+      - "4000:4000"
+  alpha-web-prod:
+    container_name: alpha-web-prod
+    build:
+      context: ./Client/alpha-p-web
+      dockerfile: Dockerfile.prod
+    links:
+      - server-prod
+  alpha-admin-prod:
+    build:
+      context: ./Client/alpha-p-admin
+      dockerfile: Dockerfile.prod
+    links:
+      - server-prod

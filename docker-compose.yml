@@ -1,0 +1,39 @@
+version: "3.7"
+
+services:
+  server:
+    container_name: server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - 4000:4000
+    restart: always
+    env_file: ./server/.env
+    volumes:
+      - ./server:/app/server #Synchronise docker container with local change
+  client-alpha-web:
+    container_name: alpha-web
+    build:
+      context: ./Client/alpha-p-web
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    restart: always
+    stdin_open: true
+    volumes:
+      - ./Client/alpha-p-web :/app/client/alpha-p-web #Synchronise docker container with local change
+      - /app/client/alpha-p-web/node_modules #Avoid re-copying local node_modules. Cache in container.
+  client-alpha-admin:
+    container_name: alpha-admin
+    build:
+      context: ./Client/alpha-p-admin
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3001
+    restart: always
+    stdin_open: true
+    volumes:
+      - ./Client/alpha-p-admin :/app/client/alpha-p-admin #Synchronise docker container with local change
+      - /app/client/alpha-p-admin/node_modules #Avoid re-copying local node_modules. Cache in container.
+
