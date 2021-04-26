@@ -10,6 +10,6 @@ RUN npm rebuild node-sass
 
 COPY . .
 
-EXPOSE 3001
+EXPOSE 3000
 
-CMD ["npm", "start", "--port", "3001"]
+CMD ["npm", "start"]

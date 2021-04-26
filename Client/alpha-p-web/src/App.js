@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import {
-  HashRouter,
   BrowserRouter as Router,
-  Switch,
   Route,
 } from "react-router-dom";
 import { AuthProvider } from "./context/auth";
@@ -20,7 +18,7 @@ import Portfolio from "./views/Portfolio";
 import { MyAuthors } from "./views/Content/MyAuthors";
 import { theme } from "./Theme";
 import { ThemeProvider } from "@material-ui/styles";
-import { CircularProgress, Container } from "@material-ui/core";
+import { CircularProgress } from "@material-ui/core";
 import Company from "./views/Company/Company";
 import ProfileSetting from "./views/profileSetting/ProfileSetting";
 import AccountSecurty from "./views/profileSetting/AccountSecurty";

@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useContext } from "react";
+import  {  useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { Editor } from "../../components/Editor";
 import { Button, Container } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
-import { fade, makeStyles } from "@material-ui/core/styles";
+import {  makeStyles } from "@material-ui/core/styles";
 import { CustomizedSnackbars } from "../../components/UI/messages";
 
 // import Snackbar from '@material-ui/core/Snackbar';
@@ -17,7 +17,7 @@ import {
   GET_DRAFT,
   PUBLISH_DRAFT,
 } from "../../graphql/Content/draftsGql";
-import { useMutation, useLazyQuery, useQuery } from "@apollo/client";
+import { useMutation,  useQuery } from "@apollo/client";
 import TagsInput from "react-tagsinput";
 
 import "react-tagsinput/react-tagsinput.css"; // If using WebPack and style-loader.
@@ -71,13 +71,13 @@ function Draft(props) {
   const [fetched, setFetched] = useState(false);
 
   let { draftId } = useParams();
-  if (draftId == "new" && !newDraft) {
+  if (draftId === "new" && !newDraft) {
     setNewDraft(true);
   }
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [tags, setTags] = useState([]);
-  const [files, setFiles] = useState([]);
+  // const [files, setFiles] = useState([]);
   const { loading: fetchLoading, data: fetchedData } = useQuery(GET_DRAFT, {
     variables: {
       draftId,
@@ -178,7 +178,7 @@ function Draft(props) {
     }
   }
   function publishDraftCall() {
-    if (tags.length == 0) {
+    if (tags.length === 0) {
       setErrors({
         message: "Please Add Tags",
       });
@@ -202,7 +202,7 @@ function Draft(props) {
   };
 
   const onFilesChange = (files) => {
-    setFiles(files);
+    // setFiles(files);
   };
   const buttons = () => {
     return newDraft ? (

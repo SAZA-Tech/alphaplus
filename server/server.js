@@ -55,7 +55,7 @@ app.use((req, res) => {
 //   .then(({ url }) =>
 //     console.log(`Server is running on ${url}`)
 //   );
-app.listen({ port: 4000 }, () =>
+app.listen({ port: port }, () =>
   console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
 );
 app.get("/", function (req, res) {
@@ -66,7 +66,7 @@ app.get("/", function (req, res) {
 //   console.log(`server listening on port ${port}`); // start the server
 // });
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"

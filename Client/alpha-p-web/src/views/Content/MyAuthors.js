@@ -3,22 +3,16 @@ import { useParams, Link as RouterLink, Link } from "react-router-dom";
 import {
   Container,
   Grid,
-  Paper,
   Card,
   Typography,
-  Divider,
-  ButtonBase,
   Button,
-  Avatar,
-  TextField,
-  FormHelperText,
   List,
   ListItem,
   CircularProgress,
 } from "@material-ui/core";
 import { useQuery } from "@apollo/client";
 import { GET_DRAFTS } from "../../graphql/Content/draftsGql";
-import { fade, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { ContentCard } from "../../components/Content/ContentCards";
 import { AuthContext } from "../../context/auth";
 import { GET_ARTICLES } from "../../graphql/Content/articleGql";
@@ -40,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 export function MyAuthors(props) {
   const classes = useStyles();
 
-  const context = useContext(AuthContext);
+  // const context = useContext(AuthContext);
   const [drafts, setDrafts] = useState([]);
   const [articles, setArticles] = useState([]);
 
@@ -89,7 +83,6 @@ export function MyAuthors(props) {
                 return (
                   <ListItem>
                     <ContentCard
-                      
                       title={e.articleTitle}
                       link={`/article/${e.id}`}
                     />

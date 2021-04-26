@@ -5,7 +5,7 @@ const { UserInputError } = require("apollo-server");
 const { validateCompanyInput } = require("../Auth/validators");
 
 const axios = require("axios");
-const api_key = "1cfa225648705ed25cf698d3f8ce2c06";
+const api_key = "5160dbc9524eca9f4098ec14861098b6";
 const { isAuthrized } = require("../Auth/Autherization");
 const checkAuth = require("../Auth/check-auth");
 const getArticleWithTags = require("../Content/getArticlesTags");

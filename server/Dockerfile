@@ -1,7 +1,7 @@
 #DockerFile Client/App
 FROM node:14.5-alpine3.12
 
-WORKDIR /app/server
+WORKDIR /
 
 COPY package*.json ./
 
@@ -11,4 +11,4 @@ COPY . .
 
 EXPOSE 4000
 
-CMD ["npm","run","dev"] 
+CMD ["npm","run","start"] 

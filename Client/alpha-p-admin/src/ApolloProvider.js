@@ -15,7 +15,7 @@ import store from './store'
 //Server URL
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000/graphql",
+  uri: "https://alpha-plus-server.herokuapp.com/graphql",
 });
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem("jwtToken");

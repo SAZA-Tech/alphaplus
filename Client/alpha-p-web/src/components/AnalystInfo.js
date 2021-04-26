@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+// import React, { useState } from "react";
 import PropTypes from "prop-types";
 import {
   Avatar,
-  ButtonBase,
+ 
   Grid,
   Typography,
   Button,
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function ArticleAutherInfo(props) {
-  const state = useState();
+  // const state = useState();
   const classes = useStyles();
   const { followed, toggleFollow } = useFollow(props.userId, props.isFollowed);
   return (

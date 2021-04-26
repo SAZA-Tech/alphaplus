@@ -1,6 +1,6 @@
 import { Grid, makeStyles, Typography, Link, ButtonBase } from "@material-ui/core";
 import { EmailRounded } from "@material-ui/icons";
-import React from "react";
+// import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import TwitterIcon from "@material-ui/icons/Twitter";
 import LinkedInIcon from "@material-ui/icons/LinkedIn";
@@ -80,6 +80,7 @@ const Footer = () => {
     
     <img  
     src="/Logo_footer.png" 
+    alt='logo'
     className={classes.logo}
       />
       </ButtonBase>

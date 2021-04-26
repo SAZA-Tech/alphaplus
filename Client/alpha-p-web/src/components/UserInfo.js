@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import { useContext } from "react";
 import {
   Avatar,
   Grid,
@@ -9,10 +9,15 @@ import {
   Container,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link as RouterLink, Redirect, useHistory } from "react-router-dom";
+import {
+  Link as RouterLink,
+
+  // Redirect,
+  useHistory,
+} from "react-router-dom";
 import { AuthContext } from "../context/auth";
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import { FOLLOW_USER_GQL, PROFILE_GQL } from "../graphql/Auth/authGql";
+// import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+// import { FOLLOW_USER_GQL, PROFILE_GQL } from "../graphql/Auth/authGql";
 import PropTypes from "prop-types";
 import { useFollow } from "../util/hooks";
 
@@ -100,9 +105,9 @@ const useStyles = makeStyles((theme) => ({
   },
 
   typogrFollowerFollwing: {
-    [theme.breakpoints.between("xs", "sm")]: {
-      // fontSize: '1px'
-    },
+    // [theme.breakpoints.between("xs", "sm")]: {
+    //   // fontSize: '1px'
+    // },
   },
 }));
 
@@ -110,9 +115,9 @@ const useStyles = makeStyles((theme) => ({
   /* // UserInfo"theSmallCard"  */
 }
 export function UserInfo(props) {
-  const history = useHistory();
+  // const history = useHistory();
   const classes = useStyles();
-  const { user } = useContext(AuthContext);
+  // const { user } = useContext(AuthContext);
   const { followed, toggleFollow } = useFollow(props.id, props.isFollowed);
 
   return (

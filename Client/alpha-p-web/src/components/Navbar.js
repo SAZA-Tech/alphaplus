@@ -1,7 +1,6 @@
 import {
   AppBar,
   Toolbar,
-  Typography,
   makeStyles,
   Button,
   IconButton,
@@ -15,7 +14,7 @@ import {
   List,
   Grid,
   Avatar,
-  ButtonBase
+  ButtonBase,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import React, { useState, useEffect, useContext } from "react";
@@ -35,14 +34,13 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 0,
   },
   logo: {
-    width: '180px',
-    height: '41.5px',
+    width: "180px",
+    height: "41.5px",
     marginRight: theme.spacing(5),
 
     [theme.breakpoints.between("xs", "sm")]: {
-      width: '135px',
-      height: '32px',
-
+      width: "135px",
+      height: "32px",
     },
   },
   leftMenu: {
@@ -119,12 +117,12 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   SignInTypog: {
-    fontSize: '24px'
+    fontSize: "24px",
   },
 
   avatar: {
-    width: '36px',
-    height: '36px',
+    width: "36px",
+    height: "36px",
     marginLeft: theme.spacing(-4),
   },
 
@@ -136,8 +134,7 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.primary.main,
       color: theme.palette.primary.contrastText,
     },
-  }
-
+  },
 }));
 
 export default function Header(props) {
@@ -200,7 +197,6 @@ export default function Header(props) {
 
   const leftMenu = [
     {
-
       title: "My Authers",
       link: context.user ? `/MyAuthers/${context.user.id}/` : `/Login`,
     },
@@ -208,31 +204,31 @@ export default function Header(props) {
       title: "My Portfolio",
       link: "/Portfolio",
     },
-    {
-      title: "Sectors",
-      dropdown: true,
-      menu: [
-        {
-          title: "My Portfolio",
-          link: "/Portfolio",
-        },
-      ],
-    },
+    // {
+    //   title: "Sectors",
+    //   dropdown: true,
+    //   menu: [
+    //     {
+    //       title: "My Portfolio",
+    //       link: "/Portfolio",
+    //     },
+    //   ],
+    // },
   ];
 
-  const rightMenu = [
-    {
-      title: "Login",
-      link: "/Login",
-      isLoggedIn: false,
-    },
-    {
-      title: "logut",
-      link: "/",
-      function: () => context.logout(),
-      isLoggedIn: true,
-    },
-  ];
+  // const rightMenu = [
+  //   {
+  //     title: "Login",
+  //     link: "/Login",
+  //     isLoggedIn: false,
+  //   },
+  //   {
+  //     title: "logut",
+  //     link: "/",
+  //     function: () => context.logout(),
+  //     isLoggedIn: true,
+  //   },
+  // ];
 
   const { header, logo, menuButton, toolbar, drawerContainer } = useStyles();
 
@@ -335,7 +331,6 @@ export default function Header(props) {
         <Drawer
           className={classes.drawerPaperColor}
           {...{
-
             anchor: "left",
             open: drawerOpen,
             onClose: handleDrawerClose,
@@ -344,9 +339,8 @@ export default function Header(props) {
           <div className={drawerContainer}>{getDrawerChoices()}</div>
         </Drawer>
 
-        
-            {Logo}
-        
+        {Logo}
+
         <div>{searchBar()}</div>
       </Toolbar>
     );
@@ -354,8 +348,7 @@ export default function Header(props) {
 
   const getDrawerChoices = () => {
     return (
-
-      <div >
+      <div>
         <Grid
           container
           direction="row"
@@ -368,17 +361,14 @@ export default function Header(props) {
 
           <Grid item>
             <IconButton
-
               className={classes.SignInTypog}
               color="inherit"
               component={RouterLink}
               to="/Login"
             >
               Sign in
-          </IconButton>
-
+            </IconButton>
           </Grid>
-
         </Grid>
 
         <Divider className={classes.divider} />
@@ -402,9 +392,7 @@ export default function Header(props) {
           <List>
             <MenuItem>Profile</MenuItem>
 
-            <MenuItem onClick={() => context.logout()}>
-              Logout
-            </MenuItem>
+            <MenuItem onClick={() => context.logout()}>Logout</MenuItem>
           </List>
         ) : (
           <Link
@@ -415,27 +403,16 @@ export default function Header(props) {
               style: { textDecoration: "none" },
               key: "Login",
             }}
-          >
-
-          </Link>
+          ></Link>
         )}
       </div>
     );
   };
 
   const Logo = (
-     <ButtonBase
-     component={RouterLink}
-     to="/" 
-     disableRipple='true'
-     >
-  
-    <img 
-    src="/logo.png"
-    className={logo} />
-   
+    <ButtonBase component={RouterLink} to="/" disableRipple="true">
+      <img src="/logo.png" alt="logo" className={logo} />
     </ButtonBase>
-
   );
 
   const getLeftMenu = () => {

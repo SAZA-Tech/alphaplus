@@ -6,26 +6,40 @@ services:
       dockerfile: Dockerfile
     ports:
       - "80:80"
-    links:
+    depends_on:
       - alpha-web-prod
+      - server-prod
       - alpha-admin-prod
+    networks:
+      - test
   server-prod:
     build:
       context: ./server
       dockerfile: Dockerfile.prod
     env_file: ./server/.env
+    networks:
+      - test
     ports:
-      - "4000:4000"
+      - 4000:4000
   alpha-web-prod:
     container_name: alpha-web-prod
     build:
       context: ./Client/alpha-p-web
       dockerfile: Dockerfile.prod
-    links:
+    depends_on:
       - server-prod
+    networks:
+      - test
   alpha-admin-prod:
     build:
       context: ./Client/alpha-p-admin
       dockerfile: Dockerfile.prod
-    links:
+    depends_on:
       - server-prod
+    ports: 
+      - 9000:3000
+    networks:
+      - test
+networks:
+  test:
+    driver: bridge

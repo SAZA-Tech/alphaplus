@@ -342,7 +342,7 @@ function MiniCompanyCardTable(props) {
   return (
     <TableContainer
       className={classes.minitable}
-      style={{ minWidth: props.minWidth == 0 ? "inherent" : props.minWidth }}
+      style={{ minWidth: props.minWidth === 0 ? "inherent" : props.minWidth }}
     >
       <Table>
         <TableHead>
@@ -383,7 +383,7 @@ export function BigCompanyCardTable(props) {
   return (
     <TableContainer
       className={classes.minitable}
-      style={{ minWidth: props.minWidth == 0 ? "inherent" : props.minWidth }}
+      style={{ minWidth: props.minWidth === 0 ? "inherent" : props.minWidth }}
     >
       <Table>
         <TableHead>
@@ -475,7 +475,7 @@ const ChangePriceValue = (props) => {
   const str = props.changePrice ? props.changePrice.toString() : "23(+4.1%)";
   var signReg = /(\+|\-)/g;
   const sign = str.split(signReg)[1];
-  const signStyle = sign == "+" ? classes.positvie : classes.negative;
+  const signStyle = sign === "+" ? classes.positvie : classes.negative;
   return (
     <Typography
       variant="body1"
@@ -500,7 +500,7 @@ function RenderCompanyChart(props) {
     mobileView: false,
   });
 
-  const { mobileView } = state;
+  // const { mobileView } = state;
 
   useEffect(() => {
     const setResponsiveness = () => {
@@ -570,7 +570,7 @@ function CompanyMiniDataTable(props) {
   const array = Object.entries(props.data);
   const half = array.length / 2;
   const bData = (key, value) =>
-    (key == "date") | (key == "__typename") ? null : (
+    (key === "date") | (key === "__typename") ? null : (
       <TableRow>
         <TableCell>
           <Typography variant="h6">{key}</Typography>
@@ -620,9 +620,9 @@ CompanyMiniDataTable.propTypes = {
 function CompanyProfile(props) {
   const classes = userStyles();
   let array = Object.entries(props.companyInfo);
-  array = array.filter(([key, value]) => (key != "name") | (key != "bio"));
+  array = array.filter(([key, value]) => (key !== "name") | (key !== "bio"));
   const label = (key, value) =>
-    (key == "name") | (key == "bio") ? null : (
+    (key === "name") | (key === "bio") ? null : (
       <div style={{ width: "inherent" }}>
         <div className={classes.labelLayout}>
           <Typography variant="inherit">{key}</Typography>

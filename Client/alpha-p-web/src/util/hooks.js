@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useContext, useState } from "react";
 import { useHistory } from "react-router";
 import { AuthContext } from "../context/auth";

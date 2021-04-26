@@ -1,12 +1,12 @@
-import React, { useState, useContext } from "react";
-import PropTypes, { func } from "prop-types";
+import { useState, useContext } from "react";
+import PropTypes from "prop-types";
 import {
   Container,
   Grid,
   Paper,
   Typography,
   Divider,
-  ButtonBase,
+  // ButtonBase,
   Button,
   Avatar,
   TextField,
@@ -24,7 +24,7 @@ import {
   ArticleAutherInfo,
   ArticleAutherInfoExpanded,
 } from "../../components/AnalystInfo";
-import { useParams, useHistory, Redirect } from "react-router-dom";
+import { useParams, Redirect } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
 
 import { fade, makeStyles } from "@material-ui/core/styles";
@@ -114,26 +114,26 @@ const analystInfo = {
   bio:
     "This a logn bio from the user and should give a breif about the user prsonality",
 };
-const commentsDocs = [
-  {
-    name: "Alex",
-    Avatar: "AL",
-    date: "2021-2-21",
-    body: "Great Article",
-  },
-  {
-    name: "Ziad",
-    Avatar: "ZI",
-    date: "2021-2-22",
-    body: "I dissagree , there should not be any downsides",
-  },
-  {
-    name: "Mohammed",
-    Avatar: "MO",
-    date: "2021-2-24",
-    body: "Please keep up the good work",
-  },
-];
+// const commentsDocs = [
+//   {
+//     name: "Alex",
+//     Avatar: "AL",
+//     date: "2021-2-21",
+//     body: "Great Article",
+//   },
+//   {
+//     name: "Ziad",
+//     Avatar: "ZI",
+//     date: "2021-2-22",
+//     body: "I dissagree , there should not be any downsides",
+//   },
+//   {
+//     name: "Mohammed",
+//     Avatar: "MO",
+//     date: "2021-2-24",
+//     body: "Please keep up the good work",
+//   },
+// ];
 
 const Article = (props) => {
   const classes = useStyles();
@@ -327,7 +327,7 @@ function CommentsSection(props) {
     setCommentBody(value.target.value);
   }
   function addCommentCall() {
-    if (commentBody.trim() != "") addComment();
+    if (commentBody.trim() !== "") addComment();
   }
   return (
     <Container className={classes.commentsLayout}>

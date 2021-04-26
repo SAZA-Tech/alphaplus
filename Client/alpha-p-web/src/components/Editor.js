@@ -7,8 +7,8 @@ import "quill/dist/quill.snow.css"; // Add css for snow theme
 // or import 'quill/dist/quill.bubble.css'; // Add css for bubble theme
 import axios from "axios";
 import moment from "moment";
-import { gql, useMutation, useQuery } from "@apollo/client";
-import { useForm } from "../util/hooks";
+import { gql, useMutation } from "@apollo/client";
+// import { useForm } from "../util/hooks";
 const s3SignMutation = gql`
   mutation($filename: String!, $filetype: String!) {
     signS3(filename: $filename, filetype: $filetype) {
@@ -74,7 +74,7 @@ export function Editor(props) {
   });
   const [hasBody, setHasBody] = useState(false);
   const [body, setBody] = useState("");
-  const [files, setFiles] = useState([]);
+  // const [files, setFiles] = useState([]);
   const [filename, setFileName] = useState();
   const [filetype, setFileType] = useState();
 
@@ -148,7 +148,7 @@ export function Editor(props) {
   };
   React.useEffect(() => {
     if (quill) {
-      if (props.body != "" && !hasBody) {
+      if (props.body !== "" && !hasBody) {
         console.log(`assign body`);
 
         setHasBody(true);

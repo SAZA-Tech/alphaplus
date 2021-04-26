@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
-import PropTypes, { func } from "prop-types";
+import  { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import {
   Avatar,
-  ButtonBase,
   Grid,
   Typography,
   Button,
-  Container,
-  Card,
   Divider,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -56,16 +53,16 @@ function ContentCard(props) {
     withAuther: false,
     crudOtion: false,
   });
-  useEffect(() => {
-    if (props.withAuther)
-      setState({
-        withAuther: props.withAuther,
-      });
-    if (props.crudOtion)
-      setState({
-        crudOtion: props.crudOtion,
-      });
-  }, []);
+  // useEffect(() => {
+  //   if (props.withAuther)
+  //     setState({
+  //       withAuther: props.withAuther,
+  //     });
+  //   if (props.crudOtion)
+  //     setState({
+  //       crudOtion: props.crudOtion,
+  //     });
+  // }, []);
   const classes = useStyles();
   return (
     <div className={classes.root}>

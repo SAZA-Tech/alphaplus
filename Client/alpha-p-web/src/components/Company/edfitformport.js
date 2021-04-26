@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import  { useState } from 'react'
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import { gql, useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import { useForm } from "../../util/hooks";
-import { fade, makeStyles } from "@material-ui/core/styles";
+import {  makeStyles } from "@material-ui/core/styles";
 import { Link as RouterLink, Redirect } from "react-router-dom";
 import { CircularProgress } from "@material-ui/core";
 
@@ -52,11 +52,11 @@ const EditFormport = (props) => {
     const classes = useStyles();
 
     const [modal, setModal] = useState(false);
-    const toggle = () => {
-        setModal(!modal);
-        console.log(values);
-    };
-    const { onChange, onSubmit, values } = useForm(CreateCompanyInfoCallBack, {
+    // const toggle = () => {
+    //     setModal(!modal);
+    //     console.log(values);
+    // };
+    const { onChange,  values } = useForm(CreateCompanyInfoCallBack, {
         portoId: props.portoId,
         name: null,
         tags: null,
