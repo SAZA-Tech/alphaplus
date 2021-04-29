@@ -25,12 +25,12 @@ import PictureInPictureIcon from '@material-ui/icons/PictureInPicture';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
-const img = "avatars/7.jpg";
-const userInfo = {
-    name: "Jhon Doe",
-    img: img,
-    bio: "Analyst",
-};
+// const img = "avatars/7.jpg";
+// const userInfo = {
+//     name: "Jhon Doe",
+//     img: img,
+//     bio: "Analyst",
+// };
 const drawerWidth = 210;
 
 const useStyles = makeStyles((theme) => ({

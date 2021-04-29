@@ -7,7 +7,7 @@ import {
     Button,
     Paper,
     Grid,
-    Avatar,
+    // Avatar,
     TextField,
     Input,
     InputLabel,
@@ -28,7 +28,6 @@ import Typography from '@material-ui/core/Typography';
 import PictureInPictureIcon from '@material-ui/icons/PictureInPicture';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Popper from '@material-ui/core/Popper';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
@@ -49,12 +48,12 @@ function getModalStyle() {
     };
 }
 
-const img = "avatars/7.jpg";
-const userInfo = {
-    name: "Jhon Doe",
-    img: img,
-    bio: "Analyst",
-};
+// const img = "avatars/7.jpg";
+// const userInfo = {
+//     name: "Jhon Doe",
+//     img: img,
+//     bio: "Analyst",
+// };
 
 const drawerWidth = 210;
 

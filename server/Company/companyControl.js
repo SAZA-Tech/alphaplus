@@ -131,7 +131,7 @@ const createCompany = async (
   // }
 };
 
-const deleteCompany = async (_, {id, companyId }, context) => {
+const deleteCompany = async (_, { id, companyId }, context) => {
   if (isAuthrized(_, { id }, context)) {
     try {
       const deleteCompany = await Company.findById(companyId);
@@ -188,7 +188,7 @@ const getCompanies = async (
 
     if (Market != null) Filter.market = Market;
 
-    if (Comname != null) Filter.comname = Comname;
+    if (Comname != null) Filter.comname = { $regex: Comname, $options: "i" };
 
     CompanyDocs = await Company.find(Filter).exec();
   }

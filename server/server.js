@@ -56,7 +56,9 @@ app.use((req, res) => {
 //     console.log(`Server is running on ${url}`)
 //   );
 app.listen({ port: port }, () =>
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+  console.log(
+    `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
+  )
 );
 app.get("/", function (req, res) {
   res.send("Hello world!"); //test post
