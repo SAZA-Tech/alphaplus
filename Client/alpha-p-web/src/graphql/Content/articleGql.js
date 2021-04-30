@@ -112,3 +112,34 @@ export const GET_COMMENTS = gql`
     }
   }
 `;
+export const EDIT_ARTICLE = gql`
+  mutation editArticle($articleId: ID!, $id: ID!, $contentInput: ContentInput) {
+    editArticle(articleId: $articleId, id: $id, contentInput: $contentInput) {
+      updatedAt
+      createdAt
+      id
+      articleTitle
+      articleBody
+      articleAuthor {
+        id
+        username
+      }
+    }
+  }
+`;
+export const GET_ARTICLE2 = gql`
+  query getArticle($articleId: ID!) {
+    getArticle(articleId: $articleId) {
+      createdAt
+      articleBody
+      articleTitle
+      updatedAt
+      id
+      articleAuthor {
+        username
+        id
+        email
+      }
+    }
+  }
+`;

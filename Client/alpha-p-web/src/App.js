@@ -13,6 +13,7 @@ import EndUserProfile from "./views/EndUserProfile";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Article from "./views/Content/Article";
+import EditArticle from "./views/Content/editArticle";
 import Draft from "./views/Content/Draft";
 import Portfolio from "./views/Portfolio";
 import { MyAuthors } from "./views/Content/MyAuthors";
@@ -55,6 +56,7 @@ export class App extends Component {
                 <Route path="/article/:articleId" component={Article} />
                 <ProtectedRoute exact path="/Portfolio" component={Portfolio} />
                 <ProtectedRoute path="/draft/:draftId" component={Draft} />
+                <ProtectedRoute path="/editarticle/:articleId" component={EditArticle} />
                 <ProtectedRoute
                   exact
                   path="/MyAuthers/:username/"
