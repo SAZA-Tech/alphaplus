@@ -74,6 +74,7 @@ export function MyAuthors(props) {
   });
   const { loading: articlesFethcingLoading } = useQuery(GET_ARTICLES, {
     onCompleted(data) {
+      
       setArticles(data.getArticles);
       console.log(`Articles length ${articles.length}`);
     },

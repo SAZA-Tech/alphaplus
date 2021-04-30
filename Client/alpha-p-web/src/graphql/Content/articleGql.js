@@ -143,3 +143,10 @@ export const GET_ARTICLE2 = gql`
     }
   }
 `;
+
+export const DELETE_ARTICLE = gql`
+  mutation deleteArticle($articleId: ID!, $id: ID!) {
+    
+    deleteArticle(articleId: $articleId, id: $id) 
+  }
+`;
