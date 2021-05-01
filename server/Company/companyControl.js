@@ -49,19 +49,17 @@ const createCompany = async (
   // if (companyExist > 0) {
   //   throw new Error(`Company Already Exist`);
   // }
-  const info={
-    Industry,
-    phoneNum,
-    website,
-    address,
-    intro,
-  }
+
   const newCompany = new Company({
     sectorId: sector._id,
     market,
     comname,
     symbol,
-    info,
+    Industry,
+    phoneNum,
+    website,
+    address,
+    intro,
   });
 
   var myMap = new Map();
@@ -133,7 +131,7 @@ const createCompany = async (
   // }
 };
 
-const deleteCompany = async (_, { id, companyId }, context) => {
+const deleteCompany = async (_, {id, companyId }, context) => {
   if (isAuthrized(_, { id }, context)) {
     try {
       const deleteCompany = await Company.findById(companyId);
@@ -190,7 +188,7 @@ const getCompanies = async (
 
     if (Market != null) Filter.market = Market;
 
-    if (Comname != null) Filter.comname = { $regex: Comname, $options: "i" };
+    if (Comname != null) Filter.comname = Comname;
 
     CompanyDocs = await Company.find(Filter).exec();
   }
@@ -247,12 +245,7 @@ const getCompanies = async (
       return a.date < b.date ? -1 : a.date > b.date ? 1 : 0;
     });
 
-    // console.log(arr);
-    // console.log(arr[arr.length-1].date)
-    // change =new-old/old
-    // var change =
-    //   (arr[arr.length - 1].close - arr[arr.length - 2].close) /
-    //   arr[arr.length - 2].close;
+
     var change = calculateChange(
       arr[arr.length - 1].close,
       arr[arr.length - 2].close
@@ -268,7 +261,7 @@ const getCompanies = async (
       financialData: arr,
       todayFinance: getLastDate,
       change: change,
-      ...element
+      ...element._doc
     });
     // console.log(companies);
   }
@@ -339,19 +332,19 @@ const editCompany = async (
 
     if (companydoc.$isValid) {
       if (intro != null) {
-        companydoc.info.intro = intro;
+        companydoc.intro = intro;
       }
       if (address != null) {
-        companydoc.info.address = address;
+        companydoc.address = address;
       }
       if (website != null) {
-        companydoc.info.website = website;
+        companydoc.website = website;
       }
       if (phoneNum != null) {
-        companydoc.info.phoneNum = phoneNum;
+        companydoc.phoneNum = phoneNum;
       }
       if (Industry != null) {
-        companydoc.info.Industry = Industry;
+        companydoc.Industry = Industry;
       }
 
       if (Comname != null) {
@@ -371,7 +364,6 @@ const editCompany = async (
       return {
         id: res._id,
         sectorId: res.sectorId,
-        info:res.info,
         market: res.market,
         comname: res.comname,
         symbol: res.symbol,
@@ -408,10 +400,20 @@ const getCompany = async (_, { companyId }) => {
       Symbol: null,
     },
   });
+  const info = {
+    intro: company.intro,
+    address: company.address,
+    website: company.website,
+    phoneNum: company.phoneNum,
+    Industry: company.Industry,
+  }
+  console.log(info);
   return {
     id: company._id,
     articles: relatedArticles,
     similarCompanies: similarCompanies,
+    info:info,
+
     ...company,
   };
 };

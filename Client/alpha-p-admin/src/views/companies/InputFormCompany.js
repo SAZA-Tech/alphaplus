@@ -55,11 +55,11 @@ const InputFormCompany = (props) => {
     SectorID: props.SectorID,
     Market: props.Market,
     Symbol: null ,
-    intro: "",
-    address: "",
-    website: "",
-    phoneNum: "",
-    Industry: "",
+    intro: null,
+    address: null,
+    website: null,
+    phoneNum: null,
+    Industry: null,
   });
   const [CreateCompanyInfo, { loading, error: mutationError }] = useMutation(EDIT_COMPANY, {
     onError(error) {
