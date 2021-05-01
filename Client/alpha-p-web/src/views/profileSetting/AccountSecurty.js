@@ -4,6 +4,7 @@ import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {
     Divider,
+    CircularProgress,
     Button,
     Paper,
     Grid,
@@ -32,6 +33,9 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Modal from '@material-ui/core/Modal';
+import { Redirect, useParams } from "react-router";
+import { useQuery } from "@apollo/client";
+import { PROFILE_GQL } from "../../graphql/Auth/authGql";
 
 function rand() {
     return Math.round(Math.random() * 20) - 10;
@@ -252,6 +256,10 @@ const useStyles = makeStyles((theme) => ({
 function AccountSecurty(props) {
     const { window } = props;
     const classes = useStyles();
+
+    
+
+
     const theme = useTheme();
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const handleDrawerToggle = () => {
@@ -326,6 +334,23 @@ function AccountSecurty(props) {
         setOpenReset(false);
     };
 
+
+    let { userId } = useParams();
+    console.log(userId);
+    const { data, error, loading } = useQuery(PROFILE_GQL, {
+      variables: {
+        id: userId,
+      },
+    //   onCompleted(data) {
+    //     console.log(data.getCompanies);
+    //   },
+    });
+    // if (error) {
+    //   console.log(error);
+    //   return <Redirect to="/404" />;
+    // }
+    if (loading) return <CircularProgress />;
+
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -397,11 +422,11 @@ function AccountSecurty(props) {
                             <Grid item>
                                 <TextField
                                     label="Email"
-                                    id="margin-none"
+                                   id={userId}
                                     InputProps={{
                                         readOnly: true,
                                     }}
-                                    defaultValue="UserEmail@gmail.com"
+                                    defaultValue={data.findUser.name}
                                     // defaultValue=""
                                     className={classes.textField}
                                 // helperText="Some important text"
