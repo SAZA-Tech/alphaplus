@@ -24,8 +24,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
   },
   Section: {
+    paddingTop:theme.spacing(2),
     [theme.breakpoints.up("md")]: {
-      marginTop: theme.spacing(4),
+      marginBottom: theme.spacing(4),
     },
   },
   titleSection: {

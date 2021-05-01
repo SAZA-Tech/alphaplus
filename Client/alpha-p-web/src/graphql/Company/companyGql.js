@@ -42,8 +42,13 @@ export const COMPANY_GQL = gql`
         exchange
       }
       isFollowed @client
+      info {
+        intro
+        address
+        website
+        phoneNum
+        Industry
+      }
     }
   }
 `;
-
-
