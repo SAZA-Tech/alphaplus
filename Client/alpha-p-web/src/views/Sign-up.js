@@ -73,6 +73,7 @@ export default function SignUp(props) {
   const [signUpUser, { loading }] = useMutation(SIGNUP_USER, {
     update(_, { data: { register: userData } }) {
       context.login(userData);
+      setSuccess(true);
       props.history.push("/");
     },
     onError(err) {

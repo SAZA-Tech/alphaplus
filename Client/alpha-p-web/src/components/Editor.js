@@ -83,19 +83,16 @@ export function Editor(props) {
     const range = quill.getSelection();
     quill.insertEmbed(range.index, "image", url);
   };
-  const [getS3SignedUrl, { loading, data, error }] = useMutation(
-    s3SignMutation,
-    {
-      variables: {
-        filename,
-        filetype,
-      },
-    }
-  );
+  const [getS3SignedUrl] = useMutation(s3SignMutation, {
+    variables: {
+      filename,
+      filetype,
+    },
+  });
 
-  function getS3SignedUrlCallBack() {
-    getS3SignedUrl();
-  }
+  // function getS3SignedUrlCallBack() {
+  //   getS3SignedUrl();
+  // }
   const uploadToS3 = async (file, signedRequest) => {
     const options = {
       headers: {
@@ -121,7 +118,7 @@ export function Editor(props) {
 
     const response = res.signS3;
     const { signedRequest, url } = response;
-    console.log(`signed ${signedRequest}`);
+    // console.log(`signed ${signedRequest}`);
     await uploadToS3(file, signedRequest);
     insertToEditor(url);
   };
@@ -130,7 +127,7 @@ export function Editor(props) {
       const html = quill.root.innerHTML;
       // console.log(`${html}`);
       setBody(html.toString());
-      console.log(body);
+      // console.log(body);
       props.onEditorChange(html);
     }
   };
@@ -149,14 +146,14 @@ export function Editor(props) {
   React.useEffect(() => {
     if (quill) {
       if (props.body !== "" && !hasBody) {
-        console.log(`assign body`);
+        // console.log(`assign body`);
 
         setHasBody(true);
         const fetchedBody = props.body;
         console.log(fetchedBody);
         quill.clipboard.dangerouslyPasteHTML(fetchedBody);
       } else {
-        console.log(`No Body`);
+        // console.log(`No Body`);
       }
       quill.on("editor-change", () => {
         handleChange();
@@ -164,7 +161,8 @@ export function Editor(props) {
       // Add custom handler for Image Upload
       quill.getModule("toolbar").addHandler("image", selectLocalImage);
     }
-  }, [quill, body]);
+    // eslint-disable-next-line 
+  }, [quill, body, hasBody]);
   return (
     <div style={{ maxWidth: "700px", height: 300, marginBottom: 100 }}>
       <div ref={quillRef} />

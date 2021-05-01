@@ -15,12 +15,19 @@ import {
   Grid,
   Avatar,
   ButtonBase,
+  Popper,
+  Card,
+  Typography,
+  Container,
+  CircularProgress,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import React, { useState, useEffect, useContext } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { AuthContext } from "../context/auth";
 import { AccountCircle, Search, ExitToApp } from "@material-ui/icons";
+import { useLazyQuery, useQuery } from "@apollo/client";
+import { SEARCH_GQL } from "../graphql/searchGql";
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -135,13 +142,43 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.primary.contrastText,
     },
   },
+  reslutPop: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
+    padding: theme.spacing(2),
+    width: "80%",
+    [theme.breakpoints.up("md")]: {
+      width: "30ch",
+    },
+    "& .MuiTypography-root": {
+      color: theme.palette.primary.contrastText,
+      textDecoration: "none",
+      marginTop: theme.spacing(1),
+    },
+  },
 }));
 
 export default function Header(props) {
   const context = useContext(AuthContext);
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorSe, setAnchorSe] = React.useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const isSearching = Boolean(anchorSe);
   const isMenuOpen = Boolean(anchorEl);
+  const [fetchSearchResults, { data, loading }] = useLazyQuery(SEARCH_GQL, {
+    variables:
+      searchTerm === ""
+        ? null
+        : {
+            companyFilter: {
+              Comname: searchTerm,
+            },
+            filter: {
+              articleTitle: searchTerm,
+            },
+          },
+  });
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -151,6 +188,78 @@ export default function Header(props) {
   };
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+  const handleSearchTerm = (event) => {
+    const term = event.target.value;
+    setSearchTerm(term);
+    if (term === "") setAnchorSe(null);
+    else {
+      setAnchorSe(event.currentTarget);
+      fetchSearchResults();
+    }
+  };
+  const handleSearchBlur = () => {
+    setAnchorSe(null);
+  };
+  const handleResultClick = (event) => {
+    setAnchorSe(event?.currentTarget);
+  };
+  const searchResults = () => {
+    const companyResult = ({ name, comId, link }) => {
+      return (
+        <>
+          <Typography
+            component={RouterLink}
+            to={`/${link}/${comId}`}
+            variant="subtitle2"
+          >
+            {name}
+          </Typography>
+          <Divider style={{ background: "white" }} />
+        </>
+      );
+    };
+    const results = () => {
+      return (
+        <Card className={classes.reslutPop}>
+          {loading ? (
+            <CircularProgress color={"inherit"} />
+          ) : (
+            <Container>
+              <Typography variant="h6">Companies</Typography>
+              <Divider style={{ background: "white", marginTop: "8px" }} />
+              {data?.getCompanies.slice(0, 3).map((e) =>
+                companyResult({
+                  name: e.comname,
+                  comId: e.id,
+                  link: "company",
+                })
+              )}
+              <Typography variant="h6">Articles</Typography>
+              <Divider style={{ background: "white" }} />
+              {data?.getArticles.slice(0, 3).map((e) =>
+                companyResult({
+                  name: e.articleTitle,
+                  comId: e.id,
+                  link: "article",
+                })
+              )}
+            </Container>
+          )}
+        </Card>
+      );
+    };
+    return (
+      <Popper
+        open={isSearching}
+        placement={"bottom"}
+        onMouseLeave={handleSearchBlur}
+        onClickCapture={handleSearchBlur}
+        anchorEl={anchorSe}
+      >
+        {results}
+      </Popper>
+    );
   };
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -263,7 +372,11 @@ export default function Header(props) {
             input: classes.inputInput,
           }}
           inputProps={{ "aria-label": "search" }}
+          value={searchTerm}
+          // onBlur={handleSearchBlur}
+          onChange={handleSearchTerm}
         />
+        {searchResults()}
       </div>
     );
   };

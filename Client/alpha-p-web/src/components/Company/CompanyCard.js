@@ -52,6 +52,7 @@ const userStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("lg")]: {
       fontSize: "24px",
     },
+    overflowW: "anywhere",
   },
 
   negative: {
@@ -239,6 +240,13 @@ function CompanyCard(props) {
             {props.Symbol}
           </Typography>
         </TableCell>
+        {props.name ? (
+          <TableCell>
+            <Typography variant="subtitle2" className={classes.tableContent}>
+              {props.name}
+            </Typography>
+          </TableCell>
+        ) : null}
         <TableCell>
           <Typography variant="subtitle2" className={classes.tableContent}>
             {props.price}
@@ -284,8 +292,10 @@ function CompanyCard(props) {
 CompanyCard.defaultProps = {
   vertical: false,
   horizontal: false,
+  comId: null,
 };
 CompanyCard.propTypes = {
+  comId: PropTypes.string.isRequired,
   vertical: PropTypes.bool.isRequired,
   horizontal: PropTypes.bool.isRequired,
   name: PropTypes.string,
@@ -388,7 +398,7 @@ export function BigCompanyCardTable(props) {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell style={{ fontWeight: "400" }}>Company</TableCell>
+            <TableCell style={{ fontWeight: "500" }}>Company</TableCell>
             <TableCell style={{ fontWeight: "400" }}>Price</TableCell>
             <TableCell style={{ fontWeight: "400" }}>Change</TableCell>
             <TableCell style={{ fontWeight: "400" }}>Volume</TableCell>
@@ -400,6 +410,7 @@ export function BigCompanyCardTable(props) {
         <TableBody>
           {props.data.slice(0, props.limit).map((e) => (
             <CompanyCard
+              comId={e.id}
               Symbol={e.symbol}
               price={e.todayFinance.close}
               change={e.change}
@@ -473,7 +484,7 @@ CompanyCardFollow.propTypes = {
 const ChangePriceValue = (props) => {
   const classes = userStyles();
   const str = props.changePrice ? props.changePrice.toString() : "23(+4.1%)";
-  var signReg = /(\+|\-)/g;
+  var signReg = /(\+|-)/g;
   const sign = str.split(signReg)[1];
   const signStyle = sign === "+" ? classes.positvie : classes.negative;
   return (
@@ -496,6 +507,7 @@ const cleaning = (data) => {
 function RenderCompanyChart(props) {
   const classes = userStyles();
   const cleanedData = cleaning(props.data);
+  // eslint-disable-next-line
   const [state, setState] = useState({
     mobileView: false,
   });
@@ -522,8 +534,8 @@ function RenderCompanyChart(props) {
         >
           <defs>
             <linearGradient id="colorClose" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-              <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+              <stop offset="5%" stopColor="#E28028" stopOpacity={0.8} />
+              <stop offset="95%" stopColor="#E28028" stopOpacity={0} />
             </linearGradient>
             {/* <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
@@ -537,7 +549,7 @@ function RenderCompanyChart(props) {
           <Area
             type="monotone"
             dataKey={props.dataKey}
-            stroke="#8884d8"
+            stroke="#E28028"
             fillOpacity={1}
             fill="url(#colorClose)"
           />
@@ -619,8 +631,8 @@ CompanyMiniDataTable.propTypes = {
 
 function CompanyProfile(props) {
   const classes = userStyles();
-  let array = Object.entries(props.companyInfo);
-  array = array.filter(([key, value]) => (key !== "name") | (key !== "bio"));
+  // let array = Object.entries(props.companyInfo);
+  // array = array.filter(([key]) => (key !== "name") | (key !== "bio"));
   const label = (key, value) =>
     (key === "name") | (key === "bio") ? null : (
       <div style={{ width: "inherent" }}>

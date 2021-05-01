@@ -38,7 +38,7 @@ export const useFollow = (id, initialState = false) => {
       history.push("/login");
     }
   };
-  const [callFollow, { loading }] = useMutation(FOLLOW_USER_GQL, {
+  const [callFollow] = useMutation(FOLLOW_USER_GQL, {
     variables: {
       userId: id,
     },
@@ -72,7 +72,7 @@ export const useLike = (articleId, initialState = false) => {
   };
   // const {user}=useContext(AuthContext);
   // follow mutaion ==> updates cache
-  const [callLiked, { loading }] = useMutation(LIKE_ARTCIEL_GQL, {
+  const [callLiked] = useMutation(LIKE_ARTCIEL_GQL, {
     variables: {
       articleId,
     },
@@ -95,6 +95,8 @@ export const useCompanyFollow = (companySybmol, initialState = false) => {
   const history = useHistory();
   const toggleFollowCompany = () => {
     if (user) {
+      if (userConfigVar().portfolio.id === "")
+        return history.push("/Portfolio");
       setFollowedCompany(!followedCompany);
       callFollowCompany();
     } else {
@@ -104,7 +106,7 @@ export const useCompanyFollow = (companySybmol, initialState = false) => {
   const porto = userConfigVar().portfolio;
   // const {user}=useContext(AuthContext);
   // follow mutaion ==> updates cache
-  const [callFollowCompany, { loading }] = useMutation(FOLLOW_COMPANY_GQL, {
+  const [callFollowCompany] = useMutation(FOLLOW_COMPANY_GQL, {
     variables: {
       portoId: porto.id,
       symbol: companySybmol,
