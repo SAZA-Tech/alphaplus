@@ -18,8 +18,15 @@ module.exports = gql`
     following: [User!]
     followers: [User!]
     portfolios: [Portfolio!]
+    bio: String
+    img: String
   }
-
+  input UserProfileInput {
+    bio: String
+    img: String
+    username: String
+    name: String
+  }
   # TODO: add defualt value for type
   input RegisterInput {
     name: String
@@ -35,6 +42,7 @@ module.exports = gql`
     updateUserInfo(id: ID!, name: String!, type: String!): User!
     deleteUser(id: ID!): String!
     followUser(userId: ID!): User!
+    updateUserProfile(userId: ID!, userInput: UserProfileInput): User!
   }
   enum UserType {
     Admin
