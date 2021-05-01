@@ -49,17 +49,19 @@ const createCompany = async (
   // if (companyExist > 0) {
   //   throw new Error(`Company Already Exist`);
   // }
-
-  const newCompany = new Company({
-    sectorId: sector._id,
-    market,
-    comname,
-    symbol,
+  const info={
     Industry,
     phoneNum,
     website,
     address,
     intro,
+  }
+  const newCompany = new Company({
+    sectorId: sector._id,
+    market,
+    comname,
+    symbol,
+    info,
   });
 
   var myMap = new Map();
@@ -266,6 +268,7 @@ const getCompanies = async (
       financialData: arr,
       todayFinance: getLastDate,
       change: change,
+      ...element
     });
     // console.log(companies);
   }
@@ -336,19 +339,19 @@ const editCompany = async (
 
     if (companydoc.$isValid) {
       if (intro != null) {
-        companydoc.intro = intro;
+        companydoc.info.intro = intro;
       }
       if (address != null) {
-        companydoc.address = address;
+        companydoc.info.address = address;
       }
       if (website != null) {
-        companydoc.website = website;
+        companydoc.info.website = website;
       }
       if (phoneNum != null) {
-        companydoc.phoneNum = phoneNum;
+        companydoc.info.phoneNum = phoneNum;
       }
       if (Industry != null) {
-        companydoc.Industry = Industry;
+        companydoc.info.Industry = Industry;
       }
 
       if (Comname != null) {
@@ -368,6 +371,7 @@ const editCompany = async (
       return {
         id: res._id,
         sectorId: res.sectorId,
+        info:res.info,
         market: res.market,
         comname: res.comname,
         symbol: res.symbol,

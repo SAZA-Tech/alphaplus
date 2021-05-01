@@ -54,7 +54,12 @@ const InputFormCompany = (props) => {
     Comname: props.Comname,
     SectorID: props.SectorID,
     Market: props.Market,
-    Symbol: null
+    Symbol: null ,
+    intro: "",
+    address: "",
+    website: "",
+    phoneNum: "",
+    Industry: "",
   });
   const [CreateCompanyInfo, { loading, error: mutationError }] = useMutation(EDIT_COMPANY, {
     onError(error) {
@@ -65,7 +70,7 @@ const InputFormCompany = (props) => {
       console.log("here");
     },
   });
-   function refreshPage() {
+  function refreshPage() {
     window.location.reload(false);
   }
   function CreateCompanyInfoCallBack() {
@@ -92,75 +97,131 @@ const InputFormCompany = (props) => {
             size="sm" color="primary"
           >close </CButton>
         </div>) : loading ? (<CSpinner></CSpinner>) : (
-        <CModalBody>
-          <CContainer>
-            <CRow>
-              <CCol sm="12">
-                <CForm onSubmit={(event) => {
-                  event.preventDefault();
-                  var CompanyInput = {
-                    CompanyID: values.CompanyID,
-                    Comname: values.Comname,
-                    SectorID: values.SectorID,
-                    Market: values.Market,
-                    Symbol: null
+          <CModalBody>
+            <CContainer>
+              <CRow>
+                <CCol sm="12">
+                  <CForm onSubmit={(event) => {
+                    event.preventDefault();
+                    var CompanyInput = {
+                      CompanyID: values.CompanyID,
+                      Comname: values.Comname,
+                      SectorID: values.SectorID,
+                      Market: values.Market,
+                      Symbol: null ,
+                      intro: values.intro,
+                      address: values.address,
+                      website: values.website,
+                      phoneNum: values.phoneNum,
+                      Industry: values.Industry,
 
-                  };
-                  CreateCompanyInfo({ variables: { CompanyInput } });
-                }}>
+                    };
+                    CreateCompanyInfo({ variables: { CompanyInput } });
+                  }}>
 
-                  <CFormGroup>
-                    <CLabel htmlFor="Comname">old company name:  {values.Comname}	</CLabel>
-                    <CInput
-                      id="Comname"
-                      name="Comname"
-                      placeholder="Enter Company Name"
-                      autoComplete="Comname"
-                      onChange={onChange}
+                    <CFormGroup>
+                      <CLabel htmlFor="Comname">old company name:  {values.Comname}	</CLabel>
+                      <CInput
+                        id="Comname"
+                        name="Comname"
+                        placeholder="Enter Company Name"
+                        autoComplete="Comname"
+                        onChange={onChange}
 
-                    />
-                  </CFormGroup>
+                      />
+                    </CFormGroup>
 
-                  <CFormGroup>
-                    <CLabel htmlFor="Market">old market:  {values.Market}	</CLabel>
-                    <CInput
-                      name="Market"
-                      id="Market"
-                      placeholder="Enter Company market"
-                      autoComplete="Market"
-                      onChange={onChange}
-                    />
-                  </CFormGroup>
+                    <CFormGroup>
+                      <CLabel htmlFor="Market">old market:  {values.Market}	</CLabel>
+                      <CInput
+                        name="Market"
+                        id="Market"
+                        placeholder="Enter Company market"
+                        autoComplete="Market"
+                        onChange={onChange}
+                      />
+                    </CFormGroup>
 
-                  <CFormGroup>
-                    <CLabel htmlFor="SectorID">Role</CLabel>
-                    <CSelect
-                      id="SectorID"
-                      name="SectorID"
-                      placeholder="Enter User type"
-                      onChange={onChange}
-                      value={values.SectorID}
-                    >
+                    <CFormGroup>
+                      <CLabel htmlFor="intro">Company Introduction</CLabel>
+                      <CInput
+                        name="intro"
+                        id="intro"
+                        placeholder="Enter User Introduction"
+                        autoComplete="intro"
+                        onChange={onChange}
+                      />
+                    </CFormGroup>
+                    <CFormGroup>
+                      <CLabel htmlFor="address">Company Address</CLabel>
+                      <CInput
+                        name="address"
+                        id="address"
+                        placeholder="Enter User address"
+                        autoComplete="address"
+                        onChange={onChange}
+                      />
+                    </CFormGroup>
+                    <CFormGroup>
+                      <CLabel htmlFor="website">Company website</CLabel>
+                      <CInput
+                        name="website"
+                        id="website"
+                        placeholder="Enter User website"
+                        autoComplete="website"
+                        onChange={onChange}
+                      />
+                    </CFormGroup>
+                    <CFormGroup>
+                      <CLabel htmlFor="phoneNum">Company Phone</CLabel>
+                      <CInput
+                        name="phoneNum"
+                        id="phoneNum"
+                        placeholder="Enter User phoneNum"
+                        autoComplete="phoneNum"
+                        onChange={onChange}
+                      />
+                    </CFormGroup>
+                    <CFormGroup>
+                      <CLabel htmlFor="Industry">Company Industry</CLabel>
+                      <CInput
+                        name="Industry"
+                        id="Industry"
+                        placeholder="Enter  Industry"
+                        autoComplete="Industry"
+                        onChange={onChange}
+                      />
+                    </CFormGroup>
 
-                      {
-                        FetchSectors ? null :
-                          SectosData.getSectors.map((e) => <option value={e.id}>{e.Secname}</option>)
-                      }
-                    </CSelect>
-                  </CFormGroup>
-                  <CButton color="primary" type="submit">
-                    Submit
+                    <CFormGroup>
+                      <CLabel htmlFor="SectorID">Role</CLabel>
+                      <CSelect
+                        id="SectorID"
+                        name="SectorID"
+                        placeholder="Enter User type"
+                        onChange={onChange}
+                        value={values.SectorID}
+                      >
+
+                        {
+                          FetchSectors ? null :
+                            SectosData.getSectors.map((e) => <option value={e.id}>{e.Secname}</option>)
+                        }
+                      </CSelect>
+                    </CFormGroup>
+                    <CButton color="primary" type="submit">
+                      Submit
                     </CButton>{" "}
-                  <CButton color="secondary" onClick={toggle}>
-                    Cancel
+                    <CButton color="secondary" onClick={toggle}>
+                      Cancel
                     </CButton>
 
 
-                </CForm>
-              </CCol>
-            </CRow>
-          </CContainer>
-        </CModalBody>
+                  </CForm>
+                </CCol>
+              </CRow>
+            </CContainer>
+          </CModalBody>
         )}
 
         <CModalFooter>
