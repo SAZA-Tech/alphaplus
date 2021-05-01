@@ -9,7 +9,9 @@ import {
   List,
   ListItem,
   CircularProgress,
+  Box
 } from "@material-ui/core";
+import CreateIcon from "@material-ui/icons/Create";
 import { useQuery } from "@apollo/client";
 import { GET_DRAFTS } from "../../graphql/Content/draftsGql";
 import { makeStyles } from "@material-ui/core/styles";
@@ -34,6 +36,22 @@ const useStyles = makeStyles((theme) => ({
 export function MyAuthors(props) {
   const classes = useStyles();
 
+  const [isOpen, setIsOpen] = useState(false);
+  const togglePopup = () => {
+    setIsOpen(!isOpen);
+  };
+  const Popup = (props) => {
+    return (
+      <div className="popup-box">
+        <div className="box">
+          <span className="close-icon" onClick={props.handleClose}>
+            x
+          </span>
+          {props.content}
+        </div>
+      </div>
+    );
+  };
   // const context = useContext(AuthContext);
   const [drafts, setDrafts] = useState([]);
   const [articles, setArticles] = useState([]);
@@ -56,6 +74,7 @@ export function MyAuthors(props) {
   });
   const { loading: articlesFethcingLoading } = useQuery(GET_ARTICLES, {
     onCompleted(data) {
+      
       setArticles(data.getArticles);
       console.log(`Articles length ${articles.length}`);
     },
@@ -85,12 +104,63 @@ export function MyAuthors(props) {
                     <ContentCard
                       title={e.articleTitle}
                       link={`/article/${e.id}`}
-                    />
+
+                    >
+                    </ContentCard>
+
                   </ListItem>
                 );
               })}
+
             </List>
+            <Box
+              p={0.5}
+              m={0.5}>
+              <Button
+
+                variant="contained"
+                color="secondary"
+                onClick={togglePopup}
+                startIcon={<CreateIcon />}
+
+              >
+                Edit articles
+            </Button>
+              {isOpen && (
+                <Popup
+
+                  content={
+                    <>
+                      <Typography variant="h4" className={classes.titleSection}>
+                        Click an article to edit{" "}
+                      </Typography>
+                      <Box p={1.5}></Box>
+                      <List>
+                        {articles.map((e) => {
+                          return (
+                            <ListItem>
+                              <ContentCard
+                                title={e.articleTitle}
+                                link={`/editarticle/${e.id}`}
+
+                              >
+                              </ContentCard>
+
+                            </ListItem>
+                          );
+                        })}
+
+                      </List>
+                    </>
+                  }
+                  handleClose={togglePopup}
+                />
+              )}
+            </Box>
           </Container>
+
+
+
         </Card>
       </Container>
     );
