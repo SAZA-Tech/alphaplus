@@ -41,14 +41,18 @@ export const PROFILE_GQL = gql`
       followers {
         id
         name
+        img
         isFollowed @client
       }
       following {
         id
         name
+        img
         isFollowed @client
       }
       isFollowed @client
+      bio
+      img
     }
     getArticles(
       filter: { userId: $id, articleId: null, companyId: null, tags: null }
@@ -70,6 +74,22 @@ export const FOLLOW_USER_GQL = gql`
       following {
         id
       }
+    }
+  }
+`;
+
+export const UPDATE_USER_PROFILE_GQL = gql`
+  mutation MyMutation(
+    $userId: ID = ""
+    $userInput: UserProfileInput = { bio: "", img: "", name: "", username: "" }
+  ) {
+    updateUserProfile(userId: $userId, userInput: $userInput) {
+      bio
+      email
+      id
+      img
+      name
+      username
     }
   }
 `;

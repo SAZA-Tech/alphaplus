@@ -7,6 +7,13 @@ const checkAuth = require("../Auth/check-auth");
 const { CommentControl } = require("./CommentControl");
 const { CompanyControl } = require("../Company");
 
+const deleteUser = {
+  id: "defalut",
+  name: "Deleted User",
+  username: "jhonDoe",
+  email: "jhon@doe.doe",
+  createdat: "2000-18",
+};
 const createArticle = async (_, { draft, tags }, context) => {
   // diffrentiate the title if it - exist
   let articleTitle = "";
@@ -48,7 +55,7 @@ const createArticle = async (_, { draft, tags }, context) => {
 
 const getArticles = async (
   _,
-  { filter: { userId, articleId, companyId, tags } },
+  { filter: { userId, articleId, companyId, tags, articleTitle } },
   context
 ) => {
   let articlesDocs = [];
@@ -58,9 +65,10 @@ const getArticles = async (
   // Filter Empty  return all article
   if (
     (userId == null) &
-    (articleId == null) &
-    (companyId == null) &
-    (tags == null)
+      (articleId == null) &
+      (companyId == null) &
+      (tags == null) &&
+    articleTitle == null
   ) {
     articlesDocs = await Article.find();
   }
@@ -74,7 +82,8 @@ const getArticles = async (
     if (companyId != null) {
     }
     if (tags != null) Filter.articleTags = { $all: tags };
-
+    if (articleTitle != null)
+      Filter.articleTitle = { $regex: articleTitle, $options: "i" };
     // Find the articles
     articlesDocs = await Article.find(Filter)
       .populate("articleAuthorId")
@@ -86,13 +95,15 @@ const getArticles = async (
   articlesDocs.map((e) => {
     articles.push({
       id: e._id,
-      articleAuthor: {
-        id: e.articleAuthorId._id,
-        name: e.articleAuthorId.name,
-        username: e.articleAuthorId.username,
-        email: e.articleAuthorId.email,
-        createdAt: e.articleAuthorId.createdAt,
-      },
+      articleAuthor: e.articleAuthorId
+        ? {
+            id: e.articleAuthorId._id,
+            name: e.articleAuthorId.name,
+            username: e.articleAuthorId.username,
+            email: e.articleAuthorId.email,
+            createdAt: e.articleAuthorId.createdAt,
+          }
+        : deleteUser,
       ...e._doc,
     });
   });
@@ -125,23 +136,23 @@ const getArticle = async (_, { articleId }, context) => {
   if (article.articleAuthorId==null) {
     var id = "defalut";
     var name = "jhon doe";
-    var username= "jhonDoe";
+    var username = "jhonDoe";
     var email = "jhon@doe.doe";
     var createdat = "2000-18";
-    var likes ={
-      createdAt :"dum",
-      username:"dum",
-      id:"dum"
-    }
+    var likes = {
+      createdAt: "dum",
+      username: "dum",
+      id: "dum",
+    };
 
-    var arr=[];
+    var arr = [];
     arr.push(likes);
-    article.likes=arr;
+    article.likes = arr;
     article.save();
     return {
       articleComments: articleComments.values(),
       id: article._id,
-      
+
       articleAuthor: {
         id: id,
         name: name,
@@ -149,7 +160,7 @@ const getArticle = async (_, { articleId }, context) => {
         email: email,
         createdAt: createdat,
       },
-   
+
       ...article._doc,
     };
   }

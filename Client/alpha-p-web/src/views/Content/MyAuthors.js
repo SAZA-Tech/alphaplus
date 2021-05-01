@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect } from "react";
-import { useParams, Link as RouterLink, Link } from "react-router-dom";
+import React, {  useState } from "react";
+import {  Link as RouterLink } from "react-router-dom";
 import {
   Container,
   Grid,
@@ -16,7 +16,7 @@ import { useQuery } from "@apollo/client";
 import { GET_DRAFTS } from "../../graphql/Content/draftsGql";
 import { makeStyles } from "@material-ui/core/styles";
 import { ContentCard } from "../../components/Content/ContentCards";
-import { AuthContext } from "../../context/auth";
+// import { AuthContext } from "../../context/auth";
 import { GET_ARTICLES } from "../../graphql/Content/articleGql";
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -178,7 +178,7 @@ export function MyAuthors(props) {
             <Button
               variant="contained"
               color="primary"
-              component={Link}
+              component={RouterLink}
               to="/draft/new"
             >
               Create New Draft

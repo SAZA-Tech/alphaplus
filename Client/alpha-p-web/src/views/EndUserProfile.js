@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { UserInfo, FollowerFollowingForm } from "../components/UserInfo";
 import { makeStyles } from "@material-ui/core/styles";
 import TwitterIcon from "@material-ui/icons/Twitter";
@@ -30,97 +30,97 @@ const userInfo = {
   bio: "Analyst",
 };
 
-const contentdummyData1 = [
-  {
-    name: "jhon Doe",
-    img: "Jh",
-    title: "This a test dummy title",
-    bio: "18 comments",
-  },
-  {
-    name: "Ziad Fnan",
-    img: "Zi",
-    title: "Don't Miss This intersting analyst",
-    bio: "18 comments",
-  },
-  {
-    name: "Abo Motlaq",
-    img: "AH",
-    title: "I only love apple products",
-    bio: "18 comments",
-  },
-  {
-    name: "Aziz Amir",
-    img: "AA",
-    title: "Play it cool with your stocks",
-    bio: "18 comments",
-  },
-  {
-    name: "Saleh Mogren",
-    img: "SM",
-    title: "How to write dummy data like a pro",
-    bio: "18 comments",
-  },
-];
+// const contentdummyData1 = [
+//   {
+//     name: "jhon Doe",
+//     img: "Jh",
+//     title: "This a test dummy title",
+//     bio: "18 comments",
+//   },
+//   {
+//     name: "Ziad Fnan",
+//     img: "Zi",
+//     title: "Don't Miss This intersting analyst",
+//     bio: "18 comments",
+//   },
+//   {
+//     name: "Abo Motlaq",
+//     img: "AH",
+//     title: "I only love apple products",
+//     bio: "18 comments",
+//   },
+//   {
+//     name: "Aziz Amir",
+//     img: "AA",
+//     title: "Play it cool with your stocks",
+//     bio: "18 comments",
+//   },
+//   {
+//     name: "Saleh Mogren",
+//     img: "SM",
+//     title: "How to write dummy data like a pro",
+//     bio: "18 comments",
+//   },
+// ];
 
-const contentdummyData2 = [
-  {
-    name: "jhon Doe",
-    img: "Jh",
-    title: "This a test dummy title",
-    bio:
-      "Contributor long only, Growth, registered investment advisor, investment advisor",
-  },
-  {
-    name: "Ziad Fnan",
-    img: "Zi",
-    title: "Don't Miss This intersting analyst",
-    bio:
-      "Contributor long only, Growth, registered investment advisor, investment advisor",
-  },
-  {
-    name: "Abo Motlaq",
-    img: "AH",
-    title: "I only love apple products",
-    bio:
-      "Contributor long only, Growth, registered investment advisor, investment advisor",
-  },
-  {
-    name: "Aziz Amir",
-    img: "AA",
-    title: "Play it cool with your stocks",
-    bio:
-      "Contributor long only, Growth, registered investment advisor, investment advisor",
-  },
-  {
-    name: "Saleh Mogren",
-    img: "SM",
-    title: "How to write dummy data like a pro",
-    bio:
-      "Contributor long only, Growth, registered investment advisor, investment advisor",
-  },
-];
+// const contentdummyData2 = [
+//   {
+//     name: "jhon Doe",
+//     img: "Jh",
+//     title: "This a test dummy title",
+//     bio:
+//       "Contributor long only, Growth, registered investment advisor, investment advisor",
+//   },
+//   {
+//     name: "Ziad Fnan",
+//     img: "Zi",
+//     title: "Don't Miss This intersting analyst",
+//     bio:
+//       "Contributor long only, Growth, registered investment advisor, investment advisor",
+//   },
+//   {
+//     name: "Abo Motlaq",
+//     img: "AH",
+//     title: "I only love apple products",
+//     bio:
+//       "Contributor long only, Growth, registered investment advisor, investment advisor",
+//   },
+//   {
+//     name: "Aziz Amir",
+//     img: "AA",
+//     title: "Play it cool with your stocks",
+//     bio:
+//       "Contributor long only, Growth, registered investment advisor, investment advisor",
+//   },
+//   {
+//     name: "Saleh Mogren",
+//     img: "SM",
+//     title: "How to write dummy data like a pro",
+//     bio:
+//       "Contributor long only, Growth, registered investment advisor, investment advisor",
+//   },
+// ];
 
-const FollowersDocs = [
-  {
-    name: "Alex",
-    avatar: img,
-    bio:
-      "Contributor long only, Growth, registered investment advisor, investment advisor",
-  },
-  {
-    name: "Ziad",
-    avatar: img,
-    bio:
-      "Contributor long only, Growth, registered investment advisor, investment advisor",
-  },
-  {
-    name: "Mohammed",
-    avatar: img,
-    bio:
-      "Contributor long only, Growth, registered investment advisor, investment advisor",
-  },
-];
+// const FollowersDocs = [
+//   {
+//     name: "Alex",
+//     avatar: img,
+//     bio:
+//       "Contributor long only, Growth, registered investment advisor, investment advisor",
+//   },
+//   {
+//     name: "Ziad",
+//     avatar: img,
+//     bio:
+//       "Contributor long only, Growth, registered investment advisor, investment advisor",
+//   },
+//   {
+//     name: "Mohammed",
+//     avatar: img,
+//     bio:
+//       "Contributor long only, Growth, registered investment advisor, investment advisor",
+//   },
+// ];
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -235,7 +235,7 @@ const EndUserProfile = (props) => {
   });
   if (error) {
     console.log(error);
-    return <Redirect to="404" />;
+    return <Redirect to="/404" />;
   }
   if (loading) return <CircularProgress />;
   return (
@@ -245,7 +245,7 @@ const EndUserProfile = (props) => {
           <Paper className={classes.paper1} elevation={2}>
             <UserInfo
               id={userId}
-              img={userInfo.img}
+              img={data?.findUser.img}
               name={data.findUser.name}
               bio={userInfo.bio}
               userId={data.findUser.id}
@@ -262,6 +262,7 @@ const EndUserProfile = (props) => {
               following={data.findUser.following}
               comments={data.getComments}
               articles={data.getArticles}
+              bio={data.findUser.bio}
             />
           </Paper>
         </Grid>
@@ -274,11 +275,11 @@ EndUserProfile.propTypes = {};
 
 export default EndUserProfile;
 
-{
-  /* // UserProfileDetails(Bio+Icons+Tabs)  */
-}
+// {
+//   /* // UserProfileDetails(Bio+Icons+Tabs)  */
+// }
 export function UserProfileDetails(props) {
-  const state = useState();
+  // const state = useState();
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
@@ -290,7 +291,7 @@ export function UserProfileDetails(props) {
       <FollowerFollowingForm
         name={v.name}
         bio={v.bio ? v.bio : "Default Bio"}
-        avatar={v.avatar}
+        img={v.img}
         userId={v.id}
         isFollowed={v.isFollowed}
       />
@@ -301,7 +302,7 @@ export function UserProfileDetails(props) {
       <FollowerFollowingForm
         name={v.name}
         bio={v.bio ? v.bio : "Default Bio"}
-        avatar={v.avatar}
+        img={v.img}
         userId={v.id}
         isFollowed={v.isFollowed}
       />
@@ -328,8 +329,10 @@ export function UserProfileDetails(props) {
         </Typography>
 
         <Typography className={classes.typogrText} variant="body1">
-          Contributor long only, Growth, registered investment
-          advisor,investment advisor
+          {props.bio !== ""
+            ? props.bio
+            : `Contributor long only, Growth, registered investment
+          advisor,investment advisor`}
         </Typography>
       </Grid>
 

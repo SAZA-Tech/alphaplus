@@ -19,7 +19,7 @@ import {
   MiniCompanyCardTable,
 } from "../components/Company/CompanyCard";
 import {
-  ContentCard,
+  // ContentCard,
   ContentCardPaper,
 } from "../components/Content/ContentCards";
 import { useQuery } from "@apollo/client";
@@ -86,12 +86,23 @@ const useStyles = makeStyles((theme) => ({
   },
 
   CardPaper: {
-    width: '100%',
-  }
+    width: "100%",
+  },
 }));
 
 function Home() {
   const classes = useStyles();
+  const [mobileView, setMobileView] = useState(false);
+  useEffect(() => {
+    const setResponsiveness = () => {
+      return window.innerWidth < 1025
+        ? setMobileView(true)
+        : setMobileView(false);
+    };
+    setResponsiveness();
+
+    window.addEventListener("resize", () => setResponsiveness());
+  }, []);
   const { data, error, loading } = useQuery(HOMEPAGE_GQL);
   if (loading) return <CircularProgress />;
   if (error) return <Redirect to="/404" />;
@@ -133,8 +144,13 @@ function Home() {
 
       {/* Editors Picks + Latest Articles */}
 
-      <Grid container direction="row" justify="space-between" spacing='1'>
-        <Grid item xs={12} md={6} >
+      <Grid
+        container
+        direction="row"
+        justify="space-between"
+        spacing={mobileView ? 0 : 1}
+      >
+        <Grid item xs={12} md={6}>
           <Paper className={classes.CardPaper}>
             <HomeCard
               dataLimit={3}
@@ -255,20 +271,20 @@ Home.propTypes = {
   auther: PropTypes,
 };
 
-const companydummyData = [
-  { Symbol: "AAPL", price: 293, changePrice: "4.2(-8%)" },
-  { Symbol: "GOOG", price: 351, changePrice: "4.2(+8%)" },
-  { Symbol: "AMZN", price: 120, changePrice: "4.2(-8%)" },
-  { Symbol: "EBSY", price: 963, changePrice: "4.2(-8%)" },
-  { Symbol: "MOZA", price: 56, changePrice: "4.2(+3%)" },
-  { Symbol: "NANI", price: 123, changePrice: "4.2(-8%)" },
-  { Symbol: "AAPL", price: 293, changePrice: "4.2(-8%)" },
-  { Symbol: "GOOG", price: 351, changePrice: "4.2(+9%)" },
-  { Symbol: "AMZN", price: 120, changePrice: "4.2(-8%)" },
-  { Symbol: "EBSY", price: 963, changePrice: "4.2(-8%)" },
-  { Symbol: "MOZA", price: 56, changePrice: "4.2(-8%)" },
-  { Symbol: "NANI", price: 123, changePrice: "4.2(-8%)" },
-];
+// const companydummyData = [
+//   { Symbol: "AAPL", price: 293, changePrice: "4.2(-8%)" },
+//   { Symbol: "GOOG", price: 351, changePrice: "4.2(+8%)" },
+//   { Symbol: "AMZN", price: 120, changePrice: "4.2(-8%)" },
+//   { Symbol: "EBSY", price: 963, changePrice: "4.2(-8%)" },
+//   { Symbol: "MOZA", price: 56, changePrice: "4.2(+3%)" },
+//   { Symbol: "NANI", price: 123, changePrice: "4.2(-8%)" },
+//   { Symbol: "AAPL", price: 293, changePrice: "4.2(-8%)" },
+//   { Symbol: "GOOG", price: 351, changePrice: "4.2(+9%)" },
+//   { Symbol: "AMZN", price: 120, changePrice: "4.2(-8%)" },
+//   { Symbol: "EBSY", price: 963, changePrice: "4.2(-8%)" },
+//   { Symbol: "MOZA", price: 56, changePrice: "4.2(-8%)" },
+//   { Symbol: "NANI", price: 123, changePrice: "4.2(-8%)" },
+// ];
 const contentdummyData = [
   {
     name: "jhon Doe",
