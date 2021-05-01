@@ -9,6 +9,7 @@ import Login from "./views/Login";
 import SignUp from "./views/Sign-up";
 import { AuthRoute, ProtectedRoute } from "./components/AuthRoute";
 import Home from "./views/Home";
+import Error from "./views/404";
 import EndUserProfile from "./views/EndUserProfile";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -50,7 +51,7 @@ export class App extends Component {
                   path="/AccountSecurty/"
                   component={AccountSecurty}
                 />
-
+                <Route exact path="/404" component={Error} />
                 <Route path="/company/:companyId" component={Company} />
                 <Route path="/article/:articleId" component={Article} />
                 <ProtectedRoute exact path="/Portfolio" component={Portfolio} />
