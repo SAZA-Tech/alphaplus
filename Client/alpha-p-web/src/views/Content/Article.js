@@ -301,13 +301,7 @@ function CommentsSection(props) {
         userId={v.commentAuthor.id}
       />
     ));
-    function refreshPage() {
-      window.location.reload(false);
-    }
-    function sleep(ms) {
-      return new Promise((resolve) => setTimeout(resolve, ms));
-    }
-  const [addComment, { laoding: commentLoading ,called}] = useMutation(ADD_COMMENT, {
+  const [addComment, { laoding: commentLoading }] = useMutation(ADD_COMMENT, {
     variables: {
       autherId: !user ? "undefind" : user.id,
       articleId: articleId,
@@ -364,7 +358,7 @@ function CommentsSection(props) {
               />
               {commentLoading ? (
                 <CircularProgress />
-              ) :called ? (sleep(250).then(()=>refreshPage())) : (
+              ) :(
                 <Button variant="contained" color="primary" type="submit" >
                   Publish
                 </Button>
