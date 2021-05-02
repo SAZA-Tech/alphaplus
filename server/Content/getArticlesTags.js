@@ -3,7 +3,7 @@ const Article = require("./Models/ArticleModel");
 const getArticleWithTags = async (tags) => {
   const Filter = {};
   if (tags != null) {
-    Filter.articleTags = { $all: tags };
+    Filter.articleTags = { $in: tags };
     const articleDocs = await Article.find(Filter)
       .populate("articleAuthorId")
       .populate("articleComments")
@@ -18,6 +18,8 @@ const getArticleWithTags = async (tags) => {
           username: e.articleAuthorId.username,
           email: e.articleAuthorId.email,
           createdAt: e.articleAuthorId.createdAt,
+          img: e.articleAuthorId.img ? e.articleAuthorId.img : "",
+          bio: e.articleAuthorId.bio ? e.articleAuthorId.bio : "",
         },
         ...e._doc,
       });

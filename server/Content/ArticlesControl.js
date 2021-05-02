@@ -61,6 +61,7 @@ const getArticles = async (
   let articlesDocs = [];
 
   // Set Up The filter
+  let Filter = {};
 
   // Filter Empty  return all article
   if (
@@ -70,27 +71,29 @@ const getArticles = async (
       (tags == null) &&
     articleTitle == null
   ) {
-    articlesDocs = await Article.find();
+    Filter = {};
   }
   // Other wise set up the filter
   else {
-    const Filter = {};
     if (userId != null) Filter.articleAuthorId = userId;
     if (articleId != null) Filter._id = articleId;
 
     // TODO: Get Company Tag from company Id
     if (companyId != null) {
     }
-    if (tags != null) Filter.articleTags = { $all: tags };
+    if (tags != null) Filter.articleTags = { $in: tags };
     if (articleTitle != null)
       Filter.articleTitle = { $regex: articleTitle, $options: "i" };
     // Find the articles
-    articlesDocs = await Article.find(Filter)
-      .populate("articleAuthorId")
-      .populate("articleComments")
-      .exec();
+
     // get auther data
   }
+  articlesDocs = await Article.find(Filter)
+    .populate("articleAuthorId")
+    .populate("articleComments")
+    .exec();
+  // console.log(articlesDocs.length);
+
   const articles = [];
   articlesDocs.map((e) => {
     articles.push({
@@ -102,6 +105,8 @@ const getArticles = async (
             username: e.articleAuthorId.username,
             email: e.articleAuthorId.email,
             createdAt: e.articleAuthorId.createdAt,
+            img: e.articleAuthorId.img ? e.articleAuthorId.img : "",
+            bio: e.articleAuthorId.bio ? e.articleAuthorId.bio : "",
           }
         : deleteUser,
       ...e._doc,
@@ -133,7 +138,7 @@ const getArticle = async (_, { articleId }, context) => {
   } else {
     throw new Error(`Article is not found`);
   }
-  if (article.articleAuthorId==null) {
+  if (article.articleAuthorId == null) {
     var id = "defalut";
     var name = "jhon doe";
     var username = "jhonDoe";

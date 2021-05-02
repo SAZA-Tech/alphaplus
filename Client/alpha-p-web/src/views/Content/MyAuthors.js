@@ -105,7 +105,7 @@ export function MyAuthors(props) {
                     <ContentCard
                       title={e.articleTitle}
                       link={`/article/${e.id}`}
-
+                      
                     >
                     </ContentCard>
 

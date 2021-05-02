@@ -20,6 +20,7 @@ export const GET_ARTICLES = gql`
       articleComments {
         commentBody
         id
+        img
       }
       articleTags
       articleTitle
@@ -38,6 +39,8 @@ export const GET_ARTICLE = gql`
         email
         id
         isFollowed @client
+        bio
+        img
       }
       articleBody
       articleTags
@@ -70,6 +73,7 @@ export const GET_ARTICLE = gql`
         createdAt
         name
         id
+        img
       }
       commentBody
       createdAt
@@ -106,6 +110,7 @@ export const GET_COMMENTS = gql`
         createdAt
         name
         id
+        img
       }
       commentBody
       createdAt

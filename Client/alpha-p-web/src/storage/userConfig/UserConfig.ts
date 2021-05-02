@@ -7,5 +7,6 @@ interface UserConfig {
     name: string;
     __typename: string;
   };
+  userImg: string | null;
 }
 export default UserConfig;

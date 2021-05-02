@@ -60,6 +60,7 @@ function AuthProvider(props) {
               id: "",
               name: "",
             },
+      userImg: userData.img ? userData.img : "",
     });
     saveUserConfig();
     // console.log(userConfigVar().followedUsers);

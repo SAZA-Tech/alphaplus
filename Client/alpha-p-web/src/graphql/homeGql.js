@@ -26,6 +26,8 @@ export const HOMEPAGE_GQL = gql`
       articleAuthor {
         id
         name
+        img
+        bio
       }
       articleTags
       articleTitle

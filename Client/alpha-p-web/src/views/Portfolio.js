@@ -178,7 +178,6 @@ function Portfolio(props) {
       data={FollowersDocs}
       limit={6}
       auther
-      title={"Articles"}
     />
   );
 

@@ -18,7 +18,7 @@ function generateToken(user) {
       email: user.email,
     },
     SECRET_KEY,
-    { expiresIn: "1h" }
+    { expiresIn: "30d" }
   );
 }
 

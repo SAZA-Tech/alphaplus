@@ -28,6 +28,7 @@ import { AuthContext } from "../context/auth";
 import { AccountCircle, Search, ExitToApp } from "@material-ui/icons";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import { SEARCH_GQL } from "../graphql/searchGql";
+import { userConfigVar } from "../storage/userConfig";
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -477,9 +478,12 @@ export default function Header(props) {
               className={classes.SignInTypog}
               color="inherit"
               component={RouterLink}
-              to="/Login"
+              to={context.user ? `/userProfile/${context.user.id}` : "/Login"}
             >
-              Sign in
+              {context.user
+                ? userConfigVar().username
+                : `              Sign in
+`}{" "}
             </IconButton>
           </Grid>
         </Grid>

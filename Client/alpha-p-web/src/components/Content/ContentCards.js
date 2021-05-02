@@ -112,6 +112,7 @@ ContentCard.defaultProps = {
   withAuther: false,
   crudOtion: false,
   link: "/",
+  img: "",
 };
 ContentCard.propTypes = {
   withAuther: PropTypes.bool,
@@ -131,8 +132,8 @@ function ContentCardPaper(props) {
         <ContentCard
           title={e.articleTitle ? e.articleTitle : e.title}
           name={e.articleAuthor ? e.articleAuthor.name : e.name}
-          img={e.img}
-          bio={e.bio}
+          img={e.articleAuthor? e.articleAuthor.img : e.img}
+          bio={e.articleAuthor ? e.articleAuthor.bio : e.bio}
           withAuther={props.auther}
           link={`/article/${e.id}`}
         />

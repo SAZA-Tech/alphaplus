@@ -11,6 +11,7 @@ const initialUserConfig: UserConfig = JSON.parse(
     follwedTags: [],
     __typename: "",
   },
+  userImg: "",
 };
 
 export default initialUserConfig;

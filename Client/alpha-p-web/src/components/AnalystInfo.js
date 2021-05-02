@@ -1,13 +1,6 @@
 // import React, { useState } from "react";
 import PropTypes from "prop-types";
-import {
-  Avatar,
- 
-  Grid,
-  Typography,
-  Button,
-  Container,
-} from "@material-ui/core";
+import { Avatar, Grid, Typography, Button, Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link as RouterLink } from "react-router-dom";
 import { useFollow } from "../util/hooks";
@@ -97,7 +90,11 @@ export function ArticleAutherInfoExpanded(props) {
               <Typography
                 variant="body1"
                 component={RouterLink}
-                style={{ textDecoration: "none", color: "black" }}
+                style={{
+                  textDecoration: "none",
+                  color: "black",
+                  padding: "8px",
+                }}
                 to={`/userProfile/${props.userId}`}
               >
                 {props.name == null ? "Name Null" : props.name}
@@ -142,8 +139,12 @@ export function ArticleAutherInfoExpanded(props) {
 }
 ArticleAutherInfoExpanded.defaultProps = {
   isFollowed: false,
+  bio: "Defalut BIo",
+  img: "",
 };
 ArticleAutherInfoExpanded.propTypes = {
   isFollowed: PropTypes.bool.isRequired,
   userId: PropTypes.string.isRequired,
+  bio: PropTypes.string.isRequired,
+  img: PropTypes.string.isRequired,
 };
