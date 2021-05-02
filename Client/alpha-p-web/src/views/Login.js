@@ -13,8 +13,8 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 // //imagers
-import GoogleIcon from "../assets/icons/1004px-Google__G__Logo.svg.png";
-import TwitterIcon from "../assets/icons/580b57fcd9996e24bc43c53e.png";
+// import GoogleIcon from "../assets/icons/1004px-Google__G__Logo.svg.png";
+// import TwitterIcon from "../assets/icons/580b57fcd9996e24bc43c53e.png";
 //graphql
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../graphql/Auth/authGql";
@@ -71,7 +71,7 @@ export default function SignIn(props) {
   const [loginUser, { loading }] = useMutation(LOGIN_USER, {
     update(_, { data: { login: userData } }) {
       context.login(userData);
-      // setSuccess(true);
+      setSuccess(true);
       props.history.push("/");
     },
     onError(err) {

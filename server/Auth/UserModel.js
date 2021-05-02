@@ -20,6 +20,8 @@ const userSchema = new Schema({
     },
   ],
   portfolios: [{ type: Schema.Types.ObjectId, ref: "Portfolio" }],
+  bio: String,
+  img: String,
 });
 
 module.exports = model("User", userSchema);

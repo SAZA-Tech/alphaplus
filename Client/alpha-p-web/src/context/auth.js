@@ -51,7 +51,16 @@ function AuthProvider(props) {
     userConfigVar({
       followedUsers: userData.following,
       username: userData.username,
-      portfolio: userData.portfolios[0],
+      portfolio:
+        userData.portfolios.length > 0
+          ? userData.portfolios[0]
+          : {
+              __typename: "",
+              follwedTags: [],
+              id: "",
+              name: "",
+            },
+      userImg: userData.img ? userData.img : "",
     });
     saveUserConfig();
     // console.log(userConfigVar().followedUsers);

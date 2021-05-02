@@ -1,4 +1,4 @@
-import { useContext } from "react";
+// import { useContext } from "react";
 import {
   Avatar,
   Grid,
@@ -13,15 +13,15 @@ import {
   Link as RouterLink,
 
   // Redirect,
-  useHistory,
+  // useHistory,
 } from "react-router-dom";
-import { AuthContext } from "../context/auth";
+// import { AuthContext } from "../context/auth";
 // import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 // import { FOLLOW_USER_GQL, PROFILE_GQL } from "../graphql/Auth/authGql";
 import PropTypes from "prop-types";
 import { useFollow } from "../util/hooks";
 
-const img = "avatars/7.jpg";
+// const img = "avatars/7.jpg";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -111,9 +111,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-{
-  /* // UserInfo"theSmallCard"  */
-}
+// {
+//   /* // UserInfo"theSmallCard"  */
+// }
 export function UserInfo(props) {
   // const history = useHistory();
   const classes = useStyles();
@@ -166,14 +166,16 @@ export function UserInfo(props) {
 UserInfo.defaultProps = {
   userId: "undefined",
   isFollowed: false,
+  img: "",
 };
 UserInfo.propTypes = {
   isFollowed: PropTypes.bool,
   userId: PropTypes.string.isRequired,
+  img: PropTypes.string.isRequired,
 };
-{
-  /* // FollowerFollowingForm  */
-}
+// {
+//   /* // FollowerFollowingForm  */
+// }
 export function FollowerFollowingForm(props) {
   const classes = useStyles();
   const { followed, toggleFollow } = useFollow(props.userId, props.isFollowed);
@@ -190,7 +192,7 @@ export function FollowerFollowingForm(props) {
         <Avatar
           className={classes.avatar2}
           alt={props.name}
-          src={props.avatar}
+          src={props.img}
         />
       </Grid>
 

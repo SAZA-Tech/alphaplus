@@ -1,11 +1,13 @@
-import  { useState } from 'react'
+// import  { useState } from 'react'
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { gql } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import { useForm } from "../../util/hooks";
 import {  makeStyles } from "@material-ui/core/styles";
-import { Link as RouterLink, Redirect } from "react-router-dom";
+import { 
+    // Link as RouterLink, 
+    Redirect } from "react-router-dom";
 import { CircularProgress } from "@material-ui/core";
 
 
@@ -51,7 +53,7 @@ mutation editPortfolio(
 const EditFormport = (props) => {
     const classes = useStyles();
 
-    const [modal, setModal] = useState(false);
+    // const [modal, setModal] = useState(false);
     // const toggle = () => {
     //     setModal(!modal);
     //     console.log(values);

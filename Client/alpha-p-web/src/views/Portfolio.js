@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
-import { fade, makeStyles } from "@material-ui/core/styles";
-import AddIcon from "@material-ui/icons/Add";
+import React, { useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+// import AddIcon from "@material-ui/icons/Add";
 import CreateIcon from "@material-ui/icons/Create";
-import { HomeCard } from "./Home";
-import { AuthContext } from "../context/auth";
+// import { HomeCard } from "./Home";
+// import { AuthContext } from "../context/auth";
 import {
   Button,
   Grid,
@@ -13,7 +13,11 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 
-import { Link as RouterLink, Redirect } from "react-router-dom";
+import {
+  //  Link as RouterLink,
+
+  Redirect,
+} from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import { useQuery } from "@apollo/client";
 import { PORTFOLIO_GQL } from "../graphql/Company/portfolioGql";
@@ -24,12 +28,7 @@ import {
   CompanyCardLine,
   BigCompanyCardTable,
 } from "../components/Company/CompanyCard";
-import { Height } from "@material-ui/icons";
-import { FollowerFollowingForm } from "../components/UserInfo";
-import {
-  ContentCard,
-  ContentCardPaper,
-} from "../components/Content/ContentCards";
+import { ContentCardPaper } from "../components/Content/ContentCards";
 import { userConfigVar } from "../storage/userConfig";
 
 // import {
@@ -124,6 +123,19 @@ const useStyles = makeStyles((theme) => ({
 
     marginRight: theme.spacing(4.5),
   },
+  createPortoLayout: {
+    marginTop: theme.spacing(12),
+    marginBottom: theme.spacing(12),
+    padding: theme.spacing(2),
+
+    width: "auto",
+    [theme.breakpoints.up("md")]: {
+      marginInline: theme.spacing(40),
+    },
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
 }));
 
 function Portfolio(props) {
@@ -132,10 +144,10 @@ function Portfolio(props) {
   const togglePopup = () => {
     setIsOpen(!isOpen);
   };
-  const user = useContext(AuthContext);
+  // const user = useContext(AuthContext);
   // check if he has porfolio
   const classes = useStyles();
-  const [Companies, setCompanies] = useState([]);
+  // const [Companies, setCompanies] = useState([]);
 
   const Popup = (props) => {
     return (
@@ -150,25 +162,22 @@ function Portfolio(props) {
     );
   };
 
-  const { data, error, loading, refetch, networkStatus } = useQuery(
-    PORTFOLIO_GQL,
-    {
-      variables: {
-        portoId: portoId,
-      },
-    }
-  );
+  const { data, error, loading, networkStatus } = useQuery(PORTFOLIO_GQL, {
+    variables: {
+      portoId: portoId,
+    },
+    skip: portoId === "",
+  });
   if (networkStatus === NetworkStatus.refetch) return "Refetching!";
   if (loading) return <CircularProgress />;
   if (error) return <Redirect to="/404" />;
 
-  const img = "avatars/7.jpg";
+  // const img = "avatars/7.jpg";
   const Followers = (FollowersDocs) => (
     <ContentCardPaper
       data={FollowersDocs}
       limit={6}
       auther
-      title={"Articles"}
     />
   );
 
@@ -271,32 +280,34 @@ function Portfolio(props) {
     );
   };
 
-  if (portoId == "") {
+  if (portoId === "") {
     return (
-      <div className={classes.paper}>
-        <p>Please create a portfolio</p>
-        <Grid item>
-          <Button
-            variant="contained"
-            color="secondary"
-            value="Create Portfolio"
-            className={classes.AddEditBtn}
-            startIcon={<CreateIcon />}
-            onClick={togglePopup}
-          >
-            Create Portfolio
-          </Button>
-        </Grid>
-        {isOpen && (
-          <Popup
-            content={
-              <>
-                <InputFormPort></InputFormPort>
-              </>
-            }
-            handleClose={togglePopup}
-          />
-        )}
+      <div className={classes.rootCom}>
+        <Paper className={classes.createPortoLayout}>
+          <p>Please create a portfolio</p>
+          <Grid item>
+            <Button
+              variant="contained"
+              color="secondary"
+              value="Create Portfolio"
+              className={classes.AddEditBtn}
+              startIcon={<CreateIcon />}
+              onClick={togglePopup}
+            >
+              Create Portfolio
+            </Button>
+          </Grid>
+          {isOpen && (
+            <Popup
+              content={
+                <>
+                  <InputFormPort></InputFormPort>
+                </>
+              }
+              handleClose={togglePopup}
+            />
+          )}
+        </Paper>
       </div>
     );
   } else {

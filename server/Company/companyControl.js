@@ -188,7 +188,7 @@ const getCompanies = async (
 
     if (Market != null) Filter.market = Market;
 
-    if (Comname != null) Filter.comname = Comname;
+    if (Comname != null) Filter.comname = { $regex: Comname, $options: "i" };
 
     CompanyDocs = await Company.find(Filter).exec();
   }
@@ -245,18 +245,20 @@ const getCompanies = async (
       return a.date < b.date ? -1 : a.date > b.date ? 1 : 0;
     });
 
-    // console.log(arr);
-    // console.log(arr[arr.length-1].date)
-    // change =new-old/old
-    // var change =
-    //   (arr[arr.length - 1].close - arr[arr.length - 2].close) /
-    //   arr[arr.length - 2].close;
+
     var change = calculateChange(
       arr[arr.length - 1].close,
       arr[arr.length - 2].close
     );
     // console.log(change);
     //Check has latest price
+    var info = {
+      intro: element.intro,
+      address: element.address,
+      website: element.website,
+      phoneNum: element.phoneNum,
+      Industry: element.Industry,
+    }
     companies.push({
       id: element._id,
       sectorId: element.sectorId,
@@ -266,6 +268,7 @@ const getCompanies = async (
       financialData: arr,
       todayFinance: getLastDate,
       change: change,
+      info:info
     });
     // console.log(companies);
   }
@@ -404,10 +407,20 @@ const getCompany = async (_, { companyId }) => {
       Symbol: null,
     },
   });
+  const info = {
+    intro: company.info.intro,
+    address: company.info.address,
+    website: company.info.website,
+    phoneNum: company.info.phoneNum,
+    Industry: company.info.Industry,
+  }
+  console.log(info);
   return {
     id: company._id,
     articles: relatedArticles,
     similarCompanies: similarCompanies,
+    info:info,
+
     ...company,
   };
 };

@@ -18,7 +18,7 @@ function generateToken(user) {
       email: user.email,
     },
     SECRET_KEY,
-    { expiresIn: "1h" }
+    { expiresIn: "30d" }
   );
 }
 
@@ -272,3 +272,25 @@ function isFollowing(current, toBeFollowed) {
   const result = current.find((item) => JSON.stringify(item) === stringFID);
   return result ? true : false;
 }
+
+module.exports.updateUserProfile = async (
+  _,
+  { userId, userInput: { bio, img, username, name } }
+) => {
+  const updatedUser = await User.findById(userId);
+  console.log(updatedUser);
+  if (updatedUser) {
+    let update = {};
+    if (bio && bio.trim() !== "") update.bio = bio;
+    if (img && img.trim() !== "") update.img = img;
+    if (name && name.trim() !== "") update.name = name;
+
+    const res = await User.findByIdAndUpdate(userId, update);
+    return {
+      id: res.id,
+      ...res._doc,
+    };
+  } else {
+    throw new Error("User Not Found");
+  }
+};

@@ -1,12 +1,6 @@
-import  { useEffect, useState } from "react";
+// import { useState } from "react";
 import PropTypes from "prop-types";
-import {
-  Avatar,
-  Grid,
-  Typography,
-  Button,
-  Divider,
-} from "@material-ui/core";
+import { Avatar, Grid, Typography, Button, Divider } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link as RouterLink } from "react-router-dom";
 
@@ -30,9 +24,8 @@ const useStyles = makeStyles((theme) => ({
     },
     padding: theme.spacing(1),
   },
-  bio:{
-    color:"#707070"
-
+  bio: {
+    color: "#707070",
   },
   cardLayout: {
     marginTop: theme.spacing(2),
@@ -49,10 +42,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ContentCard(props) {
-  const [state, setState] = useState({
-    withAuther: false,
-    crudOtion: false,
-  });
+  // const [state] = useState({
+  //   withAuther: false,
+  //   crudOtion: false,
+  // });
   // useEffect(() => {
   //   if (props.withAuther)
   //     setState({
@@ -72,7 +65,7 @@ function ContentCard(props) {
         justify="flex-start"
         alignItems="flex-start"
       >
-        {state.withAuther ? (
+        {props.withAuther ? (
           <Grid item>
             <Avatar alt={props.name} src={props.img} />
           </Grid>
@@ -81,9 +74,9 @@ function ContentCard(props) {
         )}
 
         {/* // Content info  */}
-        <Grid item sm >
-          <Grid item  container direction="column" >
-            <Grid item >
+        <Grid item sm>
+          <Grid item container direction="column">
+            <Grid item>
               <Typography
                 component={RouterLink}
                 to={props.link}
@@ -92,15 +85,15 @@ function ContentCard(props) {
               >
                 {props.title}
               </Typography>
-              
-              
-              
-              <Typography className={classes.bio}  variant="subtitle1">{props.bio}</Typography>
+
+              <Typography className={classes.bio} variant="subtitle1">
+                {props.bio}
+              </Typography>
             </Grid>
           </Grid>
-       </Grid>
+        </Grid>
         {/* // Crud Buttons */}
-        {state.crudOtion ? (
+        {props.crudOtion ? (
           <Grid container item>
             <Button variant="contained" color="primary">
               Edit
@@ -119,6 +112,7 @@ ContentCard.defaultProps = {
   withAuther: false,
   crudOtion: false,
   link: "/",
+  img: "",
 };
 ContentCard.propTypes = {
   withAuther: PropTypes.bool,
@@ -138,8 +132,8 @@ function ContentCardPaper(props) {
         <ContentCard
           title={e.articleTitle ? e.articleTitle : e.title}
           name={e.articleAuthor ? e.articleAuthor.name : e.name}
-          img={e.img}
-          bio={e.bio}
+          img={e.articleAuthor? e.articleAuthor.img : e.img}
+          bio={e.articleAuthor ? e.articleAuthor.bio : e.bio}
           withAuther={props.auther}
           link={`/article/${e.id}`}
         />

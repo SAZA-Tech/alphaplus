@@ -20,6 +20,7 @@ export const GET_ARTICLES = gql`
       articleComments {
         commentBody
         id
+        img
       }
       articleTags
       articleTitle
@@ -38,6 +39,8 @@ export const GET_ARTICLE = gql`
         email
         id
         isFollowed @client
+        bio
+        img
       }
       articleBody
       articleTags
@@ -70,6 +73,7 @@ export const GET_ARTICLE = gql`
         createdAt
         name
         id
+        img
       }
       commentBody
       createdAt
@@ -106,9 +110,48 @@ export const GET_COMMENTS = gql`
         createdAt
         name
         id
+        img
       }
       commentBody
       createdAt
     }
+  }
+`;
+export const EDIT_ARTICLE = gql`
+  mutation editArticle($articleId: ID!, $id: ID!, $contentInput: ContentInput) {
+    editArticle(articleId: $articleId, id: $id, contentInput: $contentInput) {
+      updatedAt
+      createdAt
+      id
+      articleTitle
+      articleBody
+      articleAuthor {
+        id
+        username
+      }
+    }
+  }
+`;
+export const GET_ARTICLE2 = gql`
+  query getArticle($articleId: ID!) {
+    getArticle(articleId: $articleId) {
+      createdAt
+      articleBody
+      articleTitle
+      updatedAt
+      id
+      articleAuthor {
+        username
+        id
+        email
+      }
+    }
+  }
+`;
+
+export const DELETE_ARTICLE = gql`
+  mutation deleteArticle($articleId: ID!, $id: ID!) {
+    
+    deleteArticle(articleId: $articleId, id: $id) 
   }
 `;

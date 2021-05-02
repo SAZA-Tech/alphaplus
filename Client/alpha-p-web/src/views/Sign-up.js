@@ -21,6 +21,7 @@ import { SIGNUP_USER } from "../graphql/Auth/authGql";
 //auth
 import { AuthContext } from "../context/auth";
 import { useForm } from "../util/hooks";
+import sleep from "../util/Sleep";
 
 function Copyright() {
   return (
@@ -71,10 +72,6 @@ export default function SignUp(props) {
   });
 
   const [signUpUser, { loading }] = useMutation(SIGNUP_USER, {
-    update(_, { data: { register: userData } }) {
-      context.login(userData);
-      props.history.push("/");
-    },
     onError(err) {
       setErrors(
         err && err.graphQLErrors[0]
@@ -90,6 +87,11 @@ export default function SignUp(props) {
         password: values.password,
         confirmPassword: values.confirmPasswrod,
       },
+    },
+    update(_, { data: { register: userData } }) {
+      // context.login(userData);
+      setSuccess(true);
+      sleep(500).then(() => props.history.push("/login"));
     },
   });
 

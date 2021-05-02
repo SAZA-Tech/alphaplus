@@ -11,8 +11,8 @@ const contentShcema = gql`
     # Get Comments
     getComments(filter: Filter): [Comment!]!
 
-     # Get uploads
-     uploads: [UploadedFileResponse]
+    # Get uploads
+    uploads: [UploadedFileResponse]
   }
   extend type Mutation {
     createDraft(id: ID!, contentInput: ContentInput): Draft!
@@ -21,22 +21,17 @@ const contentShcema = gql`
     publishDraft(draftID: ID!, tags: [String!]!): Article!
     editArticle(id: ID!, articleId: ID!, contentInput: ContentInput): Article!
     deleteArticle(id: ID!, articleId: ID!): String!
-    addComment(
-      autherId: ID!
-      articleId: ID!
-      commentBody:String!
-    ): Comment!
+    addComment(autherId: ID!, articleId: ID!, commentBody: String!): Comment!
     deleteComment(commentId: ID!): String!
     likeArticle(articleId: ID!): Article!
 
     # Upload File
     # singleUpload(file: Upload!): UploadedFileResponse!
     signS3(filename: String!, filetype: String!): S3Payload!
-
   }
   type S3Payload {
-    signedRequest: String!,
-    url: String!,
+    signedRequest: String!
+    url: String!
   }
 
   type Draft {
@@ -70,13 +65,14 @@ const contentShcema = gql`
   type Like {
     id: ID!
     createdAt: String!
-    username:String!
+    username: String!
   }
   #Use filter values in the queries
   input Filter {
     userId: ID
     articleId: ID
     companyId: ID
+    articleTitle: String
     tags: [String!]
   }
   input ContentInput {

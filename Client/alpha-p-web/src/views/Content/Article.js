@@ -32,6 +32,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { GET_ARTICLE, GET_COMMENTS } from "../../graphql/Content/articleGql";
 import { ADD_COMMENT } from "../../graphql/Content/commentGql";
 import { useLike } from "../../util/hooks";
+import { userConfigVar } from "../../storage/userConfig";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -137,6 +138,9 @@ const analystInfo = {
 
 const Article = (props) => {
   const classes = useStyles();
+  function refreshPage() {
+    window.location.reload(false);
+  }
   let { articleId } = useParams();
   // console.log(articleId);
   const { loading: articleFetchingLoading, data, error } = useQuery(
@@ -150,7 +154,7 @@ const Article = (props) => {
       },
     }
   );
-  if (error) return <Redirect to="404" />;
+  if (error) return <Redirect to="/404" />;
   return articleFetchingLoading ? (
     <CircularProgress />
   ) : (
@@ -268,7 +272,7 @@ const ArticleSection = (props) => {
           img={props.auther.img}
           name={props.auther.name}
           username={props.auther.username}
-          bio={analystInfo.bio}
+          bio={props.auther.bio}
           isFollowed={props.auther.isFollowed}
           userId={props.auther.id}
         />
@@ -302,6 +306,7 @@ function CommentsSection(props) {
       articleId: articleId,
       commentBody: commentBody,
     },
+
     update(cache, { data: { addComment: newComment } }) {
       cache.writeQuery({
         query: GET_COMMENTS,
@@ -338,7 +343,7 @@ function CommentsSection(props) {
           </Container>
           <Container className={classes.addComment}>
             <form onSubmit={addCommentCall}>
-              <Avatar>OP</Avatar>
+              <Avatar src={user ? userConfigVar().userImg : ""}></Avatar>
               <TextField
                 id="outlined-multiline-static"
                 multiline
@@ -373,9 +378,7 @@ const CreateComment = (props) => {
       <Divider />
       <Grid container direction="row" justify="space-between">
         <Grid item container xs={4} sm>
-          <Avatar>
-            {props.avatar == null ? props.name.split(2) : props.avatar}
-          </Avatar>
+          <Avatar src={props.avatar ? props.avatar : ""}></Avatar>
           <Typography
             variant="subtitle1"
             component={RouterLink}

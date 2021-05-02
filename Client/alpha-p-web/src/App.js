@@ -9,10 +9,12 @@ import Login from "./views/Login";
 import SignUp from "./views/Sign-up";
 import { AuthRoute, ProtectedRoute } from "./components/AuthRoute";
 import Home from "./views/Home";
+import Error from "./views/404";
 import EndUserProfile from "./views/EndUserProfile";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Article from "./views/Content/Article";
+import EditArticle from "./views/Content/editArticle";
 import Draft from "./views/Content/Draft";
 import Portfolio from "./views/Portfolio";
 import { MyAuthors } from "./views/Content/MyAuthors";
@@ -50,11 +52,12 @@ export class App extends Component {
                   path="/AccountSecurty/"
                   component={AccountSecurty}
                 />
-
+                <Route exact path="/404" component={Error} />
                 <Route path="/company/:companyId" component={Company} />
                 <Route path="/article/:articleId" component={Article} />
                 <ProtectedRoute exact path="/Portfolio" component={Portfolio} />
                 <ProtectedRoute path="/draft/:draftId" component={Draft} />
+                <ProtectedRoute path="/editarticle/:articleId" component={EditArticle} />
                 <ProtectedRoute
                   exact
                   path="/MyAuthers/:username/"
