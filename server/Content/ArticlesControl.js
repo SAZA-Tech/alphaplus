@@ -133,7 +133,7 @@ const getArticle = async (_, { articleId }, context) => {
   } else {
     throw new Error(`Article is not found`);
   }
-  if (article.articleAuthor == null) {
+  if (article.articleAuthorId==null) {
     var id = "defalut";
     var name = "jhon doe";
     var username = "jhonDoe";

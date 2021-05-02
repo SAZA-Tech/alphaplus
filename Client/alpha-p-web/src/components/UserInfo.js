@@ -166,10 +166,12 @@ export function UserInfo(props) {
 UserInfo.defaultProps = {
   userId: "undefined",
   isFollowed: false,
+  img: "",
 };
 UserInfo.propTypes = {
   isFollowed: PropTypes.bool,
   userId: PropTypes.string.isRequired,
+  img: PropTypes.string.isRequired,
 };
 // {
 //   /* // FollowerFollowingForm  */
@@ -190,7 +192,7 @@ export function FollowerFollowingForm(props) {
         <Avatar
           className={classes.avatar2}
           alt={props.name}
-          src={props.avatar}
+          src={props.img}
         />
       </Grid>
 

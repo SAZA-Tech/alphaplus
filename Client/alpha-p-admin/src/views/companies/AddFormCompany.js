@@ -80,7 +80,12 @@ const AddFormCompany = (props) => {
     Comname: props.Comname,
     SectorID: "",
     Market: "",
-    Symbol: props.Symbol
+    Symbol: props.Symbol,
+    intro: "",
+    address: "",
+    website: "",
+    phoneNum: "",
+    Industry: "",
   });
   const [CreateCompanyInfo, { loading, error: mutationError }] = useMutation(CREATE_COMPANY, {
     onError(error) {
@@ -128,7 +133,12 @@ const AddFormCompany = (props) => {
                       Comname: values.Comname,
                       SectorID: values.SectorID,
                       Market: values.Market,
-                      Symbol: values.Symbol
+                      Symbol: values.Symbol,
+                      intro: values.intro,
+                      address: values.address,
+                      website: values.website,
+                      phoneNum: values.phoneNum,
+                      Industry: values.Industry,
 
                     };
                     CreateCompanyInfo({ variables: { CompanyInput } });
@@ -165,6 +175,57 @@ const AddFormCompany = (props) => {
                         id="Symbol"
                         placeholder="Enter User symbol"
                         autoComplete="Symbol"
+                        onChange={onChange}
+                      />
+                    </CFormGroup>
+
+                    <CFormGroup>
+                      <CLabel htmlFor="intro">Company Introduction</CLabel>
+                      <CInput
+                        name="intro"
+                        id="intro"
+                        placeholder="Enter User Introduction"
+                        autoComplete="intro"
+                        onChange={onChange}
+                      />
+                    </CFormGroup>
+                    <CFormGroup>
+                      <CLabel htmlFor="address">Company Address</CLabel>
+                      <CInput
+                        name="address"
+                        id="address"
+                        placeholder="Enter User address"
+                        autoComplete="address"
+                        onChange={onChange}
+                      />
+                    </CFormGroup>
+                    <CFormGroup>
+                      <CLabel htmlFor="website">Company website</CLabel>
+                      <CInput
+                        name="website"
+                        id="website"
+                        placeholder="Enter User website"
+                        autoComplete="website"
+                        onChange={onChange}
+                      />
+                    </CFormGroup>
+                    <CFormGroup>
+                      <CLabel htmlFor="phoneNum">Company Phone</CLabel>
+                      <CInput
+                        name="phoneNum"
+                        id="phoneNum"
+                        placeholder="Enter User phoneNum"
+                        autoComplete="phoneNum"
+                        onChange={onChange}
+                      />
+                    </CFormGroup>
+                    <CFormGroup>
+                      <CLabel htmlFor="Industry">Company Industry</CLabel>
+                      <CInput
+                        name="Industry"
+                        id="Industry"
+                        placeholder="Enter  Industry"
+                        autoComplete="Industry"
                         onChange={onChange}
                       />
                     </CFormGroup>

@@ -137,6 +137,9 @@ const analystInfo = {
 
 const Article = (props) => {
   const classes = useStyles();
+  function refreshPage() {
+    window.location.reload(false);
+  }
   let { articleId } = useParams();
   // console.log(articleId);
   const { loading: articleFetchingLoading, data, error } = useQuery(
@@ -148,7 +151,9 @@ const Article = (props) => {
       onError(err) {
         console.log(`Error Happend ${err}`);
       },
+    
     }
+    
   );
   if (error) return <Redirect to="404" />;
   return articleFetchingLoading ? (
@@ -302,6 +307,7 @@ function CommentsSection(props) {
       articleId: articleId,
       commentBody: commentBody,
     },
+    
     update(cache, { data: { addComment: newComment } }) {
       cache.writeQuery({
         query: GET_COMMENTS,
@@ -352,8 +358,8 @@ function CommentsSection(props) {
               />
               {commentLoading ? (
                 <CircularProgress />
-              ) : (
-                <Button variant="contained" color="primary" type="submit">
+              ) :(
+                <Button variant="contained" color="primary" type="submit" >
                   Publish
                 </Button>
               )}

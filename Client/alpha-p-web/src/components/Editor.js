@@ -118,7 +118,7 @@ export function Editor(props) {
 
     const response = res.signS3;
     const { signedRequest, url } = response;
-    console.log(`signed ${signedRequest}`);
+    // console.log(`signed ${signedRequest}`);
     await uploadToS3(file, signedRequest);
     insertToEditor(url);
   };
