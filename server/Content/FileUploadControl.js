@@ -8,7 +8,7 @@ module.exports.FileUploadControl = {
 
     return { filename, mimetype, encoding, url: "" };
   },
-  signS3: async (parent, { filename, filetype }) => {
+  signS3: async (parent, { filename, filetype }, context) => {
     const s3Bucket = process.env.S3_BUCKET;
 
     // AWS_ACCESS_KEY_ID
@@ -24,7 +24,7 @@ module.exports.FileUploadControl = {
     const s3Params = {
       Bucket: s3Bucket,
       Key: filename,
-      Expires: 60,
+      Expires: 3600,
       ContentType: filetype,
       ACL: "public-read",
     };
