@@ -8,6 +8,8 @@ import {
   CompanyProfile,
 } from "../../components/Company/CompanyCard";
 import { ContentCardPaper } from "../../components/Content/ContentCards";
+import Skeleton from '@material-ui/lab/Skeleton';
+
 // import { contentdummyData } from "../../util/dummyData";
 import { Redirect, useParams } from "react-router";
 import { useQuery } from "@apollo/client";
@@ -49,7 +51,35 @@ function Company(props) {
     console.log(error);
     return <Redirect to="/404" />;
   }
-  if (loading) return <CircularProgress />;
+  if (loading) return (
+    
+    <Grid container direction='column' spacing='2' className={classes.paperLayout} >
+    <Grid item>
+      <Skeleton
+        variant="rect"
+        animation='wave'
+        width="100%"
+        height={390}
+      /></Grid>
+      <Grid item>
+      <Skeleton
+        variant="rect"
+        animation='wave'
+        width="100%"
+        height={415}
+      /></Grid>
+      <Grid item>
+      <Skeleton
+        variant="rect"
+        animation='wave'
+        width="100%"
+        height={290}
+      /></Grid>
+      </Grid>
+
+
+
+  );
   const CompanyHeader = () => {
     return (
       <Paper className={classes.paperLayout}>
