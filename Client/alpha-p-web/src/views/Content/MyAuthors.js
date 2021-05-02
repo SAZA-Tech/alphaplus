@@ -1,5 +1,5 @@
-import React, {  useState } from "react";
-import {  Link as RouterLink } from "react-router-dom";
+import React, { useState } from "react";
+import { Link as RouterLink, useParams } from "react-router-dom";
 import {
   Container,
   Grid,
@@ -9,7 +9,7 @@ import {
   List,
   ListItem,
   CircularProgress,
-  Box
+  Box,
 } from "@material-ui/core";
 import CreateIcon from "@material-ui/icons/Create";
 import { useQuery } from "@apollo/client";
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
   },
   Section: {
-    paddingTop:theme.spacing(2),
+    paddingTop: theme.spacing(2),
     [theme.breakpoints.up("md")]: {
       marginBottom: theme.spacing(4),
     },
@@ -60,14 +60,14 @@ export function MyAuthors(props) {
   // useEffect(() => {
   //   console.log(`Drafts are Fetched`);
   // }, [state.drafts]);
-  const params = props.match.params.username;
+  const { username } = useParams();
   const { loading: draftFetchingLoading } = useQuery(GET_DRAFTS, {
     onCompleted(data) {
       setDrafts(data.getDrafts);
       console.log(`Drafts length ${drafts.length}`);
     },
     variables: {
-      autherId: params,
+      autherId: username,
     },
     onError(error) {
       console.log(`F}ailed to fetch drafts : ${error}`);
@@ -75,12 +75,11 @@ export function MyAuthors(props) {
   });
   const { loading: articlesFethcingLoading } = useQuery(GET_ARTICLES, {
     onCompleted(data) {
-      
       setArticles(data.getArticles);
       console.log(`Articles length ${articles.length}`);
     },
     variables: {
-      userId: params,
+      userId: username,
     },
     onError(error) {
       console.log(`F}ailed to fetch articles : ${error}`);
@@ -105,31 +104,22 @@ export function MyAuthors(props) {
                     <ContentCard
                       title={e.articleTitle}
                       link={`/article/${e.id}`}
-                      
-                    >
-                    </ContentCard>
-
+                    ></ContentCard>
                   </ListItem>
                 );
               })}
-
             </List>
-            <Box
-              p={0.5}
-              m={0.5}>
+            <Box p={0.5} m={0.5}>
               <Button
-
                 variant="contained"
                 color="secondary"
                 onClick={togglePopup}
                 startIcon={<CreateIcon />}
-
               >
                 Edit articles
-            </Button>
+              </Button>
               {isOpen && (
                 <Popup
-
                   content={
                     <>
                       <Typography variant="h4" className={classes.titleSection}>
@@ -143,14 +133,10 @@ export function MyAuthors(props) {
                               <ContentCard
                                 title={e.articleTitle}
                                 link={`/editarticle/${e.id}`}
-
-                              >
-                              </ContentCard>
-
+                              ></ContentCard>
                             </ListItem>
                           );
                         })}
-
                       </List>
                     </>
                   }
@@ -159,9 +145,6 @@ export function MyAuthors(props) {
               )}
             </Box>
           </Container>
-
-
-
         </Card>
       </Container>
     );

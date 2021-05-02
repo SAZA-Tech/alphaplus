@@ -21,6 +21,7 @@ import {
   Container,
   CircularProgress,
 } from "@material-ui/core";
+import SettingsIcon from "@material-ui/icons/Settings";
 import MenuIcon from "@material-ui/icons/Menu";
 import React, { useState, useEffect, useContext } from "react";
 import { Link as RouterLink } from "react-router-dom";
@@ -276,6 +277,23 @@ export default function Header(props) {
       <MenuItem
         onClick={handleMenuClose}
         component={RouterLink}
+        to={context.user ? `/userProfile/${context.user.id}/` : `/Login`}
+      >
+        <IconButton
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+          component={RouterLink}
+          to={context.user ? `/userProfile/${context.user.id}/` : `/Login`}
+        >
+          <AccountCircle />
+        </IconButton>
+        <p>Profile</p>
+      </MenuItem>{" "}
+      <MenuItem
+        onClick={handleMenuClose}
+        component={RouterLink}
         to="/ProfileSetting"
       >
         <IconButton
@@ -286,9 +304,9 @@ export default function Header(props) {
           component={RouterLink}
           to="/ProfileSetting"
         >
-          <AccountCircle />
+          <SettingsIcon />
         </IconButton>
-        <p>Profile</p>
+        <p>Account Settings</p>
       </MenuItem>{" "}
       <MenuItem onClick={loggingOut}>
         <IconButton
@@ -507,8 +525,28 @@ export default function Header(props) {
         <Divider />
         {context.user ? (
           <List>
-            <MenuItem>Profile</MenuItem>
-
+            <Link
+              {...{
+                component: RouterLink,
+                to: context.user ? `/userProfile/${context.user.id}` : "/Login",
+                color: "inherit",
+                style: { textDecoration: "none" },
+                key: 'Profile',
+              }}
+            >
+              <MenuItem>Profile</MenuItem>
+            </Link>
+            <Link
+              {...{
+                component: RouterLink,
+                to: "/ProfileSetting",
+                color: "inherit",
+                style: { textDecoration: "none" },
+                key: 'AccountSettings',
+              }}
+            >
+              <MenuItem>Account Settings</MenuItem>
+            </Link>
             <MenuItem onClick={() => context.logout()}>Logout</MenuItem>
           </List>
         ) : (

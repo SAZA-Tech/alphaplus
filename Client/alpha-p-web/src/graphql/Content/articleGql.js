@@ -20,7 +20,7 @@ export const GET_ARTICLES = gql`
       articleComments {
         commentBody
         id
-        img
+        
       }
       articleTags
       articleTitle
