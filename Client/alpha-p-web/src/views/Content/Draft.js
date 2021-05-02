@@ -146,7 +146,7 @@ function Draft(props) {
       setSuccess(true);
       if (!startPublish)
         sleep(2000).then(() =>
-          props.history.push(`/MyAuthers/${data.editDraft.draftAuther.id}`)
+          props.history.push(`/MyPosts/${data.editDraft.draftAuther.id}`)
         );
     },
   });
@@ -168,7 +168,7 @@ function Draft(props) {
       console.log(`Draft is Published ${data.publishDraft.id}`);
       setSuccessMessage("Draft is published");
       setSuccess(true);
-      sleep(2000).then(() => props.history.push(`/MyAuthers/${user.id}`));
+      sleep(2000).then(() => props.history.push(`/MyPosts/${user.id}`));
     },
   });
   function actionDraftCallback() {

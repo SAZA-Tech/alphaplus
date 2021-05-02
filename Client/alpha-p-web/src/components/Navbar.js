@@ -307,8 +307,8 @@ export default function Header(props) {
 
   const leftMenu = [
     {
-      title: "My Authers",
-      link: context.user ? `/MyAuthers/${context.user.id}/` : `/Login`,
+      title: "My Posts",
+      link: context.user ? `/MyPosts/${context.user.id}/` : `/Login`,
     },
     {
       title: "My Portfolio",

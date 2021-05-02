@@ -109,7 +109,7 @@ function EditArticle(props) {
       setSuccess(true);
       if (!startPublish)
         sleep(2000).then(() =>
-          props.history.push(`/MyAuthers/${data.editArticle.articleAuthor.id}`)
+          props.history.push(`/MyPosts/${data.editArticle.articleAuthor.id}`)
         );
     },
   });
@@ -134,7 +134,7 @@ function EditArticle(props) {
 
         setSuccess(true);
         if (!startPublish)
-          sleep(2000).then(() => props.history.push(`/MyAuthers/${user.id}`));
+          sleep(2000).then(() => props.history.push(`/MyPosts/${user.id}`));
       },
     }
   );

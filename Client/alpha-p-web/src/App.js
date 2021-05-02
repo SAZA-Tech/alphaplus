@@ -60,7 +60,7 @@ export class App extends Component {
                 <ProtectedRoute path="/editarticle/:articleId" component={EditArticle} />
                 <ProtectedRoute
                   exact
-                  path="/MyAuthers/:username/"
+                  path="/MyPosts/:username/"
                   component={MyAuthors}
                 />
                 <AuthRoute exact path="/Signup" component={SignUp} />
