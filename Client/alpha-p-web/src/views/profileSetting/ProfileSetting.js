@@ -419,7 +419,7 @@ function ProfileSetting(props) {
               >
                 <Grid item>
                   <TextField
-                    label="Compony"
+                    label="Company"
                     id="margin-none"
                     // defaultValue=""
                     className={classes.textField}

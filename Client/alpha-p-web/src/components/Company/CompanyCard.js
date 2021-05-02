@@ -181,13 +181,16 @@ const userStyles = makeStyles((theme) => ({
   },
   labelLayout: {
     display: "flex",
-    justifyContent: "space-between",
     fontWeight: theme.typography.fontWeightBold,
-    fontSize: theme.typography.fontSize * 1.5,
     paddingTop: theme.spacing(2),
     padding: theme.spacing(1),
     "& p": {
-      paddingLeft: theme.spacing(12),
+      paddingLeft: theme.spacing(2),
+    },
+    // overflowWrap: "anywhere",
+    [theme.breakpoints.up("md")]: {
+      fontSize: theme.typography.fontSize * 1.5,
+      justifyContent: "space-between",
     },
   },
   title: {
@@ -638,7 +641,14 @@ function CompanyProfile(props) {
       <div style={{ width: "inherent" }}>
         <div className={classes.labelLayout}>
           <Typography variant="inherit">{key}</Typography>
-          <Typography variant="body1">{value}</Typography>
+          <Typography
+            variant="body1"
+            style={{
+              overflowWrap: "anywhere",
+            }}
+          >
+            {value}
+          </Typography>
         </div>{" "}
         <Divider orientation="horizontal" />
       </div>
@@ -659,7 +669,7 @@ function CompanyProfile(props) {
           justify="space-between"
         >
           <Grid item xs lg={5}>
-            {label("Secotr", props.companyInfo.sector)}
+            {label("Sector", props.companyInfo.sector)}
             {label("Address", props.companyInfo.address)}
           </Grid>
           <Grid item xs lg={5}>
