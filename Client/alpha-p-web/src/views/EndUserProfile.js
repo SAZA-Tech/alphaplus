@@ -235,7 +235,7 @@ const EndUserProfile = (props) => {
   });
   if (error) {
     console.log(error);
-    return <Redirect to="404" />;
+    return <Redirect to="/404" />;
   }
   if (loading) return <CircularProgress />;
   return (
@@ -245,7 +245,7 @@ const EndUserProfile = (props) => {
           <Paper className={classes.paper1} elevation={2}>
             <UserInfo
               id={userId}
-              img={userInfo.img}
+              img={data?.findUser.img}
               name={data.findUser.name}
               bio={userInfo.bio}
               userId={data.findUser.id}
@@ -262,6 +262,7 @@ const EndUserProfile = (props) => {
               following={data.findUser.following}
               comments={data.getComments}
               articles={data.getArticles}
+              bio={data.findUser.bio}
             />
           </Paper>
         </Grid>
@@ -290,7 +291,7 @@ export function UserProfileDetails(props) {
       <FollowerFollowingForm
         name={v.name}
         bio={v.bio ? v.bio : "Default Bio"}
-        avatar={v.avatar}
+        img={v.img}
         userId={v.id}
         isFollowed={v.isFollowed}
       />
@@ -301,7 +302,7 @@ export function UserProfileDetails(props) {
       <FollowerFollowingForm
         name={v.name}
         bio={v.bio ? v.bio : "Default Bio"}
-        avatar={v.avatar}
+        img={v.img}
         userId={v.id}
         isFollowed={v.isFollowed}
       />
@@ -328,8 +329,10 @@ export function UserProfileDetails(props) {
         </Typography>
 
         <Typography className={classes.typogrText} variant="body1">
-          Contributor long only, Growth, registered investment
-          advisor,investment advisor
+          {props.bio !== ""
+            ? props.bio
+            : `Contributor long only, Growth, registered investment
+          advisor,investment advisor`}
         </Typography>
       </Grid>
 

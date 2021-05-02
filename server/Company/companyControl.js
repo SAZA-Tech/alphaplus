@@ -131,7 +131,7 @@ const createCompany = async (
   // }
 };
 
-const deleteCompany = async (_, { id, companyId }, context) => {
+const deleteCompany = async (_, {id, companyId }, context) => {
   if (isAuthrized(_, { id }, context)) {
     try {
       const deleteCompany = await Company.findById(companyId);
@@ -188,7 +188,7 @@ const getCompanies = async (
 
     if (Market != null) Filter.market = Market;
 
-    if (Comname != null) Filter.comname = { $regex: Comname, $options: "i" };
+    if (Comname != null) Filter.comname = Comname;
 
     CompanyDocs = await Company.find(Filter).exec();
   }
@@ -245,12 +245,7 @@ const getCompanies = async (
       return a.date < b.date ? -1 : a.date > b.date ? 1 : 0;
     });
 
-    // console.log(arr);
-    // console.log(arr[arr.length-1].date)
-    // change =new-old/old
-    // var change =
-    //   (arr[arr.length - 1].close - arr[arr.length - 2].close) /
-    //   arr[arr.length - 2].close;
+
     var change = calculateChange(
       arr[arr.length - 1].close,
       arr[arr.length - 2].close
@@ -266,6 +261,7 @@ const getCompanies = async (
       financialData: arr,
       todayFinance: getLastDate,
       change: change,
+      ...element._doc
     });
     // console.log(companies);
   }
@@ -404,10 +400,20 @@ const getCompany = async (_, { companyId }) => {
       Symbol: null,
     },
   });
+  const info = {
+    intro: company.intro,
+    address: company.address,
+    website: company.website,
+    phoneNum: company.phoneNum,
+    Industry: company.Industry,
+  }
+  console.log(info);
   return {
     id: company._id,
     articles: relatedArticles,
     similarCompanies: similarCompanies,
+    info:info,
+
     ...company,
   };
 };

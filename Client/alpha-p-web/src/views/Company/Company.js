@@ -1,4 +1,3 @@
-
 import { makeStyles } from "@material-ui/core/styles";
 import { CircularProgress, Grid, Paper } from "@material-ui/core";
 import {
@@ -144,9 +143,28 @@ function Company(props) {
     );
   };
   const CompanyProfileCard = () => {
+    const companyInfo = {
+      name: data.getCompany.comname,
+      bio: data.getCompany.info.intro
+        ? data.getCompany.info.intro
+        : companydummyData.companyIfno.bio,
+      address: data.getCompany.info.address
+        ? data.getCompany.info.address
+        : companydummyData.companyIfno.address,
+      industry: data.getCompany.info.industry
+        ? data.getCompany.info.industry
+        : companydummyData.companyIfno.industry,
+      phoneNumber: data.getCompany.info.phoneNum
+        ? data.getCompany.info.phoneNum
+        : companydummyData.companyIfno.phoneNumber,
+      website: data.getCompany.info.website
+        ? data.getCompany.info.website
+        : companydummyData.companyIfno.website,
+      sector: "Tech",
+    };
     return (
       <Paper className={classes.paperLayout}>
-        <CompanyProfile companyInfo={companydummyData.companyIfno} />
+        <CompanyProfile companyInfo={companyInfo} />
       </Paper>
     );
   };

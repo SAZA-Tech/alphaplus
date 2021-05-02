@@ -37,7 +37,10 @@ export const theme = createMuiTheme({
     },
     background: {
       default: "#E5E5E5"
-    }
+    },
 
+    Forward: {
+      main: '#2979ff',
+    },
   },
 });
