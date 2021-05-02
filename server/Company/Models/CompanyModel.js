@@ -18,6 +18,7 @@ const CompanySchema = new Schema({
   website: String,
   address: String,
   intro: String,
+  
   financialData: {
     type: Map,
     of: {
