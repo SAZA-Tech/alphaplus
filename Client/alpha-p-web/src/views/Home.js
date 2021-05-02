@@ -37,6 +37,15 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: theme.spacing(3),
     },
   },
+
+  rootComLoad: {
+    
+    [theme.breakpoints.up("lg")]: {
+      
+      marginRight: theme.spacing(3),
+      marginLeft: theme.spacing(3),
+    },
+  },
   cardStyle: {
     width: "100%",
     paddingBottom: theme.spacing(2),
@@ -106,7 +115,8 @@ function Home() {
   }, []);
   const { data, error, loading } = useQuery(HOMEPAGE_GQL);
   if (loading) return (
-    <Grid container direction='column' spacing='2' className={classes.rootCom} >
+    <div className={classes.rootComLoad}>
+    <Grid container direction='column' spacing='2'  >
       <Grid item>
         <Skeleton
           variant="rect"
@@ -149,7 +159,9 @@ function Home() {
       </Grid>
 
 
-    </Grid>);
+    </Grid>
+    </div>
+    );
   if (error) return <Redirect to="/404" />;
 
   return (
